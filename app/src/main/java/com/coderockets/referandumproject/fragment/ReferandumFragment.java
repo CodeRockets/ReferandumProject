@@ -1,7 +1,9 @@
 package com.coderockets.referandumproject.fragment;
 
-/**
- * Created by aykutasil on 2.06.2016.
- */
+import com.coderockets.referandumproject.R;
+
+import org.androidannotations.annotations.EFragment;
+
+@EFragment(R.layout.fragment_referandum_layout)
 public class ReferandumFragment extends BaseFragment {
 }
