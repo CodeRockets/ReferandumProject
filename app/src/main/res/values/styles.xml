@@ -1,11 +1,120 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/iron</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+
+
+        <!--<item name="android:windowBackground">@color/primary</item>-->
+
+        <item name="colorControlNormal">@color/iron</item>
+        <item name="colorControlActivated">@color/primary_dark</item>
+        <item name="colorControlHighlight">@color/primary_light</item>
+        <item name="android:textColorHint">@color/primary</item>
+        <item name="android:textColor">@color/primary_dark</item>
+
+        <item name="colorButtonNormal">@color/iron</item>
+    </style>
+
+    <style name="AppTheme.Widget" />
+
+    <style name="AppTheme.Widget.TextView" parent="android:Widget.Holo.Light.TextView">
+        <item name="fontPath">fonts/Xenotron.ttf</item>
+    </style>
+
+
+    <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+
+        <item name="android:windowBackground">@color/primary</item>
+
+        <item name="colorControlNormal">@color/iron</item>
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/accent</item>
+        <item name="android:textColorHint">@color/iron</item>
+
+        <item name="colorButtonNormal">@color/primary_dark</item>
+
+        <!--<item name="android:colorButtonNormal">@color/abc_search_url_text</item>-->
+    </style>
+
+    <style name="AppTheme.Dark.Dialog" parent="Theme.AppCompat.Dialog">
+        <item name="colorAccent">@color/white</item>
+        <item name="android:textColorPrimary">@color/iron</item>
+        <item name="android:background">@color/primary</item>
+    </style>
+
+    <style name="AppTheme.CustomDialog" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+    </style>
+
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+    <!--<style name="MaterialSearchViewStyle">-->
+    <!--&lt;!&ndash; Background for the search bar &ndash;&gt;-->
+    <!--<item name="searchBackground">@color/primary_dark</item>-->
+
+    <!--&lt;!&ndash; Change voice icon &ndash;&gt;-->
+    <!--<item name="searchVoiceIcon">@drawable/ic_action_voice_search_inverted</item>-->
+
+    <!--&lt;!&ndash; Change clear text icon &ndash;&gt;-->
+    <!--<item name="searchCloseIcon">@drawable/ic_action_navigation_close_inverted</item>-->
+
+    <!--&lt;!&ndash; Change up icon &ndash;&gt;-->
+    <!--<item name="searchBackIcon">@drawable/ic_action_navigation_arrow_back_inverted</item>-->
+
+    <!--&lt;!&ndash; Change icon for the suggestions &ndash;&gt;-->
+    <!--<item name="searchSuggestionIcon">@drawable/ic_suggestion</item>-->
+
+    <!--&lt;!&ndash; Change background for the suggestions list view &ndash;&gt;-->
+    <!--<item name="searchSuggestionBackground">@android:color/white</item>-->
+
+    <!--&lt;!&ndash; Change text color for edit text. This will also be the color of the cursor &ndash;&gt;-->
+    <!--<item name="android:textColor">@color/accent</item>-->
+
+    <!--&lt;!&ndash; Change hint text color for edit text &ndash;&gt;-->
+    <!--<item name="android:textColorHint">@color/iron</item>-->
+
+    <!--&lt;!&ndash; Hint for edit text &ndash;&gt;-->
+    <!--<item name="android:hint">Gönderi No, Mok</item>-->
+    <!--</style>-->
+
+    <style name="MyCustomBetterPickerTheme">
+        <!--<item name="bpDialogBackground">@drawable/custom_dialog_background</item>-->
+        <!--<item name="bpTextColor">@color/custom_text_color</item>-->
+        <!--<item name="bpDeleteIcon">@drawable/ic_backspace_custom</item>-->
+        <!--<item name="bpCheckIcon">@drawable/ic_check_custom</item>-->
+        <!--<item name="bpKeyBackground">@drawable/key_background_custom</item>-->
+        <!--<item name="bpButtonBackground">@drawable/button_background_custom</item>-->
+        <!--<item name="bpDividerColor">@color/custom_divider_color</item>-->
+        <!--<item name="bpKeyboardIndicatorColor">@color/custom_keyboard_indicator_color</item>-->
+    </style>
+
+    <style name="ToolbarTitleStyle">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">19sp</item>
+        <item name="fontPath">fonts/Xenotron.ttf</item>
+
+        <!-- <item name="android:shadowColor">@color/color8</item>
+         <item name="android:shadowDx">1</item>
+         <item name="android:shadowDy">2</item>
+         <item name="android:shadowRadius">3</item>-->
+    </style>
+
+    <style name="TextAppearance.FontPath" parent="android:TextAppearance">
+        <!-- Custom Attr-->
+        <item name="fontPath">fonts/Xenotron.ttf</item>
     </style>
 
 </resources>
