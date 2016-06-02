@@ -1,4 +1,4 @@
-package com.coderockets.referandumproject.helper;
+package com.coderockets.androidhelper.helper;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -9,6 +9,7 @@ import android.widget.Toast;
 import java.net.InetAddress;
 
 import hugo.weaving.DebugLog;
+
 
 /**
  * Created by aykutasil on 2.03.2016.

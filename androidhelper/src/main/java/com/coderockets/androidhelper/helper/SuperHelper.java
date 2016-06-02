@@ -1,4 +1,4 @@
-package com.coderockets.referandumproject.helper;
+package com.coderockets.androidhelper.helper;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -25,8 +25,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-
-import com.google.android.gms.gcm.GcmPubSub;
 
 import java.io.BufferedWriter;
 import java.io.File;

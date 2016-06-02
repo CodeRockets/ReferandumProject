@@ -1,4 +1,4 @@
-package com.coderockets.referandumproject.helper;
+package com.coderockets.androidhelper.helper;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -10,9 +10,8 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v7.app.NotificationCompat;
 
-import com.coderockets.referandumproject.R;
-import com.coderockets.referandumproject.activity.MainActivity;
-import com.coderockets.referandumproject.activity.MainActivity_;
+
+import com.coderockets.androidhelper.R;
 
 import java.util.Random;
 
@@ -23,7 +22,7 @@ public class NotificationHelper {
     static Notification mNotification;
     static Context mContext;
     static int mNotifId;
-    static int mIcon = R.drawable.common_plus_signin_btn_icon_light;
+    static int mIcon = R.drawable.ok;
     static Uri mSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
     private String TAG = NotificationHelper.class.getSimpleName();
 
@@ -66,13 +65,13 @@ public class NotificationHelper {
         notificationManager.notify(notifId, mNotification);
     }
 
-    public static void showNotificationMessage(Context context, String title, String message, int notifId, Intent intent) {
+    public static void showNotificationMessage(Class mClass, Context context, String title, String message, int notifId, Intent intent) {
 
 
         if (intent == null) {
-            intent = new Intent(context, MainActivity.class);
+            intent = new Intent(context, mClass);
         }
-        int icon = R.mipmap.ic_launcher;
+        int icon = R.drawable.ok;
 
         int mNotificationId = notifId;
         // AppConfig.NOTIFICATION_ID;
@@ -218,7 +217,7 @@ public class NotificationHelper {
 
     public NotificationHelper buildNotif() {
 
-        Intent intent = new Intent(mContext, MainActivity_.class);
+        Intent intent = new Intent(mContext, mContext.getClass());
         PendingIntent pendingIntent = PendingIntent.getActivity(mContext, new Random().nextInt(), intent, PendingIntent.FLAG_ONE_SHOT);
 
         mNotification = mBuilder

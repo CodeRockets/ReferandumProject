@@ -1,4 +1,4 @@
-package com.coderockets.referandumproject.helper;
+package com.coderockets.androidhelper.helper;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -14,15 +14,16 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.coderockets.referandumproject.R;
+import com.coderockets.androidhelper.R;
 import com.joanzapata.iconify.IconDrawable;
+import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+import com.joanzapata.iconify.fonts.FontAwesomeModule;
 
 import hugo.weaving.DebugLog;
 
 
 public class UiHelper {
-
 
     public static class UiDialog {
 
@@ -30,27 +31,27 @@ public class UiHelper {
         MaterialDialog.Builder mBuilder;
         Context mContext;
 
-        private UiDialog(Context context, int a) {
-            if (a != -1) {
-                mBuilder = new MaterialDialog.Builder(context);
-            } else {
-                dialog = new MaterialDialog.Builder(context).build();
-            }
+        private UiDialog(Context context) {
+            Iconify.with(new FontAwesomeModule());
             mContext = context;
+            mBuilder = new MaterialDialog.Builder(context);
+            dialog = new MaterialDialog.Builder(context).build();
         }
 
-        public static MaterialDialog newInstance(Context context) {
-            return new UiDialog(context, -1).dialog;
-
+        public static UiDialog newInstance(Context context) {
+            return new UiDialog(context);
         }
 
-        public static UiDialog newInstance(Context context, int a) {
-            return new UiDialog(context, a);
+        public MaterialDialog getMaterialDialog() {
+            return dialog;
+        }
 
+        public MaterialDialog.Builder getMaterialDialogBuilder() {
+            return mBuilder;
         }
 
         public static void showSimpleDialog(Context context, String title, String message) {
-            newInstance(context).getBuilder().title(title).content(message).autoDismiss(true).build().show();
+            newInstance(context).getMaterialDialogBuilder().title(title).content(message).autoDismiss(true).build().show();
 
         }
 
@@ -60,7 +61,7 @@ public class UiHelper {
                     .progress(true, 100, false)
                     .progressIndeterminateStyle(true)
                     .cancelable(false)
-                    .icon(new IconDrawable(mContext, FontAwesomeIcons.fa_comment).actionBarSize().colorRes(R.color.colorPrimary))
+                    .icon(new IconDrawable(mContext, FontAwesomeIcons.fa_comment).actionBarSize().colorRes(R.color.accent))
                     .build();
         }
 
@@ -68,7 +69,7 @@ public class UiHelper {
             return mBuilder.title(title)
                     .content(content)
                     .cancelable(false)
-                    .icon(icon)
+                    .icon(icon == null ? new IconDrawable(mContext, FontAwesomeIcons.fa_angle_right).actionBarSize().colorRes(R.color.accent) : icon)
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(MaterialDialog dialog, DialogAction which) {
@@ -76,6 +77,29 @@ public class UiHelper {
                         }
                     })
                     .positiveText("Devam Et")
+                    .build();
+        }
+
+        public MaterialDialog getOKCancelDialog(String title, String content, Drawable icon) {
+            return mBuilder.title(title)
+                    .content(content)
+                    .cancelable(false)
+                    .icon(icon == null ? new IconDrawable(mContext, FontAwesomeIcons.fa_angle_right).actionBarSize().colorRes(R.color.accent) : icon)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .negativeText("İptal Et")
+                    .positiveText("Devam Et")
+                    .positiveColor(Color.RED)
                     .build();
         }
     }
