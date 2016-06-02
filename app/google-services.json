@@ -1,0 +1,61 @@
+{
+  "project_info": {
+    "project_number": "558996751150",
+    "project_id": "referandum-1291"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:558996751150:android:b277336820a93d5c",
+        "android_client_info": {
+          "package_name": "coderockets.com.referandum"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCivIgKVmfnsP2pDoMtEPWt3zsk-vevp7Q"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:558996751150:android:fcb1471fdc77efe5",
+        "android_client_info": {
+          "package_name": "com.coderockets.referandumproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCivIgKVmfnsP2pDoMtEPWt3zsk-vevp7Q"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
