@@ -2,7 +2,7 @@ package com.coderockets.referandumproject.rest.RestModel;
 
 import android.content.Context;
 
-import com.coderockets.androidhelper.helper.SuperHelper;
+import com.aykuttasil.androidbasichelperlib.SuperHelper;
 import com.google.gson.annotations.SerializedName;
 
 /**

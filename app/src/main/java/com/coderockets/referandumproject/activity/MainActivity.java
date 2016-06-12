@@ -8,7 +8,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.widget.FrameLayout;
 
-import com.coderockets.androidhelper.helper.UiHelper;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.fragment.AskQuestionFragment_;
 import com.coderockets.referandumproject.fragment.ProfileFragment;
@@ -19,6 +18,7 @@ import com.coderockets.referandumproject.util.adapter.MyFragmentPagerAdapter;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
+
 
 import hugo.weaving.DebugLog;
 
