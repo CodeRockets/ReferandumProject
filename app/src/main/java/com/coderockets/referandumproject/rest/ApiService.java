@@ -19,6 +19,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PartMap;
 import retrofit2.http.Query;
+import rx.Observable;
 
 /**
  * Created by aykutasil on 2.06.2016.
@@ -26,10 +27,10 @@ import retrofit2.http.Query;
 public interface ApiService {
 
     @POST("v1/question")
-    Call<SoruSorResponse> SoruSor(@Header("x-voter-client-id") String clientId,
-                                  @Header("x-voter-version") String version,
-                                  @Header("x-voter-installation") String installation,
-                                  @Body SoruSorRequest soruSorRequest);
+    Observable<SoruSorResponse> SoruSor(@Header("x-voter-client-id") String clientId,
+                                        @Header("x-voter-version") String version,
+                                        @Header("x-voter-installation") String installation,
+                                        @Body SoruSorRequest soruSorRequest);
 
 
     @GET("v1/question/all")

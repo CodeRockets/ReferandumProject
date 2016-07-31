@@ -1,0 +1,39 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center|bottom"
+    android:orientation="horizontal"
+    android:weightSum="2"
+    app:layout_flexBasisPercent="10%">
+
+    <com.joanzapata.iconify.widget.IconButton
+        android:id="@+id/ButtonFalse"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        android:layout_weight="1"
+        android:background="@color/color7"
+        android:gravity="center"
+        android:shadowColor="#22000000"
+        android:shadowDx="3"
+        android:shadowDy="3"
+        android:shadowRadius="1"
+        android:text="{fa-backward} HAYIR "
+        android:textColor="@color/white" />
+
+    <com.joanzapata.iconify.widget.IconButton
+        android:id="@+id/ButtonTrue"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:layout_weight="1"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:shadowColor="#22000000"
+        android:shadowDx="3"
+        android:shadowDy="3"
+        android:shadowRadius="1"
+        android:text="EVET  {fa-check}"
+        android:textColor="@color/white" />
+</LinearLayout>

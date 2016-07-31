@@ -16,7 +16,7 @@
         <item name="android:textColorHint">@color/primary</item>
         <item name="android:textColor">@color/primary_dark</item>
 
-        <item name="colorButtonNormal">@color/iron</item>
+        <item name="colorButtonNormal">@color/accent</item>
     </style>
 
     <style name="AppTheme.Widget" />

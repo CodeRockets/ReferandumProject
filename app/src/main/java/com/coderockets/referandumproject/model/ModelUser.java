@@ -1,5 +1,6 @@
 package com.coderockets.referandumproject.model;
 
+import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.google.gson.annotations.SerializedName;
 
@@ -31,6 +32,7 @@ public class ModelUser extends BaseModel {
 //    @SerializedName("is_deleted")
 //    private boolean IsDeleted;
 
+    @Column
     @SerializedName("facebook_id")
     private String FacebookId;
 

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardBackgroundColor="@color/card_activated"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp"
+        app:contentPadding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:src="@drawable/ok" />
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/ProfilePicture"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ok" />
+
+
+            <com.coderockets.referandumproject.util.AutoFitTextView
+                fontPath="fonts/Tabatha Regular.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ellipsize="none"
+                android:gravity="center"
+                android:maxLines="5"
+                android:text="Auto Resized Text, max 1 line Merhaba Merhaba Merhabaaaaa"
+                android:textSize="100sp" />
+
+            <!--<com.coderockets.referandumproject.util.AutoResizeTextView-->
+            <!--android:id="@+id/TextViewSoru"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:gravity="center"-->
+            <!--android:maxHeight="100dp"-->
+            <!--android:text="Merhaba Aykut Asil Merhaba Aykut Asil Merhaba Aykut Asil Merhaba Aykut Asil Merhaba Aykut Asil Merhaba Aykut Asil Merhaba Aykut Asil Merhaba Aykut Asil"-->
+            <!--android:textSize="30sp" />-->
+
+
+        </LinearLayout>
+
+
+        <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Aykut Asil" />-->
+
+
+        <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+
+        <!--<com.mikhaellopez.circularimageview.CircularImageView-->
+        <!--android:layout_width="70dp"-->
+        <!--android:layout_height="70dp"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginTop="102dp"-->
+        <!--android:src="@drawable/ok" />-->
+
+        <!--</RelativeLayout>-->
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>
+
+
+
