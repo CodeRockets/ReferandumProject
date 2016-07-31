@@ -37,27 +37,6 @@
                 android:text="GÖNDER" />
 
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/AskQuestionLoginLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:gravity="center"
-                android:text="Giriş Yapmanız gerekmektedir." />
-
-            <com.facebook.login.widget.LoginButton
-                android:id="@+id/LoginButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
     </FrameLayout>
 
 

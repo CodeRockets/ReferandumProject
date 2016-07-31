@@ -1,16 +1,10 @@
 package com.coderockets.referandumproject.fragment;
 
 import android.content.Context;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.LinearLayout;
 
-import com.aykuttasil.androidbasichelperlib.SuperHelper;
-import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.MainActivity;
 import com.coderockets.referandumproject.util.adapter.CustomViewPagerAdapter;
@@ -35,7 +29,6 @@ public class ReferandumFragment extends BaseFragment {
     @DebugLog
     @AfterViews
     public void ReferandumFragmentInit() {
-        setHasOptionsMenu(true);
         this.mContext = getActivity();
         this.mActivity = (MainActivity) getActivity();
         //
@@ -81,26 +74,4 @@ public class ReferandumFragment extends BaseFragment {
     }
 
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.fragment_referandum_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menuAskQuestion: {
-                SuperHelper.ReplaceFragmentBeginTransaction(
-                        mActivity,
-                        AskQuestionFragment_.builder().build(),
-                        MainActivity.FRAGMENT_CONTAINER,
-                        AskQuestionFragment.class.getSimpleName(),
-                        true);
-                break;
-            }
-        }
-        UiHelper.UiSnackBar.showSimpleSnackBar(getView(), item.getTitle().toString(), Snackbar.LENGTH_LONG);
-        return true;
-    }
 }
