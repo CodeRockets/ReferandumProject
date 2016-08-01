@@ -10,12 +10,15 @@ import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.MainActivity;
 import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.rest.RestModel.SoruSorRequest;
+import com.joanzapata.iconify.IconDrawable;
+import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.slmyldz.random.Randoms;
 
 import org.androidannotations.annotations.AfterViews;
@@ -39,8 +42,14 @@ public class AskQuestionFragment extends BaseFragment {
     @ViewById(R.id.AskQuestionMainLayout)
     LinearLayout mAskQuestionMainLayout;
 
-    @ViewById(R.id.FabAddImage)
-    FloatingActionButton mFabAddImage;
+    @ViewById(R.id.FabRefreshImage)
+    FloatingActionButton mFabRefreshImage;
+
+    @ViewById(R.id.FabUploadImage)
+    FloatingActionButton mFabUploadImage;
+
+    @ViewById(R.id.ImageView_SoruImage)
+    ImageView mImageView_SoruImage;
     //
     Context mContext;
     MainActivity mActivity;
@@ -51,13 +60,18 @@ public class AskQuestionFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         this.mContext = getActivity();
         this.mActivity = (MainActivity) getActivity();
-        updateUI();
     }
 
     @AfterViews
     @DebugLog
     public void AskQuestionFragmentInit() {
+        setFab();
+        updateUI();
+    }
 
+    private void setFab() {
+        mFabRefreshImage.setImageDrawable(new IconDrawable(mContext, FontAwesomeIcons.fa_check_circle).sizeDp(100).color(R.color.color4).getCurrent());
+        mFabUploadImage.setImageDrawable(new IconDrawable(mContext, FontAwesomeIcons.fa_upload).sizeDp(100).color(R.color.color4).getCurrent());
     }
 
     @DebugLog
@@ -69,6 +83,19 @@ public class AskQuestionFragment extends BaseFragment {
 
     @DebugLog
     private void updateUI() {
+        SuperHelper.setRandomImage(this, mImageView_SoruImage);
+    }
+
+    @DebugLog
+    @Click(R.id.FabRefreshImage)
+    public void FabRefreshImageClick() {
+        SuperHelper.setRandomImage(this, mImageView_SoruImage);
+    }
+
+    @DebugLog
+    @Click(R.id.FabUploadImage)
+    public void FabUploadImageClick() {
+        //SuperHelper.setRandomImage(this, mImageView_SoruImage);
     }
 
     @DebugLog
@@ -82,10 +109,6 @@ public class AskQuestionFragment extends BaseFragment {
 
         //ApiManager.getInstance(mContext).SoruSor(soruSorRequest);
 
-    }
-
-    @Click(R.id.FabAddImage)
-    public void FabClick() {
     }
 
     @Override

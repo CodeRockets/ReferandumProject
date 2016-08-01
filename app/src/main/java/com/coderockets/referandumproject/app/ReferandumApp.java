@@ -39,12 +39,19 @@ public class ReferandumApp extends Application {
     @DebugLog
     private void initReferandum() {
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/Xenotron.ttf")
+                .setDefaultFontPath("fonts/ShadowsIntoLight.ttf")
                 .setFontAttrId(R.attr.fontPath)
                 .build());
 
         Fabric.with(this, new Crashlytics());
         Iconify.with(new FontAwesomeModule());
+
+        Logger.init("ReferandumLogger")                // default PRETTYLOGGER or use just init()
+                .methodCount(3)                      // default 2
+                .logLevel(BuildConfig.DEBUG ? LogLevel.FULL : LogLevel.NONE)        // default LogLevel.FULL
+                .methodOffset(0);                    // default 0
+        //.hideThreadInfo()                          // default shown
+        //.logAdapter(new AndroidLogAdapter());      //default AndroidLogAdapter
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
@@ -57,17 +64,6 @@ public class ReferandumApp extends Application {
                 .create());
     }
 
-    @DebugLog
-    public void initSweetLoc() {
-        Logger.init("ReferandumLogger")                // default PRETTYLOGGER or use just init()
-                .methodCount(3)                      // default 2
-                .logLevel(BuildConfig.DEBUG ? LogLevel.FULL : LogLevel.NONE)        // default LogLevel.FULL
-                .methodOffset(0);                    // default 0
-        //.hideThreadInfo()                          // default shown
-        //.logAdapter(new AndroidLogAdapter());      //default AndroidLogAdapter
-
-        Fabric.with(this, new Crashlytics());
-    }
 
     @Override
     protected void attachBaseContext(Context base) {

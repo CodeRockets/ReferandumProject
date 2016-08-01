@@ -19,8 +19,7 @@
                 android:id="@+id/ImageView_SoruImage"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="3"
-                android:src="@drawable/ok" />
+                android:layout_weight="3" />
 
             <EditText
                 android:id="@+id/EditText_SoruText"
@@ -41,13 +40,22 @@
 
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/FabAddImage"
+        android:id="@+id/FabRefreshImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
         app:fabSize="normal"
         app:layout_anchor="@+id/ImageView_SoruImage"
         app:layout_anchorGravity="bottom|right|end" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/FabUploadImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        app:fabSize="normal"
+        app:layout_anchor="@+id/ImageView_SoruImage"
+        app:layout_anchorGravity="bottom|left|end" />
 
 </android.support.design.widget.CoordinatorLayout>
 
