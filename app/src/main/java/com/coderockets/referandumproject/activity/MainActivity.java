@@ -11,6 +11,8 @@ import com.coderockets.referandumproject.fragment.ProfileFragment_;
 import com.coderockets.referandumproject.fragment.ReferandumFragment;
 import com.coderockets.referandumproject.fragment.ReferandumFragment_;
 import com.coderockets.referandumproject.helper.SuperHelper;
+import com.joanzapata.iconify.IconDrawable;
+import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -55,7 +57,9 @@ public class MainActivity extends BaseActivity {
     private void setToolbar() {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("REFERANDUM");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(new IconDrawable(this, FontAwesomeIcons.fa_home).actionBarSize().getCurrent());
     }
 
 
@@ -121,7 +125,16 @@ public class MainActivity extends BaseActivity {
                         true);
                 break;
             }
+            case android.R.id.home: {
+                SuperHelper.ReplaceFragmentBeginTransaction(
+                        this,
+                        ReferandumFragment_.builder().build(),
+                        MainActivity.FRAGMENT_CONTAINER,
+                        MainActivity.class.getSimpleName(),
+                        true);
+                break;
+            }
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 }
