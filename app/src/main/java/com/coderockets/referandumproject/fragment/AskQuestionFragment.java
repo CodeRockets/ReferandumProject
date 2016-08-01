@@ -3,7 +3,9 @@ package com.coderockets.referandumproject.fragment;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -43,13 +45,19 @@ public class AskQuestionFragment extends BaseFragment {
     Context mContext;
     MainActivity mActivity;
 
+    @DebugLog
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.mContext = getActivity();
+        this.mActivity = (MainActivity) getActivity();
+        updateUI();
+    }
+
     @AfterViews
     @DebugLog
     public void AskQuestionFragmentInit() {
-        this.mContext = getActivity();
-        this.mActivity = (MainActivity) getActivity();
-        //
-        updateUI();
+
     }
 
     @DebugLog
@@ -61,13 +69,6 @@ public class AskQuestionFragment extends BaseFragment {
 
     @DebugLog
     private void updateUI() {
-        if (!SuperHelper.checkUser()) {
-            SuperHelper.ReplaceFragmentBeginTransaction(mActivity,
-                    ProfileFragment_.builder().build(),
-                    MainActivity.FRAGMENT_CONTAINER,
-                    ProfileFragment.class.getSimpleName(),
-                    false);
-        }
     }
 
     @DebugLog
