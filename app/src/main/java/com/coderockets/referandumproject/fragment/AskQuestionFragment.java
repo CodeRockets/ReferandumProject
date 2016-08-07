@@ -16,7 +16,9 @@ import android.widget.LinearLayout;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.MainActivity;
 import com.coderockets.referandumproject.helper.SuperHelper;
+import com.coderockets.referandumproject.rest.ApiManager;
 import com.coderockets.referandumproject.rest.RestModel.SoruSorRequest;
+import com.facebook.AccessToken;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.slmyldz.random.Randoms;
@@ -103,7 +105,7 @@ public class AskQuestionFragment extends BaseFragment {
     public void Button_SoruGonderClick() {
 
         SoruSorRequest soruSorRequest = new SoruSorRequest();
-        soruSorRequest.setUserId("123");
+        soruSorRequest.setUserId(AccessToken.getCurrentAccessToken().getToken());
         soruSorRequest.setQuestionText(mEditText_SoruText.getText().toString());
         soruSorRequest.setQuestionImage(Randoms.imageUrl("png"));
 

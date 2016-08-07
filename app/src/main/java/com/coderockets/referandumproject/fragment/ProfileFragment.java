@@ -2,6 +2,8 @@ package com.coderockets.referandumproject.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -10,13 +12,13 @@ import android.widget.ImageView;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.MainActivity;
 import com.coderockets.referandumproject.helper.SuperHelper;
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
+import com.facebook.Profile;
+import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.orhanobut.logger.Logger;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -50,6 +52,15 @@ public class ProfileFragment extends BaseFragment {
     Context mContext;
     MainActivity mActivity;
     CallbackManager mCallbackManager;
+    AccessTokenTracker mAccessTokenTracker;
+    ProfileTracker mProfileTracker;
+
+
+    @DebugLog
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @DebugLog
     @AfterViews
@@ -58,6 +69,9 @@ public class ProfileFragment extends BaseFragment {
         mActivity = (MainActivity) getActivity();
         mCallbackManager = CallbackManager.Factory.create();
         //
+        setLoginButton();
+        setAccesTokenTracker();
+        setProfileTracker();
         updateUI();
     }
 
@@ -67,27 +81,13 @@ public class ProfileFragment extends BaseFragment {
         super.onResume();
     }
 
-
-    @DebugLog
-    private void updateUI() {
-
-        // Kullanıcı Login değilse
-        if (!SuperHelper.checkUser()) {
-            hideMainContent();
-            showLoginContent();
-            mActivity.makeBlur(mContext, mImageViewLoginBackground, mImageViewLoginBackground);
-            setLoginButton();
-        } else {
-            Blurry.delete(mProfileMainLayout);
-            hideLoginContent();
-            showMainContent();
-        }
-    }
-
     @DebugLog
     private void setLoginButton() {
-        mLoginButton.setReadPermissions("public_profile", "email");
+        mLoginButton.setReadPermissions("public_profile");
         mLoginButton.setFragment(this);
+
+
+        /*
         mLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -105,6 +105,50 @@ public class ProfileFragment extends BaseFragment {
 
             }
         });
+        */
+
+    }
+
+    @DebugLog
+    private void setAccesTokenTracker() {
+        mAccessTokenTracker = new AccessTokenTracker() {
+            @DebugLog
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+                AccessToken.setCurrentAccessToken(currentAccessToken);
+                updateUI();
+            }
+        };
+        mAccessTokenTracker.startTracking();
+    }
+
+    @DebugLog
+    private void setProfileTracker() {
+        mProfileTracker = new ProfileTracker() {
+            @DebugLog
+            @Override
+            protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+                Profile.setCurrentProfile(currentProfile);
+                //updateUI();
+            }
+        };
+        mProfileTracker.startTracking();
+    }
+
+
+    @DebugLog
+    private void updateUI() {
+
+        // Kullanıcı Login değilse
+        if (!SuperHelper.checkUser()) {
+            hideMainContent();
+            showLoginContent();
+            mActivity.makeBlur(mContext, mImageViewLoginBackground, mImageViewLoginBackground);
+        } else {
+            Blurry.delete(mProfileMainLayout);
+            hideLoginContent();
+            showMainContent();
+        }
     }
 
     @DebugLog
@@ -127,12 +171,14 @@ public class ProfileFragment extends BaseFragment {
         mProfileMainLayout.setVisibility(View.GONE);
     }
 
+    @DebugLog
     @Click(R.id.ButtonCikisYap)
     public void ButtonCikisYapClick() {
         LoginManager.getInstance().logOut();
         updateUI();
     }
 
+    @DebugLog
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -141,7 +187,15 @@ public class ProfileFragment extends BaseFragment {
 
     @DebugLog
     @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @DebugLog
+    @Override
     public void onDestroyView() {
+        mAccessTokenTracker.stopTracking();
+        mProfileTracker.stopTracking();
         super.onDestroyView();
     }
 

@@ -26,6 +26,7 @@ public class SuperHelper extends com.aykuttasil.androidbasichelperlib.SuperHelpe
     @DebugLog
     public static String setRandomImage(Fragment fragment, ImageView imageView) {
         String randomUrl = Randoms.imageUrl("jpg");
+        randomUrl = "http://lorempixel.com/400/200";
         Logger.i("Random Image Url: " + randomUrl);
         Glide.with(fragment)
                 .load(randomUrl)

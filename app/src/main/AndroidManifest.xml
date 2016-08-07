@@ -44,6 +44,10 @@
             </intent-filter>
         </activity>
 
+        <provider android:authorities="com.facebook.app.FacebookContentProvider1590249051267349"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true" />
+
         <service
             android:name=".service.MyFirebaseInstanceIdService"
             android:exported="false">
