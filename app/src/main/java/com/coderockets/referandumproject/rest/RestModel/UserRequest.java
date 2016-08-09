@@ -1,17 +1,19 @@
 package com.coderockets.referandumproject.rest.RestModel;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by aykutasil on 1.05.2016.
  */
-public class UserRequest extends BaseRequest {
+public class UserRequest {
     /*
     {
         "token": "string"
     }
     */
 
+    @Expose
     @SerializedName("token")
     private String Token;
 

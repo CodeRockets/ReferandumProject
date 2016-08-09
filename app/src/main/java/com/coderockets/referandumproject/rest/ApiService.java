@@ -26,6 +26,12 @@ import rx.Observable;
  */
 public interface ApiService {
 
+    @POST("v1/user")
+    Observable<UserResponse> User(@Header("x-voter-client-id") String clientId,
+                                  @Header("x-voter-version") String version,
+                                  @Header("x-voter-installation") String installation,
+                                  @Body UserRequest userRequest);
+
     @POST("v1/question")
     Observable<SoruSorResponse> SoruSor(@Header("x-voter-client-id") String clientId,
                                         @Header("x-voter-version") String version,
@@ -50,12 +56,6 @@ public interface ApiService {
                                           @Header("x-voter-version") String version,
                                           @Header("x-voter-installation") String installation,
                                           @PartMap Map<String, RequestBody> Files);
-
-    @POST("v1/user")
-    Call<UserResponse> User(@Header("x-voter-client-id") String clientId,
-                            @Header("x-voter-version") String version,
-                            @Header("x-voter-installation") String installation,
-                            UserRequest userRequest);
 
 
     //@Multipart

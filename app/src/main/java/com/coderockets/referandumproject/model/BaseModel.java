@@ -1,19 +1,27 @@
 package com.coderockets.referandumproject.model;
 
 import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by aykutasil on 2.05.2016.
  */
-public class BaseModel extends Model {
+public class BaseModel {
 
+    @Expose
+    @Column
     @SerializedName("id")
     private String Id;
 
+    @Expose
+    @Column
     @SerializedName("created_at")
     private String CreatedAt;
 
+    @Expose
+    @Column
     @SerializedName("updated_at")
     private String UpdatedAt;
 

@@ -42,4 +42,46 @@ public class BaseActivity extends AppCompatActivity {
                 .capture(view)
                 .into(into);
     }
+
+    @DebugLog
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        /*
+        switch (requestCode) {
+            case 123: {
+
+                boolean allPermissionGranted = true;
+                for (int a = 0; a < permissions.length; a++) {
+                    if (grantResults[a] == PackageManager.PERMISSION_GRANTED) {
+                        allPermissionGranted = true;
+                    } else {
+                        allPermissionGranted = false;
+                        break;
+                    }
+                }
+                if (!allPermissionGranted) {
+                    final MaterialDialog dialog = UiHelper.UiDialog.newInstance(this, 1).getOKDialog("Reaktif Uygulama İzinleri", "Tüm izinleri vermeniz gerekmektedir !", null);
+                    dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                            setResult(Const.ACTIVITY_RESULT_CODE_SIGNUP_ERROR);
+                            finish();
+                        }
+                    });
+                    dialog.show();
+                }
+                break;
+            }
+            default: {
+                setResult(Const.ACTIVITY_RESULT_CODE_SIGNUP_ERROR);
+                finish();
+                //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            }
+        }
+        */
+
+    }
 }

@@ -1,8 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.coderockets.referandumproject">
 
-    <application>
-
-    </application>
+    <application
+        android:name="com.coderockets.referandumproject.app.ReferandumAppDebug"
+        tools:replace="android:name" />
 
 </manifest>

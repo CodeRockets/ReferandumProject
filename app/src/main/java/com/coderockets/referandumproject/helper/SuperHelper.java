@@ -1,5 +1,9 @@
 package com.coderockets.referandumproject.helper;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.widget.ImageView;
 
@@ -22,17 +26,7 @@ public class SuperHelper extends com.aykuttasil.androidbasichelperlib.SuperHelpe
     public static boolean checkUser() {
         return AccessToken.getCurrentAccessToken() != null;
     }
+    
 
-    @DebugLog
-    public static String setRandomImage(Fragment fragment, ImageView imageView) {
-        String randomUrl = Randoms.imageUrl("jpg");
-        randomUrl = "http://lorempixel.com/400/200";
-        Logger.i("Random Image Url: " + randomUrl);
-        Glide.with(fragment)
-                .load(randomUrl)
-                .signature(new StringSignature(UUID.randomUUID().toString()))
-                .fitCenter()
-                .into(imageView);
-        return randomUrl;
-    }
+
 }

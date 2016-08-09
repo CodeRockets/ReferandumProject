@@ -1,5 +1,6 @@
 package com.coderockets.referandumproject.rest.RestModel;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -7,14 +8,15 @@ import com.google.gson.annotations.SerializedName;
  */
 public class BaseRequest {
 
+    @Expose
     @SerializedName("app")
-    private String App = "0";
+    private int App;
 
-    public String getApp() {
+    public int getApp() {
         return App;
     }
 
-    public void setApp(String app) {
-        this.App = app;
+    public void setApp(int app) {
+        App = app;
     }
 }

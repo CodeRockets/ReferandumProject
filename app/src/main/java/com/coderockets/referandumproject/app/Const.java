@@ -1,6 +1,8 @@
 package com.coderockets.referandumproject.app;
 
 
+import android.Manifest;
+
 import com.coderockets.referandumproject.BuildConfig;
 
 /**
@@ -8,20 +10,14 @@ import com.coderockets.referandumproject.BuildConfig;
  */
 public class Const {
 
-    public static final String CLOSE = "Close";
-    public static final String SORU_SOR = "SoruSor";
-    public static final String BOOK = "Book";
-    public static final String SORULAR = "Sorular";
-    public static final String CASE = "Case";
-    public static final String SHOP = "Shop";
-    public static final String PARTY = "Party";
-    public static final String MOVIE = "Movie";
-    public static final String SETTINGS = "Settings";
-
-
+    public static final int REFERANDUM_APP = 0;
     public static final String CLIENT_ID = "0";
     public static final String REFERANDUM_VERSION = "1";
-    //public static final String INSTALLATION = "246";
+    //public static final String INSTALLATION = "246"
+
+
+    public static final String[] PERMISSIONS_GENERAL = new String[]{Manifest.permission.READ_PHONE_STATE};
+    public static final int PERMISIONS_REQUEST_GENERAL = 111;
 
 
     ////

@@ -1,5 +1,6 @@
 package com.coderockets.referandumproject.rest.RestModel;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -17,18 +18,23 @@ public class AnswerRequest extends BaseRequest {
     }
     */
 
+    @Expose
     @SerializedName("option")
     private String Option;
 
+    @Expose
     @SerializedName("question_id")
     private String QuestionId;
 
+    @Expose
     @SerializedName("user_id")
     private String UserId;
 
+    @Expose
     @SerializedName("text")
     private String Text;
 
+    @Expose
     @SerializedName("client_id")
     private int ClientId;
 

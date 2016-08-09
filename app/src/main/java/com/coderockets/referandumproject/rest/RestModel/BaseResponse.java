@@ -1,5 +1,6 @@
 package com.coderockets.referandumproject.rest.RestModel;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -7,15 +8,19 @@ import com.google.gson.annotations.SerializedName;
  */
 public class BaseResponse {
 
+    @Expose
     @SerializedName("statusCode")
     private int StatusCode;
 
+    @Expose
     @SerializedName("error")
     private String Error;
 
+    @Expose
     @SerializedName("message")
     private String Message;
 
+    @Expose
     @SerializedName("timestamp")
     private long TimeStamp;
 

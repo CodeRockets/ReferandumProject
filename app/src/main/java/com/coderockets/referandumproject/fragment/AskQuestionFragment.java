@@ -1,24 +1,21 @@
 package com.coderockets.referandumproject.fragment;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.app.ActivityCompat;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.MainActivity;
+import com.coderockets.referandumproject.app.Const;
 import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.rest.ApiManager;
 import com.coderockets.referandumproject.rest.RestModel.SoruSorRequest;
-import com.facebook.AccessToken;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.slmyldz.random.Randoms;
@@ -29,12 +26,8 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
 import hugo.weaving.DebugLog;
-import permissions.dispatcher.NeedsPermission;
-import permissions.dispatcher.PermissionRequest;
-import permissions.dispatcher.RuntimePermissions;
 
 
-@RuntimePermissions
 @EFragment(R.layout.fragment_askquestion_layout)
 public class AskQuestionFragment extends BaseFragment {
 
@@ -72,8 +65,8 @@ public class AskQuestionFragment extends BaseFragment {
     }
 
     private void setFab() {
-        mFabRefreshImage.setImageDrawable(new IconDrawable(mContext, FontAwesomeIcons.fa_check_circle).sizeDp(100).color(R.color.color4).getCurrent());
-        mFabUploadImage.setImageDrawable(new IconDrawable(mContext, FontAwesomeIcons.fa_upload).sizeDp(100).color(R.color.color4).getCurrent());
+        mFabRefreshImage.setImageDrawable(new IconDrawable(mContext, FontAwesomeIcons.fa_refresh).sizeDp(150).color(R.color.color4).getCurrent());
+        mFabUploadImage.setImageDrawable(new IconDrawable(mContext, FontAwesomeIcons.fa_upload).sizeDp(150).color(R.color.color4).getCurrent());
     }
 
     @DebugLog
@@ -85,13 +78,13 @@ public class AskQuestionFragment extends BaseFragment {
 
     @DebugLog
     private void updateUI() {
-        SuperHelper.setRandomImage(this, mImageView_SoruImage);
+        SuperHelper.setRandomImage(mContext, mImageView_SoruImage);
     }
 
     @DebugLog
     @Click(R.id.FabRefreshImage)
     public void FabRefreshImageClick() {
-        SuperHelper.setRandomImage(this, mImageView_SoruImage);
+        SuperHelper.setRandomImage(mContext, mImageView_SoruImage);
     }
 
     @DebugLog
@@ -103,23 +96,51 @@ public class AskQuestionFragment extends BaseFragment {
     @DebugLog
     @Click(R.id.Button_SoruGonder)
     public void Button_SoruGonderClick() {
+        if (!SuperHelper.checkPermissions(mContext, Const.PERMISSIONS_GENERAL)) {
+            ActivityCompat.requestPermissions(mActivity, Const.PERMISSIONS_GENERAL, Const.PERMISIONS_REQUEST_GENERAL);
+            return;
+        }
+        sendQuestionRequest();
+    }
 
-        SoruSorRequest soruSorRequest = new SoruSorRequest();
-        soruSorRequest.setUserId(AccessToken.getCurrentAccessToken().getToken());
+    @DebugLog
+    public void sendQuestionRequest() {
+        SoruSorRequest soruSorRequest = SoruSorRequest.SoruSorRequestInstance();
         soruSorRequest.setQuestionText(mEditText_SoruText.getText().toString());
         soruSorRequest.setQuestionImage(Randoms.imageUrl("png"));
 
-        //ApiManager.getInstance(mContext).SoruSor(soruSorRequest);
-
+        ApiManager.getInstance(mContext).SoruSor(soruSorRequest);
     }
 
+    @DebugLog
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        // NOTE: delegate the permission handling to generated method
-        //.onRequestPermissionsResult(this, requestCode, grantResults);
+
+        switch (requestCode) {
+            case Const.PERMISIONS_REQUEST_GENERAL: {
+                boolean allPermissionGranted = true;
+                for (int a = 0; a < permissions.length; a++) {
+                    if (grantResults[a] == PackageManager.PERMISSION_GRANTED) {
+                        allPermissionGranted = true;
+                    } else {
+                        allPermissionGranted = false;
+                        break;
+                    }
+                }
+                if (!allPermissionGranted) {
+                    sendQuestionRequest();
+                } else {
+                    ActivityCompat.requestPermissions(mActivity, Const.PERMISSIONS_GENERAL, Const.PERMISIONS_REQUEST_GENERAL);
+                }
+            }
+            default: {
+
+            }
+        }
     }
 
+    /*
     @NeedsPermission(Manifest.permission.READ_PHONE_STATE)
     public void showRationaleDialog(@StringRes int messageResId, final PermissionRequest request) {
         new AlertDialog.Builder(mContext)
@@ -139,4 +160,6 @@ public class AskQuestionFragment extends BaseFragment {
                 .setMessage(messageResId)
                 .show();
     }
+    */
+
 }

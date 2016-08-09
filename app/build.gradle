@@ -75,7 +75,12 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] } }
+    sourceSets {
+        main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] }
+        debug {
+            manifest.srcFile 'src/debug/AndroidManifest.xml'
+        }
+    }
 }
 
 dependencies {
@@ -122,7 +127,7 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:4.+'
     compile 'com.github.florent37:glidepalette:1.0.6'
     // Google Glide ve Palette kütüphanelerinin birlikte kullanılmasını sağlar
-    compile 'com.aykuttasil:androidbasichelper:1.0.4' // AndroidBasicHelper
+    compile 'com.aykuttasil:androidbasichelper:1.0.5' // AndroidBasicHelper
     compile 'com.google.android:flexbox:0.2.1' // Google FlexboxLayout kullanımı için
     compile 'com.github.slmyldz:AndroidRandom:1.0' // Her türden random veriler üretilmesini sağlar
 

@@ -1,14 +1,16 @@
 package com.coderockets.referandumproject.model;
 
+import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by aykutasil on 1.05.2016.
  */
 @Table(name = "User", id = "_id")
-public class ModelUser extends BaseModel {
+public class ModelUser extends Model {
 
     /*{
             "id": "c94642f0-fd0f-11e5-9a28-a3a2789bd42e",
@@ -20,25 +22,38 @@ public class ModelUser extends BaseModel {
             "profile_img": "http://res.cloudinary.com/dlxdlp9jz/image/upload/v1460068234/w9uanjdmtg86xebceoqv.jpg"
     }*/
 
-//    @SerializedName("id")
-//    private String Id;
-//
-//    @SerializedName("created_at")
-//    private String CreatedAt;
-//
-//    @SerializedName("updated_at")
-//    private String UpdatedAt;
-//
-//    @SerializedName("is_deleted")
-//    private boolean IsDeleted;
+    @Expose
+    @Column
+    @SerializedName("id")
+    private String UserId;
 
+    @Expose
+    @Column
+    @SerializedName("created_at")
+    private String CreatedAt;
+
+    @Expose
+    @Column
+    @SerializedName("updated_at")
+    private String UpdatedAt;
+
+    @Expose
+    @Column
+    @SerializedName("is_deleted")
+    private boolean IsDeleted;
+
+    @Expose
     @Column
     @SerializedName("facebook_id")
     private String FacebookId;
 
+    @Expose
+    @Column
     @SerializedName("name")
     private String Name;
 
+    @Expose
+    @Column
     @SerializedName("profile_img")
     private String ProfileImageUrl;
 
@@ -102,5 +117,37 @@ public class ModelUser extends BaseModel {
 
     public void setProfileImageUrl(String profileImageUrl) {
         ProfileImageUrl = profileImageUrl;
+    }
+
+    public String getUserId() {
+        return UserId;
+    }
+
+    public void setUserId(String userId) {
+        UserId = userId;
+    }
+
+    public String getCreatedAt() {
+        return CreatedAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        CreatedAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return UpdatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        UpdatedAt = updatedAt;
+    }
+
+    public boolean isDeleted() {
+        return IsDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        IsDeleted = deleted;
     }
 }

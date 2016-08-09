@@ -1,15 +1,16 @@
 package com.coderockets.referandumproject.rest;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.aykuttasil.androidbasichelperlib.SuperHelper;
 import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.coderockets.referandumproject.app.Const;
 import com.coderockets.referandumproject.rest.RestModel.SoruSorRequest;
 import com.coderockets.referandumproject.rest.RestModel.SoruSorResponse;
+import com.orhanobut.logger.Logger;
 
 import hugo.weaving.DebugLog;
+import permissions.dispatcher.RuntimePermissions;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -17,6 +18,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by aykutasil on 2.06.2016.
  */
+@RuntimePermissions
 public class ApiManager {
 
     private static ApiManager mInstance;
@@ -41,7 +43,7 @@ public class ApiManager {
     @DebugLog
     public void SoruSor(SoruSorRequest soruSorRequest) {
 
-        Log.i("UserId", soruSorRequest.getUserId());
+        Logger.i("UserId: " + soruSorRequest.getUserId());
 
         try {
             RestClient restClient = RestClient.getInstance();
@@ -55,6 +57,7 @@ public class ApiManager {
             api.subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(soruSorResponse -> {
+                        //UiHelper.UiSnackBar.showSimpleSnackBar();
                         UiHelper.UiDialog.newInstance(mContext).getOKDialog("Uyyy", soruSorResponse.getData().getQuestionText(), null).show();
                     }, error -> {
                         UiHelper.UiDialog.newInstance(mContext).getOKDialog("Uyyy", error.getMessage(), null).show();

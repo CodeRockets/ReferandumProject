@@ -1,6 +1,7 @@
 package com.coderockets.referandumproject.rest.RestModel;
 
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
  */
 public class SorularResponse extends BaseResponse {
 
+    @Expose
     @SerializedName("data")
     private List<ModelQuestionInformation> Data;
 

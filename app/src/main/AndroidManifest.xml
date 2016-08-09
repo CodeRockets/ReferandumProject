@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.coderockets.referandumproject">
 
 
@@ -15,7 +16,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="android:name">
 
         <activity
             android:name=".activity.MainActivity_"
@@ -38,14 +40,17 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
 
-        <provider android:authorities="com.facebook.app.FacebookContentProvider1590249051267349"
+        <provider
             android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider1590249051267349"
             android:exported="true" />
 
         <service
@@ -71,6 +76,14 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="1180ed8815863b0006d4df63e666bc74901dc3ec" />
+
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="referandum.db" />
+
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="1" />
 
     </application>
 </manifest>
