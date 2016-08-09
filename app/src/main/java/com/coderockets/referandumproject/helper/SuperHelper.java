@@ -1,19 +1,12 @@
 package com.coderockets.referandumproject.helper;
 
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.widget.ImageView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.signature.StringSignature;
 import com.facebook.AccessToken;
 import com.orhanobut.logger.Logger;
-import com.slmyldz.random.Randoms;
-
-import java.util.UUID;
 
 import hugo.weaving.DebugLog;
 
@@ -26,7 +19,32 @@ public class SuperHelper extends com.aykuttasil.androidbasichelperlib.SuperHelpe
     public static boolean checkUser() {
         return AccessToken.getCurrentAccessToken() != null;
     }
-    
+
+    public static void ReplaceFragmentBeginTransaction(AppCompatActivity activity, Fragment fragment, int containerID, String tag, boolean isBackStack) {
+
+        FragmentManager.enableDebugLogging(true);
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        Fragment alreadyFragment = fragmentManager.findFragmentByTag(tag);
+        if (alreadyFragment == null) {
+            Logger.i("alreadyFragment == null");
+            if (isBackStack) {
+                Logger.i("isBackStack : true");
+                fragmentTransaction.addToBackStack(fragment.getClass().getSimpleName());
+            }
+            //fragmentTransaction.commitAllowingStateLoss();
+            fragmentTransaction.replace(containerID, fragment, tag);
+            fragmentTransaction.commit();
+        } else {
+            Logger.i("alreadyFragment != null");
+            fragmentTransaction.replace(containerID, alreadyFragment, tag);
+            fragmentTransaction.commit();
+        }
+
+
+    }
 
 
 }

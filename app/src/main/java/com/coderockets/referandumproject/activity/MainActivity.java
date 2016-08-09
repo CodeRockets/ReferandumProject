@@ -103,15 +103,15 @@ public class MainActivity extends BaseActivity {
                     SuperHelper.ReplaceFragmentBeginTransaction(
                             this,
                             ProfileFragment_.builder().build(),
-                            MainActivity.FRAGMENT_CONTAINER,
-                            MainActivity.class.getSimpleName(),
+                            FRAGMENT_CONTAINER,
+                            ProfileFragment_.class.getSimpleName(),
                             true);
                 } else {
                     SuperHelper.ReplaceFragmentBeginTransaction(
                             this,
                             AskQuestionFragment_.builder().build(),
-                            MainActivity.FRAGMENT_CONTAINER,
-                            MainActivity.class.getSimpleName(),
+                            FRAGMENT_CONTAINER,
+                            AskQuestionFragment_.class.getSimpleName(),
                             true);
                 }
                 break;
@@ -120,8 +120,8 @@ public class MainActivity extends BaseActivity {
                 SuperHelper.ReplaceFragmentBeginTransaction(
                         this,
                         ProfileFragment_.builder().build(),
-                        MainActivity.FRAGMENT_CONTAINER,
-                        MainActivity.class.getSimpleName(),
+                        FRAGMENT_CONTAINER,
+                        ProfileFragment_.class.getSimpleName(),
                         true);
                 break;
             }
@@ -129,8 +129,8 @@ public class MainActivity extends BaseActivity {
                 SuperHelper.ReplaceFragmentBeginTransaction(
                         this,
                         ReferandumFragment_.builder().build(),
-                        MainActivity.FRAGMENT_CONTAINER,
-                        MainActivity.class.getSimpleName(),
+                        FRAGMENT_CONTAINER,
+                        ReferandumFragment_.class.getSimpleName(),
                         true);
                 break;
             }

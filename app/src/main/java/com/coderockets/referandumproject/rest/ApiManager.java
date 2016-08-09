@@ -10,7 +10,6 @@ import com.coderockets.referandumproject.rest.RestModel.SoruSorResponse;
 import com.orhanobut.logger.Logger;
 
 import hugo.weaving.DebugLog;
-import permissions.dispatcher.RuntimePermissions;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -18,7 +17,6 @@ import rx.schedulers.Schedulers;
 /**
  * Created by aykutasil on 2.06.2016.
  */
-@RuntimePermissions
 public class ApiManager {
 
     private static ApiManager mInstance;

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.UiThread;
 
 import hugo.weaving.DebugLog;
 import jp.wasabeef.blurry.Blurry;
@@ -23,7 +24,7 @@ public class BaseActivity extends AppCompatActivity {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @org.androidannotations.annotations.UiThread
+    @UiThread
     @DebugLog
     public void makeBlur(Context context, ViewGroup viewGroup) {
         Blurry.delete(viewGroup);
@@ -33,7 +34,7 @@ public class BaseActivity extends AppCompatActivity {
                 .onto(viewGroup);
     }
 
-    @org.androidannotations.annotations.UiThread
+    @UiThread
     @DebugLog
     public void makeBlur(Context context, View view, ImageView into) {
         Blurry.with(context)
@@ -43,12 +44,14 @@ public class BaseActivity extends AppCompatActivity {
                 .into(into);
     }
 
+
+    /*
     @DebugLog
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        /*
+
         switch (requestCode) {
             case 123: {
 
@@ -81,7 +84,7 @@ public class BaseActivity extends AppCompatActivity {
                 //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
             }
         }
-        */
 
-    }
+
+    }  */
 }

@@ -27,6 +27,10 @@ public class SoruSorRequest extends BaseRequest {
     private String UserId;
 
     @Expose
+    @SerializedName("app")
+    private int App;
+
+    @Expose
     @SerializedName("question_text")
     private String QuestionText;
 
@@ -92,5 +96,13 @@ public class SoruSorRequest extends BaseRequest {
 
     public void setOption_B(String option_B) {
         Option_B = option_B;
+    }
+
+    public int getApp() {
+        return App;
+    }
+
+    public void setApp(int app) {
+        App = app;
     }
 }

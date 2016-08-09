@@ -138,11 +138,14 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.2.0'
     compile 'io.reactivex:rxjava:1.1.5'
 
-    compile 'com.github.hotchemi:permissionsdispatcher:2.1.3'
-    apt 'com.github.hotchemi:permissionsdispatcher-processor:2.1.3'
-    apt 'com.github.AleksanderMielczarek:AndroidAnnotationsPermissionsDispatcherPlugin:0.1.0'
+    //compile 'com.github.hotchemi:permissionsdispatcher:2.1.3'
+    //apt 'com.github.hotchemi:permissionsdispatcher-processor:2.1.3'
+    //apt 'com.github.AleksanderMielczarek:AndroidAnnotationsPermissionsDispatcherPlugin:0.1.0'
 
     compile 'jp.wasabeef:blurry:2.0.2'
+    compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
+    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.7.0@aar'
+
     //compile 'com.yalantis:sidemenu:1.0'
     //compile 'com.github.ozodrukh:CircularReveal:1.3.1@aar'
     //compile 'link.fls:swipestack:0.3.0'

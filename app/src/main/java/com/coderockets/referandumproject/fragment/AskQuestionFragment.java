@@ -1,24 +1,26 @@
 package com.coderockets.referandumproject.fragment;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
+import android.support.design.widget.Snackbar;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.MainActivity;
 import com.coderockets.referandumproject.app.Const;
 import com.coderockets.referandumproject.helper.SuperHelper;
-import com.coderockets.referandumproject.rest.ApiManager;
+import com.coderockets.referandumproject.rest.RestClient;
 import com.coderockets.referandumproject.rest.RestModel.SoruSorRequest;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.slmyldz.random.Randoms;
+import com.tbruyelle.rxpermissions.RxPermissions;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -26,6 +28,8 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
 import hugo.weaving.DebugLog;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 @EFragment(R.layout.fragment_askquestion_layout)
@@ -48,6 +52,7 @@ public class AskQuestionFragment extends BaseFragment {
     //
     Context mContext;
     MainActivity mActivity;
+    RxPermissions mRxPermissions;
 
     @DebugLog
     @Override
@@ -55,6 +60,7 @@ public class AskQuestionFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         this.mContext = getActivity();
         this.mActivity = (MainActivity) getActivity();
+        mRxPermissions = RxPermissions.getInstance(mContext);
     }
 
     @AfterViews
@@ -96,70 +102,63 @@ public class AskQuestionFragment extends BaseFragment {
     @DebugLog
     @Click(R.id.Button_SoruGonder)
     public void Button_SoruGonderClick() {
-        if (!SuperHelper.checkPermissions(mContext, Const.PERMISSIONS_GENERAL)) {
-            ActivityCompat.requestPermissions(mActivity, Const.PERMISSIONS_GENERAL, Const.PERMISIONS_REQUEST_GENERAL);
-            return;
-        }
-        sendQuestionRequest();
+
+        mRxPermissions.requestEach(Const.PERMISSIONS_GENERAL)
+                .subscribe(permissions -> {
+                    if (permissions.granted) {
+                        sendQuestionRequest();
+                    } else {
+                        UiHelper.UiSnackBar.showSimpleSnackBar(getView(),
+                                "Soru gönderebilmeniz için gerekli izinleri vermelisiniz !",
+                                Snackbar.LENGTH_INDEFINITE);
+                    }
+                });
     }
 
     @DebugLog
     public void sendQuestionRequest() {
+
+        if (validateIsEmpty(mEditText_SoruText)) return;
+
         SoruSorRequest soruSorRequest = SoruSorRequest.SoruSorRequestInstance();
         soruSorRequest.setQuestionText(mEditText_SoruText.getText().toString());
         soruSorRequest.setQuestionImage(Randoms.imageUrl("png"));
 
-        ApiManager.getInstance(mContext).SoruSor(soruSorRequest);
+        MaterialDialog materialDialog = new MaterialDialog.Builder(mContext)
+                .cancelable(false)
+                .icon(new IconDrawable(mContext, FontAwesomeIcons.fa_angle_right).actionBarSize().colorRes(com.aykuttasil.androidbasichelperlib.R.color.accent))
+                .title("Sorunuz Gönderiliyor")
+                .content("Lütfen Bekleyiniz...")
+                .progress(true, 0)
+                .show();
+
+        RestClient.getInstance().getApiService().SoruSor(
+                Const.CLIENT_ID,
+                Const.REFERANDUM_VERSION,
+                SuperHelper.getDeviceId(mContext),
+                soruSorRequest
+        )
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    UiHelper.UiSnackBar.showSimpleSnackBar(getView(), "Sorunuz gönderildi.", Snackbar.LENGTH_INDEFINITE);
+                }, error -> {
+                    UiHelper.UiDialog.showSimpleDialog(mContext, "HATA", error.getMessage());
+                }, materialDialog::dismiss);
     }
 
-    @DebugLog
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    private boolean validateIsEmpty(EditText... editTexts) {
 
-        switch (requestCode) {
-            case Const.PERMISIONS_REQUEST_GENERAL: {
-                boolean allPermissionGranted = true;
-                for (int a = 0; a < permissions.length; a++) {
-                    if (grantResults[a] == PackageManager.PERMISSION_GRANTED) {
-                        allPermissionGranted = true;
-                    } else {
-                        allPermissionGranted = false;
-                        break;
-                    }
-                }
-                if (!allPermissionGranted) {
-                    sendQuestionRequest();
-                } else {
-                    ActivityCompat.requestPermissions(mActivity, Const.PERMISSIONS_GENERAL, Const.PERMISIONS_REQUEST_GENERAL);
-                }
-            }
-            default: {
-
+        boolean flag = false;
+        for (EditText editText : editTexts) {
+            if (editText.getText().toString().length() == 0) {
+                editText.setError("Boş bırakmayınız !");
+                flag = true;
+            } else {
+                editText.setError(null);
             }
         }
+        return flag;
     }
-
-    /*
-    @NeedsPermission(Manifest.permission.READ_PHONE_STATE)
-    public void showRationaleDialog(@StringRes int messageResId, final PermissionRequest request) {
-        new AlertDialog.Builder(mContext)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(@NonNull DialogInterface dialog, int which) {
-                        request.proceed();
-                    }
-                })
-                .setNegativeButton("SALLA", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(@NonNull DialogInterface dialog, int which) {
-                        request.cancel();
-                    }
-                })
-                .setCancelable(false)
-                .setMessage(messageResId)
-                .show();
-    }
-    */
 
 }
