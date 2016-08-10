@@ -17,6 +17,8 @@ import com.coderockets.referandumproject.app.Const;
 import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.rest.RestClient;
 import com.coderockets.referandumproject.rest.RestModel.SoruSorRequest;
+import com.coderockets.referandumproject.util.AutoFitTextView;
+import com.jakewharton.rxbinding.widget.RxTextView;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.slmyldz.random.Randoms;
@@ -49,6 +51,9 @@ public class AskQuestionFragment extends BaseFragment {
 
     @ViewById(R.id.ImageView_SoruImage)
     ImageView mImageView_SoruImage;
+
+    @ViewById(R.id.RxAutoFitTextViewSoru)
+    AutoFitTextView mRxAutoFitTextViewSoru;
     //
     Context mContext;
     MainActivity mActivity;
@@ -59,6 +64,7 @@ public class AskQuestionFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.mContext = getActivity();
+
         this.mActivity = (MainActivity) getActivity();
         mRxPermissions = RxPermissions.getInstance(mContext);
     }
@@ -67,7 +73,16 @@ public class AskQuestionFragment extends BaseFragment {
     @DebugLog
     public void AskQuestionFragmentInit() {
         setFab();
+        setReactiveEditText();
         updateUI();
+    }
+
+    private void setReactiveEditText() {
+        RxTextView.textChanges(mEditText_SoruText)
+                .map(charSequence -> charSequence.toString().toUpperCase())
+                .subscribe(text -> {
+                    mRxAutoFitTextViewSoru.setText(text);
+                });
     }
 
     private void setFab() {

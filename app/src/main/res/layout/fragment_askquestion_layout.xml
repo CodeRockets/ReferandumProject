@@ -19,13 +19,24 @@
                 android:id="@+id/ImageView_SoruImage"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="3" />
+                android:layout_weight="2.5" />
+
+            <com.coderockets.referandumproject.util.AutoFitTextView
+                android:id="@+id/RxAutoFitTextViewSoru"
+                fontPath="fonts/Tabatha Regular.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3.5"
+                android:ellipsize="none"
+                android:gravity="center"
+                android:maxLines="5"
+                android:textSize="100sp" />
 
             <EditText
                 android:id="@+id/EditText_SoruText"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="4"
+                android:layout_weight="1"
                 android:hint="Sorunuz !" />
 
             <Button
