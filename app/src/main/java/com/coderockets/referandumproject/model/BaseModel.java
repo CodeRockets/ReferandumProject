@@ -12,11 +12,6 @@ public class BaseModel {
 
     @Expose
     @Column
-    @SerializedName("id")
-    private String Id;
-
-    @Expose
-    @Column
     @SerializedName("created_at")
     private String CreatedAt;
 
@@ -40,13 +35,6 @@ public class BaseModel {
     @SerializedName("client_id")
     private String ClientId;
 
-    public String getID() {
-        return Id;
-    }
-
-    public void setID(String id) {
-        Id = id;
-    }
 
     public String getCreatedAt() {
         return CreatedAt;

@@ -44,11 +44,11 @@ public interface ApiService {
 
 
     @GET("v1/question/fetch/0")
-    Call<SoruGetirBaseResponse> SoruGetir(@Header("x-voter-client-id") String clientId,
-                                          @Header("x-voter-version") String version,
-                                          @Header("x-voter-installation") String installation,
-                                          @Query(value = "limit") String limit,
-                                          @Query(value = "user_id") String userId);
+    Observable<SoruGetirBaseResponse> SoruGetir(@Header("x-voter-client-id") String clientId,
+                                                @Header("x-voter-version") String version,
+                                                @Header("x-voter-installation") String installation,
+                                                @Query(value = "limit") String limit,
+                                                @Query(value = "user_id") String userId);
 
     @Multipart
     @POST("v1/question/image")

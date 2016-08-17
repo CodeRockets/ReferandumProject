@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by aykutasil on 25.04.2016.
  */
-public class SoruGetirBaseResponse {
+public class SoruGetirBaseResponse extends BaseResponse {
 
     @Expose
     @SerializedName("data")

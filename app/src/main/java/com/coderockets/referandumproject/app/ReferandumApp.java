@@ -8,6 +8,7 @@ import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
 import com.coderockets.referandumproject.BuildConfig;
 import com.coderockets.referandumproject.R;
+import com.coderockets.referandumproject.model.ModelQuestionInformation;
 import com.coderockets.referandumproject.model.ModelUser;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.FacebookSdk;
@@ -65,6 +66,7 @@ public class ReferandumApp extends Application {
     private void initActiveAndroid() {
         ActiveAndroid.initialize(new Configuration.Builder(getApplicationContext())
                 .addModelClass(ModelUser.class)
+                .addModelClass(ModelQuestionInformation.class)
                 .create());
     }
 

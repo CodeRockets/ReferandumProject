@@ -82,7 +82,7 @@
 
         <meta-data
             android:name="AA_DB_NAME"
-            android:value="referandum1.db" />
+            android:value="referandum2.db" />
 
         <meta-data
             android:name="AA_DB_VERSION"

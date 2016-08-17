@@ -1,17 +1,19 @@
 package com.coderockets.referandumproject.model;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by aykutasil on 13.03.2016.
  */
 @Table(name = "Sorular", id = "_id")
-public class ModelQuestionInformation extends BaseModel {
+public class ModelQuestionInformation extends Model {
 
     /*
     {
-            "rn": "20",
             "id": "444c7d10-e97f-11e5-b6b4-ede54fe3ed30",
             "question_text": "Android Referandum Test Question 1",
             "question_image": "Android Referandum Test Image 1",
@@ -25,70 +27,114 @@ public class ModelQuestionInformation extends BaseModel {
             "created_at": "2016-03-14T00:54:12.000Z",
             "updated_at": "2016-03-14T00:54:12.000Z",
             "is_deleted": false,
-            "no": 177
+            "no": 177,
+            "abuse_count": 0,
+            "favorite_count": 0,
+            "asker_profile_img": "http://res.cloudinary.com/dlxdlp9jz/image/upload/v1470742541/sl42nvudxn2r6ksjrak7.jpg",
+            "asker_name": "Aykut Asil",
+            "friends": []
     }
     */
 
+    @Expose
+    @Column
+    @SerializedName("id")
+    private String SoruId;
 
-    //@SerializedName("id")
-    //private String Id;
-
-    //@SerializedName("created_at")
-    //private Date CreatedAt;
-
-    //@SerializedName("updated_at")
-    //private Date UpdatedAt;
-
-    //@SerializedName("is_deleted")
-    //private boolean IsDeleted;
-
-    @SerializedName("rn")
-    private String Rn;
-
+    @Expose
+    @Column
     @SerializedName("question_text")
     private String QuestionText;
 
+    @Expose
+    @Column
     @SerializedName("question_image")
     private String QuestionImage;
 
-    //@SerializedName("user_id")
-    //private String UserId;
+    @Expose
+    @Column
+    @SerializedName("user_id")
+    private String UserId;
 
+    @Expose
+    @Column
     @SerializedName("app")
     private int App;
 
+    @Expose
+    @Column
     @SerializedName("option_a")
     private String Option_A;
 
+    @Expose
+    @Column
     @SerializedName("option_b")
     private String Option_B;
 
+    @Expose
+    @Column
     @SerializedName("option_a_count")
     private int Option_A_Count;
 
+    @Expose
+    @Column
     @SerializedName("option_b_count")
     private int Option_B_Count;
 
+    @Expose
+    @Column
     @SerializedName("skip_count")
     private int Skip_Count;
 
+    @Expose
+    @Column
+    @SerializedName("created_at")
+    private String CreatedAt;
+
+    @Expose
+    @Column
+    @SerializedName("updated_at")
+    private String UpdatedAt;
+
+    @Expose
+    @Column
+    @SerializedName("is_deleted")
+    private boolean IsDeleted;
+
+    @Expose
+    @Column
     @SerializedName("no")
     private int No;
+
+    @Expose
+    @Column
+    @SerializedName("abuse_count")
+    private int AbuseCount;
+
+    @Expose
+    @Column
+    @SerializedName("favorite_count")
+    private int FavoriteCount;
+
+    @Expose
+    @Column
+    @SerializedName("asker_profile_img")
+    private String AskerProfileImg;
+
+    @Expose
+    @Column
+    @SerializedName("asker_name")
+    private String AskerName;
+
+    @Expose
+    @Column
+    @SerializedName("friends")
+    private String[] Friens;
 
 
     public ModelQuestionInformation() {
         super();
     }
-
-    /*
-    public String getId() {
-        return Id;
-    }
-
-    public void setId(String id) {
-        Id = id;
-    }*/
-
 
     public int getSkip_Count() {
         return Skip_Count;
@@ -97,47 +143,6 @@ public class ModelQuestionInformation extends BaseModel {
     public void setSkip_Count(int skip_Count) {
         Skip_Count = skip_Count;
     }
-
-
-//    public String getIdSoru() {
-//        return Id;
-//    }
-//
-//    public void setId(String id) {
-//        Id = id;
-//    }
-//
-//    public Date getCreatedAt() {
-//        return CreatedAt;
-//    }
-//
-//    public void setCreatedAt(Date createdAt) {
-//        CreatedAt = createdAt;
-//    }
-//
-//    public Date getUpdatedAt() {
-//        return UpdatedAt;
-//    }
-//
-//    public void setUpdatedAt(Date updatedAt) {
-//        UpdatedAt = updatedAt;
-//    }
-//
-//    public boolean isDeleted() {
-//        return IsDeleted;
-//    }
-//
-//    public void setIsDeleted(boolean isDeleted) {
-//        IsDeleted = isDeleted;
-//    }
-
-//    public String getUserId() {
-//        return UserId;
-//    }
-//
-//    public void setUserId(String userId) {
-//        UserId = userId;
-//    }
 
     public int getApp() {
         return App;
@@ -195,19 +200,91 @@ public class ModelQuestionInformation extends BaseModel {
         Option_B_Count = option_B_Count;
     }
 
-    public String getRn() {
-        return Rn;
-    }
-
-    public void setRn(String rn) {
-        Rn = rn;
-    }
-
     public int getNo() {
         return No;
     }
 
     public void setNo(int no) {
         No = no;
+    }
+
+    public String getCreatedAt() {
+        return CreatedAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        CreatedAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return UpdatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        UpdatedAt = updatedAt;
+    }
+
+    public boolean isDeleted() {
+        return IsDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        IsDeleted = deleted;
+    }
+
+    public int getAbuseCount() {
+        return AbuseCount;
+    }
+
+    public void setAbuseCount(int abuseCount) {
+        AbuseCount = abuseCount;
+    }
+
+    public int getFavoriteCount() {
+        return FavoriteCount;
+    }
+
+    public void setFavoriteCount(int favoriteCount) {
+        FavoriteCount = favoriteCount;
+    }
+
+    public String getAskerProfileImg() {
+        return AskerProfileImg;
+    }
+
+    public void setAskerProfileImg(String askerProfileImg) {
+        AskerProfileImg = askerProfileImg;
+    }
+
+    public String getAskerName() {
+        return AskerName;
+    }
+
+    public void setAskerName(String askerName) {
+        AskerName = askerName;
+    }
+
+    public String[] getFriens() {
+        return Friens;
+    }
+
+    public void setFriens(String[] friens) {
+        Friens = friens;
+    }
+
+    public String getSoruId() {
+        return SoruId;
+    }
+
+    public void setSoruId(String soruId) {
+        SoruId = soruId;
+    }
+
+    public String getUserId() {
+        return UserId;
+    }
+
+    public void setUserId(String userId) {
+        UserId = userId;
     }
 }
