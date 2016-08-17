@@ -12,6 +12,7 @@ public class ImageUploadResponse extends BaseResponse {
     @SerializedName("data")
     private String Data;
 
+
     public String getData() {
         return Data;
     }

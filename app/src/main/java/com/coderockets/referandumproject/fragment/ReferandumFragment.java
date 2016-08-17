@@ -2,11 +2,14 @@ package com.coderockets.referandumproject.fragment;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.MainActivity;
+import com.coderockets.referandumproject.util.CustomButton;
 import com.coderockets.referandumproject.util.adapter.CustomViewPagerAdapter;
 
 import org.androidannotations.annotations.AfterViews;
@@ -21,6 +24,14 @@ public class ReferandumFragment extends BaseFragment {
 
     @ViewById(R.id.ViewPagerSorular)
     ViewPager mViewPagerSorular;
+
+    @ViewById(R.id.ButtonTrue)
+    CustomButton mButtonTrue;
+
+
+    @ViewById(R.id.ButtonFalse)
+    CustomButton mButtonFalse;
+
 
     Context mContext;
     MainActivity mActivity;
@@ -39,6 +50,7 @@ public class ReferandumFragment extends BaseFragment {
 
     private void setViewPager() {
         mViewPagerAdapter = new CustomViewPagerAdapter();
+
         mViewPagerSorular.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -60,6 +72,7 @@ public class ReferandumFragment extends BaseFragment {
 
     @DebugLog
     private void setSorular() {
+
         LinearLayout cardView = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.question_layout, null);
         mViewPagerAdapter.addView(cardView);
         //mViewPagerAdapter.addView(cardView);
@@ -70,7 +83,10 @@ public class ReferandumFragment extends BaseFragment {
 
     @Click(R.id.ButtonTrue)
     public void ButtonTrueClick() {
-        setSorular();
+        mButtonTrue.changeButtonScale();
+        //setSorular();
+
+
     }
 
 

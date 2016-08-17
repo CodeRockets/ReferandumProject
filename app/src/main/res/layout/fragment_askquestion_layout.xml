@@ -59,14 +59,28 @@
         app:layout_anchor="@+id/ImageView_SoruImage"
         app:layout_anchorGravity="bottom|right|end" />
 
-    <android.support.design.widget.FloatingActionButton
+
+    <io.github.yavski.fabspeeddial.FabSpeedDial
+        android:id="@+id/FabUploadImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabGravity="top_start"
+        app:fabMenu="@menu/fragment_askquestion_image_chooser_menu"
+        app:layout_anchor="@+id/ImageView_SoruImage"
+        app:layout_anchorGravity="bottom|left|end"
+        app:miniFabBackgroundTint="@android:color/white"
+        app:miniFabDrawableTint="?attr/colorPrimaryDark"
+        app:miniFabTitleTextColor="?attr/colorPrimaryDark" />
+
+
+    <!--<android.support.design.widget.FloatingActionButton
         android:id="@+id/FabUploadImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         app:fabSize="normal"
         app:layout_anchor="@+id/ImageView_SoruImage"
-        app:layout_anchorGravity="bottom|left|end" />
+        app:layout_anchorGravity="bottom|left|end" />-->
 
 </android.support.design.widget.CoordinatorLayout>
 

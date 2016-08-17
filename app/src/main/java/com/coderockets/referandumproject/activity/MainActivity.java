@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.fragment.AskQuestionFragment_;
 import com.coderockets.referandumproject.fragment.ProfileFragment_;
-import com.coderockets.referandumproject.fragment.ReferandumFragment;
 import com.coderockets.referandumproject.fragment.ReferandumFragment_;
 import com.coderockets.referandumproject.helper.SuperHelper;
 import com.joanzapata.iconify.IconDrawable;
@@ -49,7 +48,6 @@ public class MainActivity extends BaseActivity {
                 this,
                 ReferandumFragment_.builder().build(),
                 FRAGMENT_CONTAINER,
-                ReferandumFragment.class.getSimpleName(),
                 false);
     }
 
@@ -104,14 +102,12 @@ public class MainActivity extends BaseActivity {
                             this,
                             ProfileFragment_.builder().build(),
                             FRAGMENT_CONTAINER,
-                            ProfileFragment_.class.getSimpleName(),
                             true);
                 } else {
                     SuperHelper.ReplaceFragmentBeginTransaction(
                             this,
                             AskQuestionFragment_.builder().build(),
                             FRAGMENT_CONTAINER,
-                            AskQuestionFragment_.class.getSimpleName(),
                             true);
                 }
                 break;
@@ -121,7 +117,6 @@ public class MainActivity extends BaseActivity {
                         this,
                         ProfileFragment_.builder().build(),
                         FRAGMENT_CONTAINER,
-                        ProfileFragment_.class.getSimpleName(),
                         true);
                 break;
             }
@@ -130,7 +125,6 @@ public class MainActivity extends BaseActivity {
                         this,
                         ReferandumFragment_.builder().build(),
                         FRAGMENT_CONTAINER,
-                        ReferandumFragment_.class.getSimpleName(),
                         true);
                 break;
             }

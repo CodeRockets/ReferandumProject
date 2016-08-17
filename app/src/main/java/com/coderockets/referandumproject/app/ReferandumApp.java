@@ -12,6 +12,7 @@ import com.coderockets.referandumproject.model.ModelUser;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.fuck_boilerplate.rx_paparazzo.RxPaparazzo;
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import com.orhanobut.logger.LogLevel;
@@ -55,6 +56,9 @@ public class ReferandumApp extends Application {
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
+
+        RxPaparazzo.register(this);
+
     }
 
     @DebugLog

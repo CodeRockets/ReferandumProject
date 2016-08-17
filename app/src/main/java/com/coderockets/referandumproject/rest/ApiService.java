@@ -52,10 +52,10 @@ public interface ApiService {
 
     @Multipart
     @POST("v1/question/image")
-    Call<ImageUploadResponse> ImageUpload(@Header("x-voter-client-id") String clientId,
-                                          @Header("x-voter-version") String version,
-                                          @Header("x-voter-installation") String installation,
-                                          @PartMap Map<String, RequestBody> Files);
+    Observable<ImageUploadResponse> ImageUpload(@Header("x-voter-client-id") String clientId,
+                                                @Header("x-voter-version") String version,
+                                                @Header("x-voter-installation") String installation,
+                                                @PartMap Map<String, RequestBody> Files);
 
 
     //@Multipart

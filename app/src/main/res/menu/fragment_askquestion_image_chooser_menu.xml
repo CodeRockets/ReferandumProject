@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_capture"
+        android:icon="@drawable/ic_camera_enhance_indigo_400_18dp"
+        android:title="Kamera" />
+    <item
+        android:id="@+id/action_galery"
+        android:icon="@drawable/ic_perm_media_indigo_400_18dp"
+        android:title="Galeri" />
+</menu>

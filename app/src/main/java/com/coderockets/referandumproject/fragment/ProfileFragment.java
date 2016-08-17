@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -19,6 +20,7 @@ import com.coderockets.referandumproject.db.DbManager;
 import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.rest.RestClient;
 import com.coderockets.referandumproject.rest.RestModel.UserRequest;
+import com.coderockets.referandumproject.util.CustomButton;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -57,6 +59,12 @@ public class ProfileFragment extends BaseFragment {
 
     @ViewById(R.id.ButtonCikisYap)
     Button mButtonCikisYap;
+
+    @ViewById(R.id.ButtonCustomDeneme1)
+    CustomButton mButtonCustomDeneme1;
+
+    @ViewById(R.id.ButtonCustomDeneme2)
+    CustomButton mButtonCustomDeneme2;
 
     @ViewById(R.id.ImageViewLoginBackground)
     ImageView mImageViewLoginBackground;
@@ -117,9 +125,8 @@ public class ProfileFragment extends BaseFragment {
         mLoginButton.setFragment(this);
     }
 
-
     @DebugLog
-    private void saveUser(String token) {
+    public void saveUser(String token) {
 
         MaterialDialog materialDialog = new MaterialDialog.Builder(mContext)
                 .cancelable(false)
@@ -132,22 +139,33 @@ public class ProfileFragment extends BaseFragment {
         UserRequest userRequest = new UserRequest();
         userRequest.setToken(token);
 
-        RestClient.getInstance().getApiService().User(
-                Const.CLIENT_ID,
-                Const.REFERANDUM_VERSION,
-                SuperHelper.getDeviceId(mContext),
-                userRequest
-        ).subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                            response.getData().save();
-                            updateUI();
-                        },
-                        onError -> {
-                            UiHelper.UiDialog.newInstance(mContext).getOKDialog("HATA", onError.getMessage(), null).show();
-                        }
-                        , materialDialog::dismiss
-                );
+        Logger.i(userRequest.getToken());
+        Logger.i(SuperHelper.getDeviceId(mContext));
+
+        try {
+            RestClient.getInstance().getApiService().User(
+                    Const.CLIENT_ID,
+                    Const.REFERANDUM_VERSION,
+                    SuperHelper.getDeviceId(mContext),
+                    userRequest
+            )
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(response -> {
+                                Logger.i(response.getData().getName());
+                                response.getData().save();
+                                updateUI();
+
+                            }, error -> {
+                                UiHelper.UiSnackBar.showSimpleSnackBar(getView(), error.getMessage(), Snackbar.LENGTH_INDEFINITE);
+                            },
+                            materialDialog::dismiss
+                    );
+        } catch (Exception e) {
+            materialDialog.dismiss();
+            e.printStackTrace();
+            //UiHelper.UiSnackBar.showSimpleSnackBar(getView(), e.getMessage(), Snackbar.LENGTH_INDEFINITE);
+        }
 
     }
 
@@ -156,11 +174,13 @@ public class ProfileFragment extends BaseFragment {
             @DebugLog
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+
                 AccessToken.setCurrentAccessToken(currentAccessToken);
 
                 if (!mRxPermissions.isGranted(Manifest.permission.READ_PHONE_STATE)) {
 
                     mRxPermissions.request(Manifest.permission.READ_PHONE_STATE)
+                            .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(granted -> {
                                 if (granted) {
                                     Logger.i("Permission granted !");
@@ -174,10 +194,12 @@ public class ProfileFragment extends BaseFragment {
                 } else {
 
                     // Eğer izin onaylanmış ise ve giriş yapılmaya çalışılır ise buraya girer
+                    Logger.i("Permission is granted.");
+                    Logger.i("Access Token: " + currentAccessToken);
                     if (currentAccessToken != null) {
                         saveUser(currentAccessToken.getToken());
                     }
-                    // Eğer Çıkış yapıldığında buraya girer.
+                    // Çıkış yapıldığında buraya girer.
                     else {
                         DbManager.deleteModelUser();
                         updateUI();
@@ -220,6 +242,20 @@ public class ProfileFragment extends BaseFragment {
     @Click(R.id.ButtonCikisYap)
     public void ButtonCikisYapClick() {
         mLoginButton.performClick();
+    }
+
+    @DebugLog
+    @Click(R.id.ButtonCustomDeneme1)
+    public void ButtonCustomDeneme1Click() {
+        mButtonCustomDeneme1.changeButtonBgColor();
+    }
+
+    @DebugLog
+    @Click(R.id.ButtonCustomDeneme2)
+    public void ButtonCustomDeneme2Click() {
+        mButtonCustomDeneme2.changeButtonScale();
+        //ResizeAnimation resizeAnimation = new ResizeAnimation(, 200, 100);
+        //this.startAnimation(resizeAnimation);
     }
 
     /*

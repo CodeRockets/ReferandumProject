@@ -4,13 +4,10 @@ import com.coderockets.referandumproject.BuildConfig;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -27,21 +24,19 @@ public class RestClient {
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
-            @Override
-            public Response intercept(Interceptor.Chain chain) throws IOException {
-                Request original = chain.request();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(
+                        chain -> {
+                            Request original = chain.request();
 
-                Request request = original.newBuilder()
-                        .addHeader("Content-Type", "application/json")
-                        .method(original.method(), original.body())
-                        .build();
+                            Request request = original.newBuilder()
+                                    .addHeader("Content-Type", "application/json")
+                                    .method(original.method(), original.body())
+                                    .build();
 
-                Response response = chain.proceed(request);
-
-                return response;
-            }
-        }).addInterceptor(httpLoggingInterceptor)
+                            return chain.proceed(request);
+                        })
+                //.addInterceptor(httpLoggingInterceptor)
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
@@ -59,6 +54,7 @@ public class RestClient {
                 .baseUrl(BuildConfig.BACKEND_URL)
                 .client(client)
                 .build();
+
         apiService = retrofit.create(ApiService.class);
     }
 

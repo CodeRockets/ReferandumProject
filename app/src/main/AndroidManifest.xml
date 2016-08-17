@@ -9,6 +9,9 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".app.ReferandumApp_"
@@ -79,7 +82,7 @@
 
         <meta-data
             android:name="AA_DB_NAME"
-            android:value="referandum.db" />
+            android:value="referandum1.db" />
 
         <meta-data
             android:name="AA_DB_VERSION"

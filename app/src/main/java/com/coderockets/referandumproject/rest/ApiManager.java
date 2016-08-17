@@ -76,4 +76,16 @@ public class ApiManager {
         }
     }
     //endregion
+
+    /*
+    public static Observable<String> uploadImage() {
+
+
+
+        return Observable.create((Observable.OnSubscribe<String>)
+                subscriber -> {
+
+                });
+    }
+    */
 }
