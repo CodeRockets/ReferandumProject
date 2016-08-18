@@ -1,5 +1,8 @@
 package com.coderockets.referandumproject.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -10,7 +13,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by aykutasil on 13.03.2016.
  */
 @Table(name = "Sorular", id = "_id")
-public class ModelQuestionInformation extends Model {
+public class ModelQuestionInformation extends Model implements Parcelable {
 
     /*
     {
@@ -135,6 +138,40 @@ public class ModelQuestionInformation extends Model {
     public ModelQuestionInformation() {
         super();
     }
+
+    protected ModelQuestionInformation(Parcel in) {
+        SoruId = in.readString();
+        QuestionText = in.readString();
+        QuestionImage = in.readString();
+        UserId = in.readString();
+        App = in.readInt();
+        Option_A = in.readString();
+        Option_B = in.readString();
+        Option_A_Count = in.readInt();
+        Option_B_Count = in.readInt();
+        Skip_Count = in.readInt();
+        CreatedAt = in.readString();
+        UpdatedAt = in.readString();
+        IsDeleted = in.readByte() != 0;
+        No = in.readInt();
+        AbuseCount = in.readInt();
+        FavoriteCount = in.readInt();
+        AskerProfileImg = in.readString();
+        AskerName = in.readString();
+        Friens = in.createStringArray();
+    }
+
+    public static final Creator<ModelQuestionInformation> CREATOR = new Creator<ModelQuestionInformation>() {
+        @Override
+        public ModelQuestionInformation createFromParcel(Parcel in) {
+            return new ModelQuestionInformation(in);
+        }
+
+        @Override
+        public ModelQuestionInformation[] newArray(int size) {
+            return new ModelQuestionInformation[size];
+        }
+    };
 
     public int getSkip_Count() {
         return Skip_Count;
@@ -286,5 +323,33 @@ public class ModelQuestionInformation extends Model {
 
     public void setUserId(String userId) {
         UserId = userId;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(SoruId);
+        parcel.writeString(QuestionText);
+        parcel.writeString(QuestionImage);
+        parcel.writeString(UserId);
+        parcel.writeInt(App);
+        parcel.writeString(Option_A);
+        parcel.writeString(Option_B);
+        parcel.writeInt(Option_A_Count);
+        parcel.writeInt(Option_B_Count);
+        parcel.writeInt(Skip_Count);
+        parcel.writeString(CreatedAt);
+        parcel.writeString(UpdatedAt);
+        parcel.writeByte((byte) (IsDeleted ? 1 : 0));
+        parcel.writeInt(No);
+        parcel.writeInt(AbuseCount);
+        parcel.writeInt(FavoriteCount);
+        parcel.writeString(AskerProfileImg);
+        parcel.writeString(AskerName);
+        parcel.writeStringArray(Friens);
     }
 }

@@ -11,8 +11,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.StringSignature;
 import com.facebook.AccessToken;
 import com.orhanobut.logger.Logger;
-
-import java.util.UUID;
+import com.slmyldz.random.Randoms;
 
 import hugo.weaving.DebugLog;
 
@@ -92,11 +91,11 @@ public class SuperHelper extends com.aykuttasil.androidbasichelperlib.SuperHelpe
     }
 
     @DebugLog
-    public static String setRandomImage(Context context, final ImageView imageView) {
-        String randomUrl = "http://lorempixel.com/400/200";
+    public static String setRandomImage(Context context, final ImageView imageView, String signature) {
+        String randomUrl = Randoms.imageUrl("png");
         Glide.with(context)
                 .load(randomUrl)
-                .signature(new StringSignature(UUID.randomUUID().toString()))
+                .signature(new StringSignature(signature))
                 .fitCenter()
                 .into(imageView);
         Logger.i("Random Image Url: " + randomUrl);

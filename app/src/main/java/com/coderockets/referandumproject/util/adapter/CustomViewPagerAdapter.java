@@ -5,7 +5,6 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import java.util.ArrayList;
 
 import hugo.weaving.DebugLog;

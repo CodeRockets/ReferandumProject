@@ -7,20 +7,19 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardBackgroundColor="@color/card_activated"
+        app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="10dp"
-        app:cardElevation="5dp"
-        app:contentPadding="10dp">
+        app:cardElevation="5dp">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="wrap_content"
-                android:layout_height="100dp"
+                android:id="@+id/SoruImage"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
                 android:src="@drawable/ok" />
 
             <com.mikhaellopez.circularimageview.CircularImageView
@@ -28,13 +27,19 @@
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/ok" />
+                android:layout_marginTop="113dp"
+                android:src="@drawable/ok"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
 
 
             <com.coderockets.referandumproject.util.AutoFitTextView
+                android:id="@+id/SoruText"
                 fontPath="fonts/Tabatha Regular.ttf"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/ProfilePicture"
                 android:ellipsize="none"
                 android:gravity="center"
                 android:maxLines="5"
@@ -52,7 +57,7 @@
             <!--android:textSize="30sp" />-->
 
 
-        </LinearLayout>
+        </RelativeLayout>
 
 
         <!--<TextView-->

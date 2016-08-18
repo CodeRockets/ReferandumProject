@@ -83,7 +83,6 @@ public class AskQuestionFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.mContext = getActivity();
-
         this.mActivity = (MainActivity) getActivity();
         mRxPermissions = RxPermissions.getInstance(mContext);
         //mFilesPaths = new ArrayList<>();
