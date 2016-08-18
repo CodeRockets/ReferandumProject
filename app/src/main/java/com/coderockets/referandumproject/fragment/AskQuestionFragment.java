@@ -238,7 +238,12 @@ public class AskQuestionFragment extends BaseFragment {
                                         .subscribeOn(Schedulers.newThread())
                                         .observeOn(AndroidSchedulers.mainThread())
                                         .subscribe(
-                                                response -> UiHelper.UiSnackBar.showSimpleSnackBar(getView(), "Sorunuz gönderildi.", Snackbar.LENGTH_INDEFINITE),
+                                                response ->
+                                                {
+                                                    mFilePath = null;
+                                                    mEditText_SoruText.setText("");
+                                                    UiHelper.UiSnackBar.showSimpleSnackBar(getView(), "Sorunuz gönderildi.", Snackbar.LENGTH_INDEFINITE);
+                                                },
                                                 error -> {
                                                     materialDialog.dismiss();
                                                     error.printStackTrace();
@@ -283,7 +288,7 @@ public class AskQuestionFragment extends BaseFragment {
         options.setToolbarTitle("Düzenle");
         options.setToolbarColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark));
         options.setMaxResultSize(1024, 640);
-        options.setAspectRatio(130, 60);
+        options.setAspectRatio(150, 60);
         //options.setAspectRatio(100, 60);
         //options.setMaxResultSize(640, 480);
         //options.setActiveWidgetColor(getResources().getColor(R.color.bpDark_gray)); //
@@ -318,7 +323,7 @@ public class AskQuestionFragment extends BaseFragment {
         RxPaparazzo.takeImage(this)
                 .useInternalStorage()
                 .crop(options)
-                .size(Size.Small)
+                .size(Size.Screen)
                 .usingGallery()
                 .subscribe(response -> {
                     if (response.resultCode() != Activity.RESULT_OK) {
