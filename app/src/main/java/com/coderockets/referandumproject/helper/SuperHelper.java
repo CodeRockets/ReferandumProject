@@ -1,17 +1,28 @@
 package com.coderockets.referandumproject.helper;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.PictureDrawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.StringSignature;
 import com.facebook.AccessToken;
+import com.joanzapata.iconify.IconDrawable;
+import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.orhanobut.logger.Logger;
 import com.slmyldz.random.Randoms;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import hugo.weaving.DebugLog;
 
@@ -96,11 +107,47 @@ public class SuperHelper extends com.aykuttasil.androidbasichelperlib.SuperHelpe
         Glide.with(context)
                 .load(randomUrl)
                 .signature(new StringSignature(signature))
-                .fitCenter()
+                .placeholder(new IconDrawable(context, FontAwesomeIcons.fa_cog).sizeDp(50).color(Color.GRAY).getCurrent())
+                .centerCrop()
                 .into(imageView);
         Logger.i("Random Image Url: " + randomUrl);
         return randomUrl;
     }
 
+
+    /**
+     * Bitmap.CompressFormat can be PNG,JPEG or WEBP.
+     * <p>
+     * quality goes from 1 to 100. (Percentage).
+     * <p>
+     * dir you can get from many places like Environment.getExternalStorageDirectory() or mContext.getFilesDir()
+     * depending on where you want to save the image.
+     */
+    @DebugLog
+    public static boolean saveBitmapToFile(File dir, String fileName, Bitmap bm, Bitmap.CompressFormat format, int quality) {
+
+        File imageFile = new File(dir, fileName);
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(imageFile);
+
+            bm.compress(format, quality, fos);
+
+            fos.close();
+
+            return true;
+        } catch (IOException e) {
+            Log.e("app", e.getMessage());
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+        return false;
+    }
 
 }

@@ -4,74 +4,96 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <com.google.android.flexbox.FlexboxLayout
             android:id="@+id/AskQuestionMainLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:weightSum="8">
+            app:flexDirection="column">
 
-            <ImageView
-                android:id="@+id/ImageView_SoruImage"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="2.5" />
+                android:layout_height="150dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                app:layout_flexBasisPercent="30%">
+
+                <ImageView
+                    android:id="@+id/ImageView_SoruImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true" />
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/FabRefreshImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/ImageView_SoruImage"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginRight="10dp"
+                    app:fabSize="mini" />
+            </RelativeLayout>
 
             <com.coderockets.referandumproject.util.AutoFitTextView
                 android:id="@+id/RxAutoFitTextViewSoru"
                 fontPath="fonts/Tabatha Regular.ttf"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="3.5"
+                android:layout_height="match_parent"
                 android:ellipsize="none"
                 android:gravity="center"
                 android:maxLines="5"
-                android:textSize="100sp" />
+                android:textSize="100sp"
+                app:layout_flexBasisPercent="50%" />
 
-            <EditText
-                android:id="@+id/EditText_SoruText"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:hint="Sorunuz !" />
-
-            <Button
-                android:id="@+id/Button_SoruGonder"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:text="GÖNDER" />
-
-        </LinearLayout>
-    </FrameLayout>
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_flexBasisPercent="20%">
 
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/FabRefreshImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        app:fabSize="normal"
-        app:layout_anchor="@+id/ImageView_SoruImage"
-        app:layout_anchorGravity="bottom|right|end" />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <EditText
+                        android:id="@+id/EditText_SoruText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Sorunuz.."
+                        android:textSize="12sp" />
+                </android.support.design.widget.TextInputLayout>
 
 
-    <io.github.yavski.fabspeeddial.FabSpeedDial
-        android:id="@+id/FabUploadImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:fabGravity="top_start"
-        app:fabMenu="@menu/fragment_askquestion_image_chooser_menu"
-        app:layout_anchor="@+id/ImageView_SoruImage"
-        app:layout_anchorGravity="bottom|left|end"
-        app:miniFabBackgroundTint="@android:color/white"
-        app:miniFabDrawableTint="?attr/colorPrimaryDark"
-        app:miniFabTitleTextColor="?attr/colorPrimaryDark" />
+                <com.joanzapata.iconify.widget.IconButton
+                    android:id="@+id/Button_SoruGonder"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="GÖNDER {fa-upload}" />
 
+            </LinearLayout>
+
+
+        </com.google.android.flexbox.FlexboxLayout>
+
+        <io.github.yavski.fabspeeddial.FabSpeedDial
+            android:id="@+id/FabUploadImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            app:fabGravity="top_start"
+            app:fabMenu="@menu/fragment_askquestion_image_chooser_menu"
+            app:fabSize="mini"
+            app:miniFabBackgroundTint="@android:color/white"
+            app:miniFabDrawableTint="?attr/colorPrimaryDark"
+            app:miniFabTitleTextColor="?attr/colorPrimaryDark" />
+
+    </RelativeLayout>
 
     <!--<android.support.design.widget.FloatingActionButton
         android:id="@+id/FabUploadImage"

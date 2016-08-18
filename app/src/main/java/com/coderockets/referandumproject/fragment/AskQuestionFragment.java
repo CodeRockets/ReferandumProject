@@ -2,16 +2,19 @@ package com.coderockets.referandumproject.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.design.internal.NavigationMenu;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -42,6 +45,7 @@ import org.androidannotations.annotations.ViewById;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import hugo.weaving.DebugLog;
 import io.github.yavski.fabspeeddial.FabSpeedDial;
@@ -58,7 +62,7 @@ public class AskQuestionFragment extends BaseFragment {
     EditText mEditText_SoruText;
 
     @ViewById(R.id.AskQuestionMainLayout)
-    LinearLayout mAskQuestionMainLayout;
+    ViewGroup mAskQuestionMainLayout;
 
     @ViewById(R.id.FabRefreshImage)
     FloatingActionButton mFabRefreshImage;
@@ -75,7 +79,7 @@ public class AskQuestionFragment extends BaseFragment {
     Context mContext;
     MainActivity mActivity;
     RxPermissions mRxPermissions;
-    private String mFilePath;
+    private String mFilePath = null;
     private Size size;
 
     @DebugLog
@@ -137,13 +141,13 @@ public class AskQuestionFragment extends BaseFragment {
     }
 
     private void updateUI() {
-        SuperHelper.setRandomImage(mContext, mImageView_SoruImage);
+        SuperHelper.setRandomImage(mContext, mImageView_SoruImage, UUID.randomUUID().toString());
     }
 
     @DebugLog
     @Click(R.id.FabRefreshImage)
     public void FabRefreshImageClick() {
-        SuperHelper.setRandomImage(mContext, mImageView_SoruImage);
+        SuperHelper.setRandomImage(mContext, mImageView_SoruImage, UUID.randomUUID().toString());
     }
 
     /*
@@ -189,7 +193,20 @@ public class AskQuestionFragment extends BaseFragment {
 
         try {
 
-            File file = new File(mFilePath);
+            if (mFilePath == null) {
+                Drawable drawable = mImageView_SoruImage.getDrawable();
+                File externalDir = new File(Environment.getExternalStorageDirectory().getPath() + "/ReferandumProject");
+                if (!externalDir.exists()) externalDir.mkdir();
+
+                Bitmap bitmap = SuperHelper.drawableToBitmap(drawable);
+                SuperHelper.saveBitmapToFile(externalDir, "ReferandumSoru.jpeg", bitmap, Bitmap.CompressFormat.JPEG, 100);
+
+                String soruImageFilePath = externalDir.getPath() + "/ReferandumSoru.jpeg";
+                Logger.i(soruImageFilePath);
+                mFilePath = soruImageFilePath;
+            }
+            File file;
+            file = new File(mFilePath);
             Logger.i("FilePath: " + mFilePath);
             Map<String, RequestBody> map = new HashMap<>();
             RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpg"), file);
@@ -265,8 +282,10 @@ public class AskQuestionFragment extends BaseFragment {
         //options.useSourceImageAspectRatio();
         options.setToolbarTitle("Düzenle");
         options.setToolbarColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark));
-        options.setAspectRatio(100, 60);
-        options.setMaxResultSize(640, 480);
+        options.setMaxResultSize(1024, 640);
+        options.setAspectRatio(130, 60);
+        //options.setAspectRatio(100, 60);
+        //options.setMaxResultSize(640, 480);
         //options.setActiveWidgetColor(getResources().getColor(R.color.bpDark_gray)); //
         //options.setCropGridColor(Color.BLUE);
         //options.setLogoColor(Color.BLACK);
@@ -293,11 +312,13 @@ public class AskQuestionFragment extends BaseFragment {
         //options.useSourceImageAspectRatio();
         options.setToolbarColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark));
         options.setToolbarTitle("Düzenle");
+        options.setMaxResultSize(1024, 640);
+        options.setAspectRatio(150, 60);
 
         RxPaparazzo.takeImage(this)
                 .useInternalStorage()
                 .crop(options)
-                .size(Size.Screen)
+                .size(Size.Small)
                 .usingGallery()
                 .subscribe(response -> {
                     if (response.resultCode() != Activity.RESULT_OK) {
@@ -344,7 +365,7 @@ public class AskQuestionFragment extends BaseFragment {
     }
 
     private void showUserCanceled() {
-        Toast.makeText(getActivity(), "User cancelled.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "İptal edildi.", Toast.LENGTH_SHORT).show();
     }
 
     private boolean validateIsEmpty(EditText... editTexts) {

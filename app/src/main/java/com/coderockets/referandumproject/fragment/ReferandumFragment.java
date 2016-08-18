@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v4.view.ViewPager;
 
 import com.ToxicBakery.viewpager.transforms.BackgroundToForegroundTransformer;
-import com.ToxicBakery.viewpager.transforms.RotateDownTransformer;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.MainActivity;
 import com.coderockets.referandumproject.app.Const;
@@ -52,7 +51,6 @@ public class ReferandumFragment extends BaseFragment {
         //
         setViewPager();
         setSorular();
-
     }
 
     private void setViewPager() {
@@ -80,6 +78,22 @@ public class ReferandumFragment extends BaseFragment {
         */
 
         mSorularAdapter = new CustomSorularAdapter(getChildFragmentManager());
+        mViewPagerSorular.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         mViewPagerSorular.setAdapter(mSorularAdapter);
         mViewPagerSorular.setPageTransformer(true, new BackgroundToForegroundTransformer());
     }
@@ -88,11 +102,29 @@ public class ReferandumFragment extends BaseFragment {
     private void setSorular() {
 
         //mSorularAdapter = new CustomSorularAdapter(mActivity.getSupportFragmentManager());
+        //mViewPagerAdapter.addView(cardView);
+        //mViewPagerAdapter.addView(cardView);
+
+        Logger.i("mSorularAdapter.getCount(): " + mSorularAdapter.getCount());
+        if (mSorularAdapter.getCount() == 0) {
+            addQuestionsAdapter();
+        }
+    }
 
 
+    @Click(R.id.ButtonTrue)
+    public void ButtonTrueClick() {
+        mButtonTrue.changeButtonScale();
+    }
+
+
+    @Click(R.id.ButtonFalse)
+    public void ButtonFalseClick() {
+        addQuestionsAdapter();
+    }
+
+    private void addQuestionsAdapter() {
         try {
-            //LinearLayout cardView = (LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.question_layout, null);
-            //mViewPagerAdapter.addView(cardView);
 
             Logger.i("User Id: " + DbManager.getModelUser().getUserId());
 
@@ -140,19 +172,6 @@ public class ReferandumFragment extends BaseFragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        //mViewPagerAdapter.addView(cardView);
-        //mViewPagerAdapter.addView(cardView);
-
-    }
-
-
-    @Click(R.id.ButtonTrue)
-    public void ButtonTrueClick() {
-        mButtonTrue.changeButtonScale();
-        //setSorular();
-
-
     }
 
 

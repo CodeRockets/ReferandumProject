@@ -1,6 +1,7 @@
 package com.coderockets.referandumproject.fragment;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,6 +14,8 @@ import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.MainActivity;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
 import com.coderockets.referandumproject.util.AutoFitTextView;
+import com.joanzapata.iconify.IconDrawable;
+import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import org.androidannotations.annotations.AfterViews;
@@ -60,6 +63,8 @@ public class QuestionFragment extends Fragment {
         Uri soruImageUri = Uri.parse(mqi.getQuestionImage());
         Glide.with(this)
                 .load(soruImageUri)
+                .placeholder(new IconDrawable(mContext, FontAwesomeIcons.fa_refresh).sizeDp(50).color(Color.GRAY).getCurrent())
+                .centerCrop()
                 .signature(new StringSignature(mqi.getSoruId()))
                 .into(mImageView_SoruImage);
 
@@ -67,10 +72,11 @@ public class QuestionFragment extends Fragment {
         Uri profileImageUri = Uri.parse(mqi.getAskerProfileImg());
         Glide.with(this)
                 .load(profileImageUri)
+                .placeholder(mContext.getDrawable(R.drawable.anonym))
                 .signature(new StringSignature(mqi.getAskerProfileImg()))
                 .into(mProfilePicture);
         //mProfilePicture.setImageDrawable(new IconDrawable(mContext, FontAwesomeIcons.fa_github).sizeDp(150).getCurrent());
-        mSoruText.setText(mqi.getQuestionText());
+        mSoruText.setText(mqi.getQuestionText().toUpperCase());
     }
 
 }
