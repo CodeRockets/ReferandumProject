@@ -75,6 +75,9 @@ public class CustomAnswerPercent extends View {
         this.animAlphaViewDuration = ta.getInt(R.styleable.CustomAnswerPercent_animAlphaViewDuration, 300);
         this.alphaViewValue = ta.getFloat(R.styleable.CustomAnswerPercent_alphaViewValue, 0.3f);
         ta.recycle();
+
+
+
         /*
         CountDownTimer countDownTimer = new CountDownTimer(2000, 100) {
             @Override
@@ -133,23 +136,9 @@ public class CustomAnswerPercent extends View {
         currentValuePaint.setColor(circleTextColor);
         currentValuePaint.setTextAlign(Paint.Align.CENTER);
         */
-
-        /*
-        Logger.i("getWidth(): " + getWidth());
-        Logger.i("getHeight(): " + getHeight());
-
-        Logger.i("getMeasuredHeight(): " + getMeasuredHeight());
-        Logger.i("getMeasuredWidth(): " + getMeasuredWidth());
-
-        Logger.i("getRootView().getMeasuredHeight(): " + getRootView().getMeasuredHeight());
-        Logger.i("getRootView().getMeasuredWidth(): " + getRootView().getMeasuredWidth());
-        //setLayoutParams(new ViewGroup.LayoutParams(getMeasuredWidth(), getMeasuredHeight()));
-        //invalidate();
-        */
     }
 
-
-    public void addHostView(View hostView) {
+    public void addAlphaView(View hostView) {
         this.mAlphaView = hostView;
     }
 
@@ -185,6 +174,7 @@ public class CustomAnswerPercent extends View {
         this.alphaViewValue = val;
     }
 
+
     @DebugLog
     public void showResult() throws Exception {
 
@@ -216,7 +206,14 @@ public class CustomAnswerPercent extends View {
 
     private void startBar() {
 
+        // Bar A değerini %60 (Sadece 60) haline dönüştürüyoruz.
         int computePercentA = (int) (((float) mValueBarA / (float) (mValueBarA + mValueBarB)) * 100);
+
+        // Bar ın gösterileceği yüksekliği belirlemek için toplam yükseklikten yazının yüksekliği değerini çıkartıyoruz (100)
+        // ve bu değerin yüzdelik değerini buluyoruz.
+        // Örnek : Host View yüksekliği = 720 , bar oranı = %50
+        // - 100 = 620 -> en üstteki yazı için yer açıyoruz
+        // * (50 / 100) = 310 -> bar ın gösterileceği yükseklik
         float computeBarAValue = ((getHeight() - 100) * computePercentA / 100);
 
         ValueAnimator animatorAHeight = ValueAnimator.ofFloat(0, computeBarAValue);
@@ -301,16 +298,6 @@ public class CustomAnswerPercent extends View {
             int computePercentB = (int) (((float) mValueBarB / (float) (mValueBarA + mValueBarB)) * 100);
             canvas.drawText(computePercentB + " %", startPoint + (mRectBarB.width() / 2), getHeight() - mRectBarB.height() - widthBarB, percentText);
         }
-    }
-
-    private float calculateBarAHeight(float barValue) {
-
-        float ass = (mValueBarA + mValueBarB) / mValueBarA;
-
-        float scaleHostHight = 100 / getHeight();
-        float scaleBarHeight = 100 / barValue;
-        return scaleBarHeight;
-
     }
 
 

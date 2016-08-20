@@ -1,5 +1,7 @@
 package com.coderockets.referandumproject.rest;
 
+import com.coderockets.referandumproject.rest.RestModel.AnswerRequest;
+import com.coderockets.referandumproject.rest.RestModel.AnswerResponse;
 import com.coderockets.referandumproject.rest.RestModel.ImageUploadResponse;
 import com.coderockets.referandumproject.rest.RestModel.SoruGetirBaseResponse;
 import com.coderockets.referandumproject.rest.RestModel.SoruSorRequest;
@@ -45,10 +47,10 @@ public interface ApiService {
 
     @GET("v1/question/fetch/0")
     Observable<SoruGetirBaseResponse> SoruGetir(@Header("x-voter-client-id") String clientId,
-                                          @Header("x-voter-version") String version,
-                                          @Header("x-voter-installation") String installation,
-                                          @Query(value = "limit") String limit,
-                                          @Query(value = "user_id") String userId);
+                                                @Header("x-voter-version") String version,
+                                                @Header("x-voter-installation") String installation,
+                                                @Query(value = "limit") String limit,
+                                                @Query(value = "user_id") String userId);
 
     @Multipart
     @POST("v1/question/image")
@@ -56,6 +58,12 @@ public interface ApiService {
                                                 @Header("x-voter-version") String version,
                                                 @Header("x-voter-installation") String installation,
                                                 @PartMap Map<String, RequestBody> Files);
+
+    @POST("v1/answer")
+    Observable<AnswerResponse> Answer(@Header("x-voter-client-id") String clientId,
+                                      @Header("x-voter-version") String version,
+                                      @Header("x-voter-installation") String installation,
+                                      @Body AnswerRequest answerRequest);
 
 
     //@Multipart

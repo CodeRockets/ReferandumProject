@@ -41,6 +41,7 @@ public class QuestionFragment extends Fragment {
     //
     private Context mContext;
     private MainActivity mActivity;
+    private ModelQuestionInformation mqi;
 
     @DebugLog
     @Override
@@ -54,8 +55,12 @@ public class QuestionFragment extends Fragment {
         this.mContext = getActivity();
         this.mActivity = (MainActivity) getActivity();
         //
-        ModelQuestionInformation mqi = getArguments().getParcelable(ModelQuestionInformation.class.getSimpleName());
+        mqi = getArguments().getParcelable(ModelQuestionInformation.class.getSimpleName());
         setSoru(mqi);
+    }
+
+    public ModelQuestionInformation getQuestion() {
+        return mqi;
     }
 
     private void setSoru(ModelQuestionInformation mqi) {

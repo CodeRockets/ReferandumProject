@@ -1,5 +1,6 @@
 package com.coderockets.referandumproject.model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -21,9 +22,11 @@ public class ModelAnswer extends BaseModel {
     }
     */
 
+    @Expose
     @SerializedName("option")
     private String Option;
 
+    @Expose
     @SerializedName("text")
     private String Text;
 

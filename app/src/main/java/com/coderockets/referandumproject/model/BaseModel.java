@@ -1,7 +1,5 @@
 package com.coderockets.referandumproject.model;
 
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -11,27 +9,30 @@ import com.google.gson.annotations.SerializedName;
 public class BaseModel {
 
     @Expose
-    @Column
     @SerializedName("created_at")
     private String CreatedAt;
 
     @Expose
-    @Column
     @SerializedName("updated_at")
     private String UpdatedAt;
 
+    @Expose
     @SerializedName("is_deleted")
     private boolean IsDeleted;
 
+    @Expose
     @SerializedName("question_id")
     private String QuestionId;
 
+    @Expose
     @SerializedName("user_id")
     private String UserId;
 
+    @Expose
     @SerializedName("installation_id")
     private String InstallationId;
 
+    @Expose
     @SerializedName("client_id")
     private String ClientId;
 
