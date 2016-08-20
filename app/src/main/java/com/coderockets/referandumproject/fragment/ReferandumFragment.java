@@ -147,9 +147,9 @@ public class ReferandumFragment extends BaseFragment {
 
             CustomAnswerPercent customAnswerPercent = (CustomAnswerPercent) frg.getView().findViewById(R.id.MyCustomAnswerPercent);
             customAnswerPercent.addHostView(viewGroup);
-            customAnswerPercent.setAValue(300);
-            customAnswerPercent.setBValue(200);
-            
+            customAnswerPercent.setAValue(90);
+            customAnswerPercent.setBValue(10);
+
             //customAnswerPercent.setWidthBarA(120);
             //customAnswerPercent.setWidthBarB(20);
             //customAnswerPercent.setSValue(76);

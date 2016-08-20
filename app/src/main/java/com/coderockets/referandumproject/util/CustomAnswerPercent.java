@@ -216,12 +216,15 @@ public class CustomAnswerPercent extends View {
 
     private void startBar() {
 
-        ValueAnimator animatorAHeight = ValueAnimator.ofFloat(0, this.mValueBarA);
+        int computePercentA = (int) (((float) mValueBarA / (float) (mValueBarA + mValueBarB)) * 100);
+        float computeBarAValue = ((getHeight() - 100) * computePercentA / 100);
+
+        ValueAnimator animatorAHeight = ValueAnimator.ofFloat(0, computeBarAValue);
         animatorAHeight.setDuration(animBarDuration);
 
         animatorAHeight.addUpdateListener(valueAnimator -> {
             animAValue = (float) animatorAHeight.getAnimatedValue();
-            if ((float) animatorAHeight.getAnimatedValue() == this.mValueBarA) {
+            if ((float) animatorAHeight.getAnimatedValue() == computeBarAValue) {
                 this.isFinishAnimBarA = true;
             }
             invalidate();
@@ -229,12 +232,15 @@ public class CustomAnswerPercent extends View {
         animatorAHeight.start();
 
 
-        ValueAnimator animatorBHeight = ValueAnimator.ofFloat(0, this.mValueBarB);
+        int computePercentB = (int) (((float) mValueBarB / (float) (mValueBarA + mValueBarB)) * 100);
+        float computeBarBValue = ((getHeight() - 100) * computePercentB / 100);
+
+        ValueAnimator animatorBHeight = ValueAnimator.ofFloat(0, computeBarBValue);
         animatorBHeight.setDuration(animBarDuration);
 
         animatorBHeight.addUpdateListener(valueAnimator -> {
             animBValue = (float) animatorBHeight.getAnimatedValue();
-            if ((float) animatorBHeight.getAnimatedValue() == this.mValueBarB) {
+            if ((float) animatorBHeight.getAnimatedValue() == computeBarBValue) {
                 this.isFinishAnimBarB = true;
             }
             invalidate();
@@ -257,12 +263,14 @@ public class CustomAnswerPercent extends View {
         canvas.drawRect(mRectBarA, mPaintBarA);
 
         if (isFinishAnimBarA) {
+            Logger.i("Anim Bar A finised ");
             Paint percentText = new Paint();
             percentText.setTextSize(100);
             percentText.setColor(Color.BLACK);
             percentText.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
             percentText.setTextAlign(Paint.Align.CENTER);
 
+            //Rect textRext = new Rect();
             int computePercentA = (int) (((float) mValueBarA / (float) (mValueBarA + mValueBarB)) * 100);
             canvas.drawText(computePercentA + " %", startPoint + (mRectBarA.width() / 2), getHeight() - mRectBarA.height() - widthBarA, percentText);
         }
