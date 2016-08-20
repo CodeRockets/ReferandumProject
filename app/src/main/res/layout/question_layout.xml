@@ -26,25 +26,40 @@
                 android:id="@+id/ProfilePicture"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="113dp"
-                android:src="@drawable/ok"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true" />
+                android:src="@drawable/ok" />
 
 
-            <com.coderockets.referandumproject.util.AutoFitTextView
-                android:id="@+id/SoruText"
-                fontPath="fonts/Tabatha Regular.ttf"
+            <RelativeLayout
+                android:id="@+id/SoruTextLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/ProfilePicture"
-                android:ellipsize="none"
-                android:gravity="center"
-                android:maxLines="5"
-                android:text="Auto Resized Text, max 1 line Merhaba Merhaba Merhabaaaaa"
-                android:textSize="100sp" />
+                android:orientation="vertical">
+
+                <com.coderockets.referandumproject.util.AutoFitTextView
+                    android:id="@+id/SoruText"
+                    fontPath="fonts/Tabatha Regular.ttf"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ellipsize="none"
+                    android:gravity="center"
+                    android:maxLines="5"
+                    android:text="Auto Resized Text, max 1 line Merhaba Merhaba Merhabaaaaa"
+                    android:textSize="100sp" />
+
+                <com.coderockets.referandumproject.util.CustomAnswerPercent
+                    android:id="@+id/MyCustomAnswerPercent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true" />
+            </RelativeLayout>
+
 
             <!--<com.coderockets.referandumproject.util.AutoResizeTextView-->
             <!--android:id="@+id/TextViewSoru"-->

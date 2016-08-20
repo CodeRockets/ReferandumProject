@@ -242,7 +242,7 @@ public class AskQuestionFragment extends BaseFragment {
                                                 {
                                                     mFilePath = null;
                                                     mEditText_SoruText.setText("");
-                                                    UiHelper.UiSnackBar.showSimpleSnackBar(getView(), "Sorunuz gönderildi.", Snackbar.LENGTH_INDEFINITE);
+                                                    UiHelper.UiSnackBar.showSimpleSnackBar(getView(), "Sorunuz gönderildi.", Snackbar.LENGTH_LONG);
                                                 },
                                                 error -> {
                                                     materialDialog.dismiss();

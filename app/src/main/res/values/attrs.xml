@@ -9,4 +9,19 @@
         <attr name="shape_color" format="color" />
     </declare-styleable>
 
+
+    <declare-styleable name="CustomAnswerPercent">
+        <attr name="barAWidth" format="integer" />
+        <attr name="barBWidth" format="integer" />
+        <attr name="barAValue" format="integer" />
+        <attr name="barBValue" format="integer" />
+        <attr name="barSValue" format="integer" />
+        <attr name="barAColor" format="color" />
+        <attr name="barBColor" format="color" />
+        <attr name="animBarDuration" format="float" />
+        <attr name="animAlphaViewDuration" format="float" />
+        <attr name="alphaViewValue" format="float" />
+    </declare-styleable>
+
+
 </resources>

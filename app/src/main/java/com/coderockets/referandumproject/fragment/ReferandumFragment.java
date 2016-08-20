@@ -1,7 +1,9 @@
 package com.coderockets.referandumproject.fragment;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 
 import com.ToxicBakery.viewpager.transforms.BackgroundToForegroundTransformer;
 import com.coderockets.referandumproject.R;
@@ -11,15 +13,17 @@ import com.coderockets.referandumproject.db.DbManager;
 import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
 import com.coderockets.referandumproject.rest.RestClient;
+import com.coderockets.referandumproject.util.CustomAnswerPercent;
 import com.coderockets.referandumproject.util.CustomButton;
 import com.coderockets.referandumproject.util.adapter.CustomSorularAdapter;
-import com.coderockets.referandumproject.util.adapter.CustomViewPagerAdapter;
 import com.orhanobut.logger.Logger;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
+
+import java.util.Hashtable;
 
 import hugo.weaving.DebugLog;
 import rx.android.schedulers.AndroidSchedulers;
@@ -40,8 +44,9 @@ public class ReferandumFragment extends BaseFragment {
 
     Context mContext;
     MainActivity mActivity;
-    CustomViewPagerAdapter mViewPagerAdapter;
+    //CustomViewPagerAdapter mViewPagerAdapter;
     CustomSorularAdapter mSorularAdapter;
+    Hashtable<Integer, Boolean> modControl = new Hashtable<>();
 
     @DebugLog
     @AfterViews
@@ -86,7 +91,7 @@ public class ReferandumFragment extends BaseFragment {
 
             @Override
             public void onPageSelected(int position) {
-
+                ControlTempQuestion();
             }
 
             @Override
@@ -99,6 +104,21 @@ public class ReferandumFragment extends BaseFragment {
     }
 
     @DebugLog
+    private void ControlTempQuestion() {
+        // Eğer modControl hashtable ında 10 ve katlarında bir kayıt yoksa 10 soru çekilir.
+        // Bu kontrolün amacı 11. soruda iken 10. soruya dönüldüğünde tekrar soru yüklenmesini engellemek için.
+        if (modControl.get(mViewPagerSorular.getCurrentItem()) == null) {
+            if (mViewPagerSorular.getCurrentItem() % 10 == 0) {
+                // HashTable a ViewPager.getCurrentItem() değerini atıyoruz.
+                // Bu sayede ViewPager.getCurrentItem() sayfasında iken null değeri dönmeyecek ve tekrar soru yüklmesi yapılmayacak.
+                modControl.put(mViewPagerSorular.getCurrentItem(), true);
+                addQuestionsAdapter("10");
+            }
+        }
+    }
+
+
+    @DebugLog
     private void setSorular() {
 
         //mSorularAdapter = new CustomSorularAdapter(mActivity.getSupportFragmentManager());
@@ -107,23 +127,45 @@ public class ReferandumFragment extends BaseFragment {
 
         Logger.i("mSorularAdapter.getCount(): " + mSorularAdapter.getCount());
         if (mSorularAdapter.getCount() == 0) {
-            addQuestionsAdapter();
+            addQuestionsAdapter("20");
         }
     }
 
-
     @Click(R.id.ButtonTrue)
     public void ButtonTrueClick() {
-        mButtonTrue.changeButtonScale();
+        try {
+            showAnswerResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
+    private void showAnswerResult() {
+        try {
+            Fragment frg = mSorularAdapter.getItem(mViewPagerSorular.getCurrentItem());
+            View viewGroup = frg.getView().findViewById(R.id.SoruText);
+
+            CustomAnswerPercent customAnswerPercent = (CustomAnswerPercent) frg.getView().findViewById(R.id.MyCustomAnswerPercent);
+            customAnswerPercent.addHostView(viewGroup);
+            customAnswerPercent.setAValue(300);
+            customAnswerPercent.setBValue(200);
+            
+            //customAnswerPercent.setWidthBarA(120);
+            //customAnswerPercent.setWidthBarB(20);
+            //customAnswerPercent.setSValue(76);
+            //viewGroup.addView(customAnswerPercent);
+            customAnswerPercent.showResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Click(R.id.ButtonFalse)
     public void ButtonFalseClick() {
-        addQuestionsAdapter();
+        //addQuestionsAdapter("10");
     }
 
-    private void addQuestionsAdapter() {
+    private void addQuestionsAdapter(String count) {
         try {
 
             Logger.i("User Id: " + DbManager.getModelUser().getUserId());
@@ -134,20 +176,21 @@ public class ReferandumFragment extends BaseFragment {
                             Const.CLIENT_ID,
                             Const.REFERANDUM_VERSION,
                             SuperHelper.getDeviceId(mContext),
-                            "10",
+                            count,
                             SuperHelper.checkUser() ? DbManager.getModelUser().getUserId() : ""
                     )
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(response -> {
-                        //QuestionFragment_ soruFragment = QuestionFragment_.builder().
-                        for (ModelQuestionInformation mqi : response.getData().getRows()) {
-                            Logger.i(mqi.getQuestionText());
-                            mSorularAdapter.addFragment(QuestionFragment_.builder().build(), mqi);
-                        }
-                    }, error -> {
-                        error.printStackTrace();
-                    });
+                    .subscribe(
+                            response -> {
+                                //QuestionFragment_ soruFragment = QuestionFragment_.builder().
+                                for (ModelQuestionInformation mqi : response.getData().getRows()) {
+                                    Logger.i(mqi.getQuestionText());
+                                    mSorularAdapter.addFragment(QuestionFragment_.builder().build(), mqi);
+                                }
+                            }, error -> {
+                                error.printStackTrace();
+                            });
 
                     /*
                     .enqueue(new Callback<SoruGetirBaseResponse>() {

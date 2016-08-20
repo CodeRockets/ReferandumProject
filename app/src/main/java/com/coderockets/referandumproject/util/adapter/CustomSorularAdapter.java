@@ -31,6 +31,10 @@ public class CustomSorularAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         QuestionFragment questionFragment = mFragmentList.get(position);
 
+        if (questionFragment.isVisible()) {
+            return questionFragment;
+        }
+
         Bundle args = new Bundle();
         args.putParcelable(ModelQuestionInformation.class.getSimpleName(), mSoruList.get(position));
         questionFragment.setArguments(args);
