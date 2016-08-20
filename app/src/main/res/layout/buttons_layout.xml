@@ -20,7 +20,7 @@
         android:shadowDx="3"
         android:shadowDy="3"
         android:shadowRadius="1"
-        android:text="{fa-backward} HAYIR "
+        android:text="{fa-close 100%}"
         android:textColor="@color/white" />
 
     <com.coderockets.referandumproject.util.CustomButton
@@ -35,6 +35,6 @@
         android:shadowDx="3"
         android:shadowDy="3"
         android:shadowRadius="1"
-        android:text="EVET  {fa-check}"
+        android:text="{fa-check 100%}"
         android:textColor="@color/white" />
 </LinearLayout>
