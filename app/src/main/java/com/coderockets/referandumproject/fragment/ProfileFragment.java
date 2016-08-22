@@ -20,7 +20,6 @@ import com.coderockets.referandumproject.db.DbManager;
 import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.rest.RestClient;
 import com.coderockets.referandumproject.rest.RestModel.UserRequest;
-import com.coderockets.referandumproject.util.CustomButton;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -62,12 +61,6 @@ public class ProfileFragment extends BaseFragment {
     @ViewById(R.id.ButtonCikisYap)
     Button mButtonCikisYap;
 
-    @ViewById(R.id.ButtonCustomDeneme1)
-    CustomButton mButtonCustomDeneme1;
-
-    @ViewById(R.id.ButtonCustomDeneme2)
-    CustomButton mButtonCustomDeneme2;
-
     @ViewById(R.id.ImageViewLoginBackground)
     ImageView mImageViewLoginBackground;
     //
@@ -101,13 +94,6 @@ public class ProfileFragment extends BaseFragment {
     }
 
     @DebugLog
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-
-    @DebugLog
     private void updateUI() {
 
         // Kullanıcı Login değilse
@@ -136,8 +122,7 @@ public class ProfileFragment extends BaseFragment {
         MaterialDialog materialDialog = new MaterialDialog.Builder(mContext)
                 .cancelable(false)
                 .icon(new IconDrawable(mContext, FontAwesomeIcons.fa_angle_right).actionBarSize().colorRes(com.aykuttasil.androidbasichelperlib.R.color.accent))
-                .title("Kullanıcı Kaydediliyor")
-                .content("Lütfen Bekleyiniz...")
+                .content("Lütfen Bekleyiniz..")
                 .progress(true, 0)
                 .show();
 
@@ -251,19 +236,6 @@ public class ProfileFragment extends BaseFragment {
         mLoginButton.performClick();
     }
 
-    @DebugLog
-    @Click(R.id.ButtonCustomDeneme1)
-    public void ButtonCustomDeneme1Click() {
-        mButtonCustomDeneme1.changeButtonBgColor();
-    }
-
-    @DebugLog
-    @Click(R.id.ButtonCustomDeneme2)
-    public void ButtonCustomDeneme2Click() {
-        mButtonCustomDeneme2.changeButtonScale();
-        //ResizeAnimation resizeAnimation = new ResizeAnimation(, 200, 100);
-        //this.startAnimation(resizeAnimation);
-    }
 
     /*
     private void clickLoginButton() {
@@ -308,12 +280,6 @@ public class ProfileFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @DebugLog
-    @Override
-    public void onPause() {
-        super.onPause();
     }
 
     @DebugLog
