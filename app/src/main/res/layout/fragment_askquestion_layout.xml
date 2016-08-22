@@ -74,7 +74,7 @@
                     android:id="@+id/Button_SoruGonder"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="GÖNDER {fa-upload}" />
+                    android:text="GÖNDER" />
 
             </LinearLayout>
 

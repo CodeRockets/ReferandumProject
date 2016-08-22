@@ -41,7 +41,7 @@ public class ReferandumApp extends Application {
     @DebugLog
     private void initReferandum() {
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/ShadowsIntoLight.ttf")
+                //.setDefaultFontPath("fonts/ShadowsIntoLight.ttf")
                 .setFontAttrId(R.attr.fontPath)
                 .build());
 
