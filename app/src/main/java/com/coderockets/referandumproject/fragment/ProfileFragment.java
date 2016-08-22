@@ -26,7 +26,9 @@ import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
+import com.facebook.login.LoginManager;
 import com.facebook.login.widget.LoginButton;
+import com.google.gson.Gson;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.orhanobut.logger.Logger;
@@ -110,6 +112,9 @@ public class ProfileFragment extends BaseFragment {
 
         // Kullanıcı Login değilse
         if (!SuperHelper.checkUser()) {
+            if (DbManager.getModelUser() == null && AccessToken.getCurrentAccessToken() != null) {
+                LoginManager.getInstance().logOut();
+            }
             hideMainContent();
             showLoginContent();
             mActivity.makeBlur(mContext, mImageViewLoginBackground, mImageViewLoginBackground);
@@ -141,6 +146,7 @@ public class ProfileFragment extends BaseFragment {
 
         Logger.i(userRequest.getToken());
         Logger.i(SuperHelper.getDeviceId(mContext));
+        Logger.i("User save request: " + new Gson().toJson(userRequest));
 
         try {
             RestClient.getInstance().getApiService().User(
@@ -157,6 +163,7 @@ public class ProfileFragment extends BaseFragment {
                                 updateUI();
 
                             }, error -> {
+                                materialDialog.dismiss();
                                 UiHelper.UiSnackBar.showSimpleSnackBar(getView(), error.getMessage(), Snackbar.LENGTH_INDEFINITE);
                             },
                             materialDialog::dismiss

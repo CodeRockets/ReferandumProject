@@ -2,9 +2,7 @@ package com.coderockets.referandumproject.helper;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.drawable.PictureDrawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -14,6 +12,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.StringSignature;
+import com.coderockets.referandumproject.db.DbManager;
 import com.facebook.AccessToken;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
@@ -33,7 +32,7 @@ public class SuperHelper extends com.aykuttasil.androidbasichelperlib.SuperHelpe
 
     @DebugLog
     public static boolean checkUser() {
-        return AccessToken.getCurrentAccessToken() != null;
+        return AccessToken.getCurrentAccessToken() != null && DbManager.getModelUser() != null;
     }
 
     /**

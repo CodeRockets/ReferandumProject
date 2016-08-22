@@ -81,7 +81,6 @@ public class ReferandumFragment extends BaseFragment {
                 position = position == 0 ? 0 : position - 1;
                 ModelQuestionInformation mqi = getQuestionFragment(position).getQuestion();
                 if (!isAnswered && !checkAnswered(mqi)) {
-
                     sendQuestionAnswer("atla", "s", mqi);
                 }
                 ControlTempQuestion();
@@ -102,11 +101,17 @@ public class ReferandumFragment extends BaseFragment {
         // Eğer modControl hashtable ında 10 ve katlarında bir kayıt yoksa 10 soru çekilir.
         // Bu kontrolün amacı 11. soruda iken 10. soruya dönüldüğünde tekrar soru yüklenmesini engellemek için.
         if (modControl.get(mViewPagerSorular.getCurrentItem()) == null) {
-            if (mViewPagerSorular.getCurrentItem() % 10 == 0) {
+            Logger.i("ViewPagerSorular.getCurrentItem(): " + mViewPagerSorular.getCurrentItem());
+            Logger.i("SorularAdapter.getCount(): " + mSorularAdapter.getCount());
+            if ((mViewPagerSorular.getCurrentItem() < mSorularAdapter.getCount() - 10
+                    && mViewPagerSorular.getCurrentItem() != 0)
+                    || mViewPagerSorular.getCurrentItem() + 1 == mSorularAdapter.getCount())
+            //if (mViewPagerSorular.getCurrentItem() % 10 == 0 && mViewPagerSorular.getCurrentItem() != 0)
+            {
                 // HashTable a ViewPager.getCurrentItem() değerini atıyoruz.
                 // Bu sayede ViewPager.getCurrentItem() sayfasında iken null değeri dönmeyecek ve tekrar soru yüklmesi yapılmayacak.
                 modControl.put(mViewPagerSorular.getCurrentItem(), true);
-                addQuestionsAdapter("10");
+                addQuestionsToAdapter("10");
             }
         }
     }
@@ -120,7 +125,7 @@ public class ReferandumFragment extends BaseFragment {
 
         Logger.i("mSorularAdapter.getCount(): " + mSorularAdapter.getCount());
         if (mSorularAdapter.getCount() == 0) {
-            addQuestionsAdapter("20");
+            addQuestionsToAdapter("20");
         }
     }
 
@@ -128,8 +133,7 @@ public class ReferandumFragment extends BaseFragment {
     public void ButtonTrueClick() {
         try {
             isAnswered = true;
-            //setQuestionFragment();
-            showAnswerResult();
+            showAnswerResult("evet");
             sendQuestionAnswer("evet", "a", mQuestionFragment.getQuestion());
         } catch (Exception e) {
             e.printStackTrace();
@@ -139,20 +143,30 @@ public class ReferandumFragment extends BaseFragment {
     @Click(R.id.ButtonFalse)
     public void ButtonFalseClick() {
         isAnswered = true;
-        //setQuestionFragment();
-        showAnswerResult();
+        showAnswerResult("hayir");
         sendQuestionAnswer("hayir", "b", mQuestionFragment.getQuestion());
     }
 
-    private void showAnswerResult() {
+    private void showAnswerResult(String which) {
         try {
 
-            View viewGroup = mQuestionFragment.getView().findViewById(R.id.SoruText);
+            View alphaView = mQuestionFragment.getView().findViewById(R.id.SoruText);
 
+            ModelQuestionInformation mqi = getCurrentQuestionFragment().getQuestion();
+            switch (which) {
+                case "evet": {
+                    mqi.setOption_A_Count(mqi.getOption_A_Count() + 1);
+                    break;
+                }
+                case "hayir": {
+                    mqi.setOption_B_Count(mqi.getOption_B_Count() + 1);
+                    break;
+                }
+            }
             CustomAnswerPercent customAnswerPercent = (CustomAnswerPercent) mQuestionFragment.getView().findViewById(R.id.MyCustomAnswerPercent);
-            customAnswerPercent.addAlphaView(viewGroup);
-            customAnswerPercent.setAValue(90);
-            customAnswerPercent.setBValue(10);
+            customAnswerPercent.addAlphaView(alphaView);
+            customAnswerPercent.setAValue(mqi.getOption_B_Count());
+            customAnswerPercent.setBValue(mqi.getOption_A_Count());
 
             customAnswerPercent.showResult();
 
@@ -182,15 +196,15 @@ public class ReferandumFragment extends BaseFragment {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(success -> {
-                        UiHelper.UiSnackBar.showSimpleSnackBar(getView(), "Cevap gönderildi.", Snackbar.LENGTH_LONG);
+                        //UiHelper.UiSnackBar.showSimpleSnackBar(getView(), "Cevap gönderildi.", Snackbar.LENGTH_LONG);
                     }, error -> {
-
+                        UiHelper.UiSnackBar.showSimpleSnackBar(getView(), error.getMessage(), Snackbar.LENGTH_LONG);
                     });
         }
         answerControl.put(mqi.getSoruId(), true);
     }
 
-    private void addQuestionsAdapter(String count) {
+    private void addQuestionsToAdapter(String count) {
         try {
 
             RestClient restClient = RestClient.getInstance();
@@ -206,11 +220,10 @@ public class ReferandumFragment extends BaseFragment {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                             response -> {
-                                //QuestionFragment_ soruFragment = QuestionFragment_.builder().
                                 for (ModelQuestionInformation mqi : response.getData().getRows()) {
-                                    Logger.i(mqi.getQuestionText());
+                                    //Logger.i(mqi.getQuestionText());
                                     mSorularAdapter.addFragment(QuestionFragment_.builder().build(), mqi);
-                                    //answerControl.put(mqi.getSoruId(), false);
+                                    answerControl.put(mqi.getSoruId(), false);
                                 }
                             },
                             Throwable::printStackTrace,
@@ -243,17 +256,27 @@ public class ReferandumFragment extends BaseFragment {
 
     @DebugLog
     private void setQuestionFragment() {
-        mQuestionFragment = (QuestionFragment) mSorularAdapter.getItem(mViewPagerSorular.getCurrentItem());
-        //return mQuestionFragment;
+        try {
+            if (mSorularAdapter.getCount() == 0) {
+                Logger.i("Soru yok..");
+                return;
+            }
+            mQuestionFragment = (QuestionFragment) mSorularAdapter.getItem(mViewPagerSorular.getCurrentItem());
+        } catch (Exception e) {
+            Logger.e("HATA:" + e);
+        }
     }
 
     private QuestionFragment getQuestionFragment(int position) {
         return (QuestionFragment) mSorularAdapter.getItem(position);
     }
 
+    private QuestionFragment getCurrentQuestionFragment() {
+        return (QuestionFragment) mSorularAdapter.getItem(mViewPagerSorular.getCurrentItem());
+    }
+
     @DebugLog
     private boolean checkAnswered(ModelQuestionInformation mqi) {
-
         return answerControl.get(mqi.getSoruId()) == null ? false : answerControl.get(mqi.getSoruId());
     }
 }

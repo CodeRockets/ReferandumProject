@@ -2,6 +2,7 @@ package com.coderockets.referandumproject.util;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -15,7 +16,6 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.coderockets.referandumproject.R;
-import com.orhanobut.logger.Logger;
 
 import hugo.weaving.DebugLog;
 
@@ -214,7 +214,7 @@ public class CustomAnswerPercent extends View {
         // Örnek : Host View yüksekliği = 720 , bar oranı = %50
         // - 100 = 620 -> en üstteki yazı için yer açıyoruz
         // * (50 / 100) = 310 -> bar ın gösterileceği yükseklik
-        float computeBarAValue = ((getHeight() - 100) * computePercentA / 100);
+        float computeBarAValue = ((getHeight() - 130) * computePercentA / 100);
 
         ValueAnimator animatorAHeight = ValueAnimator.ofFloat(0, computeBarAValue);
         animatorAHeight.setDuration(animBarDuration);
@@ -230,7 +230,7 @@ public class CustomAnswerPercent extends View {
 
 
         int computePercentB = (int) (((float) mValueBarB / (float) (mValueBarA + mValueBarB)) * 100);
-        float computeBarBValue = ((getHeight() - 100) * computePercentB / 100);
+        float computeBarBValue = ((getHeight() - 130) * computePercentB / 100);
 
         ValueAnimator animatorBHeight = ValueAnimator.ofFloat(0, computeBarBValue);
         animatorBHeight.setDuration(animBarDuration);
@@ -251,6 +251,10 @@ public class CustomAnswerPercent extends View {
         mPaintBarA = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaintBarA.setColor(mColorBarA);
 
+
+        Resources resources = getResources();
+        float scale = resources.getDisplayMetrics().density;
+
         float startPoint = (getWidth() / 4) - widthBarA;
         float endPoint = (getWidth() / 4) + widthBarA;
 
@@ -260,16 +264,24 @@ public class CustomAnswerPercent extends View {
         canvas.drawRect(mRectBarA, mPaintBarA);
 
         if (isFinishAnimBarA) {
-            Logger.i("Anim Bar A finised ");
+            //Logger.i("Anim Bar A finised ");
+
+            int computePercentA = (int) (((float) mValueBarA / (float) (mValueBarA + mValueBarB)) * 100);
+            float textStart = startPoint + (mRectBarA.width() / 2);
+            float textEnd = getHeight() - mRectBarA.height() - (widthBarA / 2);
+
             Paint percentText = new Paint();
-            percentText.setTextSize(100);
+            percentText.setTextSize((int) (17 * scale));
             percentText.setColor(Color.BLACK);
             percentText.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
             percentText.setTextAlign(Paint.Align.CENTER);
 
-            //Rect textRext = new Rect();
-            int computePercentA = (int) (((float) mValueBarA / (float) (mValueBarA + mValueBarB)) * 100);
-            canvas.drawText(computePercentA + " %", startPoint + (mRectBarA.width() / 2), getHeight() - mRectBarA.height() - widthBarA, percentText);
+            String barText = computePercentA + " %";
+            Rect barTextRect = new Rect();
+            percentText.getTextBounds(barText, 0, barText.length(), barTextRect);
+
+            canvas.drawText(barText, textStart, textEnd, percentText);
+
         }
     }
 
@@ -280,6 +292,9 @@ public class CustomAnswerPercent extends View {
         mPaintBarB = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaintBarB.setColor(mColorBarB);
 
+        Resources resources = getResources();
+        float scale = resources.getDisplayMetrics().density;
+
         float startPoint = getWidth() - (getWidth() / 4) - widthBarB;
         float endPoint = getWidth() - (getWidth() / 4) + widthBarB;
 
@@ -289,14 +304,21 @@ public class CustomAnswerPercent extends View {
         canvas.drawRect(mRectBarB, mPaintBarB);
 
         if (isFinishAnimBarB) {
+            int computePercentB = (int) (((float) mValueBarB / (float) (mValueBarA + mValueBarB)) * 100);
+            float textStart = startPoint + (mRectBarB.width() / 2);
+            float textEnd = getHeight() - mRectBarB.height() - (widthBarB / 2);
+
             Paint percentText = new Paint();
-            percentText.setTextSize(100);
+            percentText.setTextSize((int) (17 * scale));
             percentText.setColor(Color.BLACK);
             percentText.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
             percentText.setTextAlign(Paint.Align.CENTER);
 
-            int computePercentB = (int) (((float) mValueBarB / (float) (mValueBarA + mValueBarB)) * 100);
-            canvas.drawText(computePercentB + " %", startPoint + (mRectBarB.width() / 2), getHeight() - mRectBarB.height() - widthBarB, percentText);
+            String barText = computePercentB + " %";
+            Rect barTextRect = new Rect();
+            percentText.getTextBounds(barText, 0, barText.length(), barTextRect);
+
+            canvas.drawText(barText, textStart, textEnd, percentText);
         }
     }
 
@@ -307,7 +329,7 @@ public class CustomAnswerPercent extends View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         if (getParent() instanceof RelativeLayout) {
-            Logger.i("Parent is RelativeLayout");
+            //Logger.i("Parent is RelativeLayout");
         } else {
             Log.i(CustomAnswerPercent.class.getSimpleName(), "Parent is not RelativeLayout !");
             return;

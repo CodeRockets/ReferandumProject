@@ -34,6 +34,7 @@ public class RestClient {
                                     .method(original.method(), original.body())
                                     .build();
 
+
                             return chain.proceed(request);
                         })
                 //.addInterceptor(httpLoggingInterceptor)

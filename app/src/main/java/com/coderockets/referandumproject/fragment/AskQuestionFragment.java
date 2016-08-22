@@ -30,11 +30,11 @@ import com.coderockets.referandumproject.util.AutoFitTextView;
 import com.fuck_boilerplate.rx_paparazzo.RxPaparazzo;
 import com.fuck_boilerplate.rx_paparazzo.entities.Options;
 import com.fuck_boilerplate.rx_paparazzo.entities.Size;
+import com.google.gson.Gson;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.orhanobut.logger.Logger;
-import com.slmyldz.random.Randoms;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
 import org.androidannotations.annotations.AfterViews;
@@ -181,12 +181,12 @@ public class AskQuestionFragment extends BaseFragment {
 
         SoruSorRequest soruSorRequest = SoruSorRequest.SoruSorRequestInstance();
         soruSorRequest.setQuestionText(mEditText_SoruText.getText().toString());
-        soruSorRequest.setQuestionImage(Randoms.imageUrl("png"));
+        //soruSorRequest.setQuestionImage(Randoms.imageUrl("png"));
 
         MaterialDialog materialDialog = new MaterialDialog.Builder(mContext)
                 .cancelable(false)
                 .icon(new IconDrawable(mContext, FontAwesomeIcons.fa_angle_right).actionBarSize().colorRes(com.aykuttasil.androidbasichelperlib.R.color.accent))
-                .title("Sorunuz gönderiliyor")
+                //.title("Sorunuz gönderiliyor")
                 .content("Lütfen bekleyiniz..")
                 .progress(true, 0)
                 .show();
@@ -255,6 +255,9 @@ public class AskQuestionFragment extends BaseFragment {
                                 materialDialog.dismiss();
                                 error.printStackTrace();
                                 UiHelper.UiDialog.showSimpleDialog(mContext, "HATA", error.getMessage());
+                            },
+                            () -> {
+                                Logger.i("Soru Request: " + new Gson().toJson(soruSorRequest));
                             });
 
 
