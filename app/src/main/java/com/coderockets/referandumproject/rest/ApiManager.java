@@ -2,14 +2,22 @@ package com.coderockets.referandumproject.rest;
 
 import android.content.Context;
 
-import com.aykuttasil.androidbasichelperlib.SuperHelper;
-import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.coderockets.referandumproject.app.Const;
+import com.coderockets.referandumproject.db.DbManager;
+import com.coderockets.referandumproject.helper.SuperHelper;
+import com.coderockets.referandumproject.rest.RestModel.AnswerRequest;
+import com.coderockets.referandumproject.rest.RestModel.AnswerResponse;
+import com.coderockets.referandumproject.rest.RestModel.ImageUploadResponse;
+import com.coderockets.referandumproject.rest.RestModel.SoruGetirBaseResponse;
 import com.coderockets.referandumproject.rest.RestModel.SoruSorRequest;
 import com.coderockets.referandumproject.rest.RestModel.SoruSorResponse;
-import com.orhanobut.logger.Logger;
+import com.coderockets.referandumproject.rest.RestModel.UserRequest;
+import com.coderockets.referandumproject.rest.RestModel.UserResponse;
+
+import java.util.Map;
 
 import hugo.weaving.DebugLog;
+import okhttp3.RequestBody;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -39,43 +47,72 @@ public class ApiManager {
 
     //region SoruSor
     @DebugLog
-    public void SoruSor(SoruSorRequest soruSorRequest) {
+    public Observable<SoruSorResponse> SoruSor(SoruSorRequest soruSorRequest) {
 
-        Logger.i("UserId: " + soruSorRequest.getUserId());
+        RestClient restClient = RestClient.getInstance();
 
-        try {
-            RestClient restClient = RestClient.getInstance();
-
-            Observable<SoruSorResponse> api = restClient.getApiService().SoruSor(
-                    Const.CLIENT_ID,
-                    Const.REFERANDUM_VERSION,
-                    SuperHelper.getDeviceId(mContext),
-                    soruSorRequest);
-
-            api.subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(soruSorResponse -> {
-                        //UiHelper.UiSnackBar.showSimpleSnackBar();
-                        UiHelper.UiDialog.newInstance(mContext).getOKDialog("Uyyy", soruSorResponse.getData().getQuestionText(), null).show();
-                    }, error -> {
-                        UiHelper.UiDialog.newInstance(mContext).getOKDialog("Uyyy", error.getMessage(), null).show();
-
-                    });
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            UiHelper.UiDialog.newInstance(mContext).getOKDialog("Uyyy", e.getMessage(), null).show();
-
-            /*
-            ErrorEvent errorEvent = new ErrorEvent();
-            errorEvent.setErrorTitle("Hata");
-            errorEvent.setErrorContent(e.getMessage());
-            errorEvent.setErrorCode("99");
-            EventBus.getDefault().post(errorEvent);
-            */
-        }
+        return restClient.getApiService()
+                .SoruSor(
+                        Const.CLIENT_ID,
+                        Const.REFERANDUM_VERSION,
+                        SuperHelper.getDeviceId(mContext),
+                        soruSorRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
     //endregion
+
+
+    public Observable<AnswerResponse> Answer(AnswerRequest answerRequest) {
+
+        return RestClient.getInstance().getApiService()
+                .Answer(
+                        Const.CLIENT_ID,
+                        Const.REFERANDUM_VERSION,
+                        com.coderockets.referandumproject.helper.SuperHelper.getDeviceId(mContext),
+                        answerRequest
+                )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<SoruGetirBaseResponse> SoruGetir(int count) {
+        return RestClient.getInstance().getApiService()
+                .SoruGetir(
+                        Const.CLIENT_ID,
+                        Const.REFERANDUM_VERSION,
+                        SuperHelper.getDeviceId(mContext),
+                        String.valueOf(count),
+                        SuperHelper.checkUser() ? DbManager.getModelUser().getUserId() : ""
+                )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<UserResponse> SaveUser(UserRequest userRequest) {
+        return RestClient.getInstance().getApiService()
+                .User(
+                        Const.CLIENT_ID,
+                        Const.REFERANDUM_VERSION,
+                        SuperHelper.getDeviceId(mContext),
+                        userRequest
+                )
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
+    }
+
+    public Observable<ImageUploadResponse> ImageUpload(Map<String, RequestBody> map) {
+        return RestClient.getInstance().getApiService()
+                .ImageUpload(
+                        Const.CLIENT_ID,
+                        Const.REFERANDUM_VERSION,
+                        SuperHelper.getDeviceId(mContext),
+                        map
+                )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+    }
 
     /*
     public static Observable<String> uploadImage() {

@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -15,11 +17,11 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.MainActivity;
-import com.coderockets.referandumproject.app.Const;
 import com.coderockets.referandumproject.db.DbManager;
 import com.coderockets.referandumproject.helper.SuperHelper;
-import com.coderockets.referandumproject.rest.RestClient;
+import com.coderockets.referandumproject.rest.ApiManager;
 import com.coderockets.referandumproject.rest.RestModel.UserRequest;
+import com.coderockets.referandumproject.util.adapter.MyFragmentPagerAdapter;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -41,7 +43,6 @@ import org.androidannotations.annotations.ViewById;
 import hugo.weaving.DebugLog;
 import jp.wasabeef.blurry.Blurry;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by aykutasil on 2.06.2016.
@@ -63,6 +64,12 @@ public class ProfileFragment extends BaseFragment {
 
     @ViewById(R.id.ImageViewLoginBackground)
     ImageView mImageViewLoginBackground;
+
+    @ViewById(R.id.tabs)
+    TabLayout mTabs;
+
+    @ViewById(R.id.ProfileViewPager)
+    ViewPager mProfileViewPager;
     //
     Context mContext;
     MainActivity mActivity;
@@ -108,7 +115,18 @@ public class ProfileFragment extends BaseFragment {
             Blurry.delete(mProfileMainLayout);
             hideLoginContent();
             showMainContent();
+            //setTabs();
+            setupViewPager(mProfileViewPager);
+            mTabs.setupWithViewPager(mProfileViewPager);
         }
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+
+        MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getChildFragmentManager());
+        adapter.addFragment(ProfileMe_.builder().build(), "Profil");
+        adapter.addFragment(ProfileMyQuestions_.builder().build(), "Sorularım");
+        viewPager.setAdapter(adapter);
     }
 
     private void setLoginButton() {
@@ -134,14 +152,7 @@ public class ProfileFragment extends BaseFragment {
         Logger.i("User save request: " + new Gson().toJson(userRequest));
 
         try {
-            RestClient.getInstance().getApiService().User(
-                    Const.CLIENT_ID,
-                    Const.REFERANDUM_VERSION,
-                    SuperHelper.getDeviceId(mContext),
-                    userRequest
-            )
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
+            ApiManager.getInstance(mContext).SaveUser(userRequest)
                     .subscribe(response -> {
                                 Logger.i(response.getData().getName());
                                 response.getData().save();

@@ -24,13 +24,12 @@ import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.MainActivity;
 import com.coderockets.referandumproject.app.Const;
 import com.coderockets.referandumproject.helper.SuperHelper;
-import com.coderockets.referandumproject.rest.RestClient;
+import com.coderockets.referandumproject.rest.ApiManager;
 import com.coderockets.referandumproject.rest.RestModel.SoruSorRequest;
 import com.coderockets.referandumproject.util.AutoFitTextView;
 import com.fuck_boilerplate.rx_paparazzo.RxPaparazzo;
 import com.fuck_boilerplate.rx_paparazzo.entities.Options;
 import com.fuck_boilerplate.rx_paparazzo.entities.Size;
-import com.google.gson.Gson;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
@@ -164,14 +163,19 @@ public class AskQuestionFragment extends BaseFragment {
 
         mRxPermissions.request(Const.PERMISSIONS_GENERAL)
                 .subscribe(granted -> {
-                    if (granted) {
-                        sendQuestionRequest();
-                    } else {
-                        UiHelper.UiSnackBar.showSimpleSnackBar(getView(),
-                                "Soru gönderebilmeniz için gerekli izinleri vermelisiniz !",
-                                Snackbar.LENGTH_INDEFINITE);
-                    }
-                });
+                            if (granted) {
+                                sendQuestionRequest();
+                            } else {
+                                UiHelper.UiSnackBar.showSimpleSnackBar(getView(),
+                                        "Soru gönderebilmeniz için gerekli izinleri vermelisiniz !",
+                                        Snackbar.LENGTH_INDEFINITE);
+                            }
+                        }, error -> {
+                            UiHelper.UiSnackBar.showSimpleSnackBar(getView(),
+                                    error.getMessage(),
+                                    Snackbar.LENGTH_INDEFINITE);
+                        }
+                );
     }
 
     @DebugLog
@@ -179,17 +183,8 @@ public class AskQuestionFragment extends BaseFragment {
 
         if (validateIsEmpty(mEditText_SoruText)) return;
 
-        SoruSorRequest soruSorRequest = SoruSorRequest.SoruSorRequestInstance();
-        soruSorRequest.setQuestionText(mEditText_SoruText.getText().toString());
-        //soruSorRequest.setQuestionImage(Randoms.imageUrl("png"));
-
-        MaterialDialog materialDialog = new MaterialDialog.Builder(mContext)
-                .cancelable(false)
-                .icon(new IconDrawable(mContext, FontAwesomeIcons.fa_angle_right).actionBarSize().colorRes(com.aykuttasil.androidbasichelperlib.R.color.accent))
-                //.title("Sorunuz gönderiliyor")
-                .content("Lütfen bekleyiniz..")
-                .progress(true, 0)
-                .show();
+        MaterialDialog materialDialog = UiHelper.UiDialog.newInstance(mContext).getProgressDialog("Lütfen Bekleyiniz..", null);
+        materialDialog.show();
 
         try {
 
@@ -199,9 +194,9 @@ public class AskQuestionFragment extends BaseFragment {
                 if (!externalDir.exists()) externalDir.mkdir();
 
                 Bitmap bitmap = SuperHelper.drawableToBitmap(drawable);
-                SuperHelper.saveBitmapToFile(externalDir, "ReferandumSoru.jpeg", bitmap, Bitmap.CompressFormat.JPEG, 100);
+                SuperHelper.saveBitmapToFile(externalDir, "ReferandumSoru.jpg", bitmap, Bitmap.CompressFormat.JPEG, 100);
 
-                String soruImageFilePath = externalDir.getPath() + "/ReferandumSoru.jpeg";
+                String soruImageFilePath = externalDir.getPath() + "/ReferandumSoru.jpg";
                 Logger.i(soruImageFilePath);
                 mFilePath = soruImageFilePath;
             }
@@ -213,52 +208,32 @@ public class AskQuestionFragment extends BaseFragment {
             map.put("file\"; filename=\"" + "file", requestBody);
 
 
-            RestClient restClient = RestClient.getInstance();
-            restClient.getApiService().ImageUpload(
-                    Const.CLIENT_ID,
-                    Const.REFERANDUM_VERSION,
-                    SuperHelper.getDeviceId(mContext),
-                    map
-            )
-                    .subscribeOn(Schedulers.newThread())
+            ApiManager.getInstance(mContext).ImageUpload(map)
+                    .flatMap(response -> {
+                        SoruSorRequest soruSorRequest = SoruSorRequest.SoruSorRequestInstance();
+                        soruSorRequest.setQuestionText(mEditText_SoruText.getText().toString());
+                        //soruSorRequest.setQuestionImage(Randoms.imageUrl("png"));
+
+                        Logger.i("Image Url: " + response.getData());
+                        soruSorRequest.setQuestionImage(response.getData());
+
+                        return ApiManager.getInstance(mContext).SoruSor(soruSorRequest);
+
+                    })
+                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
-                            responseImageUpload -> {
-
-                                Logger.i("Image Url: " + responseImageUpload.getData());
-                                soruSorRequest.setQuestionImage(responseImageUpload.getData());
-
-                                RestClient.getInstance().getApiService()
-                                        .SoruSor(
-                                                Const.CLIENT_ID,
-                                                Const.REFERANDUM_VERSION,
-                                                SuperHelper.getDeviceId(mContext),
-                                                soruSorRequest
-                                        )
-                                        .subscribeOn(Schedulers.newThread())
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribe(
-                                                response ->
-                                                {
-                                                    mFilePath = null;
-                                                    mEditText_SoruText.setText("");
-                                                    UiHelper.UiSnackBar.showSimpleSnackBar(getView(), "Sorunuz gönderildi.", Snackbar.LENGTH_LONG);
-                                                },
-                                                error -> {
-                                                    materialDialog.dismiss();
-                                                    error.printStackTrace();
-                                                    UiHelper.UiDialog.showSimpleDialog(mContext, "HATA", error.getMessage());
-                                                },
-                                                materialDialog::dismiss);
-                            },
-                            error -> {
+                            response -> {
+                                {
+                                    mFilePath = null;
+                                    mEditText_SoruText.setText("");
+                                    UiHelper.UiSnackBar.showSimpleSnackBar(getView(), "Sorunuz gönderildi.", Snackbar.LENGTH_LONG);
+                                }
+                            }, error -> {
                                 materialDialog.dismiss();
                                 error.printStackTrace();
                                 UiHelper.UiDialog.showSimpleDialog(mContext, "HATA", error.getMessage());
-                            },
-                            () -> {
-                                Logger.i("Soru Request: " + new Gson().toJson(soruSorRequest));
-                            });
+                            }, materialDialog::dismiss);
 
 
         } catch (Exception e) {

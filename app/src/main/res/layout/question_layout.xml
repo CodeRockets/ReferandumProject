@@ -14,9 +14,9 @@
         app:cardElevation="5dp">
 
         <RelativeLayout
-            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/white"
             android:orientation="vertical">
 
             <ImageView
@@ -33,16 +33,16 @@
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="113dp"
-                android:src="@drawable/ok" />
+                android:src="@drawable/ic_account_circle_pink_900_48dp" />
 
 
             <RelativeLayout
-                android:background="@color/white"
                 android:id="@+id/SoruTextLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/ProfilePicture"
+                android:background="@color/white"
                 android:orientation="vertical">
 
                 <com.coderockets.referandumproject.util.AutoFitTextView

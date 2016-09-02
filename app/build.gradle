@@ -127,16 +127,16 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:4.+'
     compile 'com.github.florent37:glidepalette:1.0.6'
     // Google Glide ve Palette kütüphanelerinin birlikte kullanılmasını sağlar
-    compile 'com.aykuttasil:androidbasichelper:1.0.5' // AndroidBasicHelper
+    compile 'com.aykuttasil:androidbasichelper:1.0.8' // AndroidBasicHelper
     compile 'com.google.android:flexbox:0.2.1' // Google FlexboxLayout kullanımı için
     compile 'com.github.slmyldz:AndroidRandom:1.0' // Her türden random veriler üretilmesini sağlar
     compile 'io.github.yavski:fab-speed-dial:1.0.4'
     compile 'com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.2.32@aar'
 
-
-    compile 'com.squareup.retrofit2:retrofit:2.0.2'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.3.0'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
 
     compile 'io.reactivex:rxandroid:1.2.0'
     compile 'io.reactivex:rxjava:1.1.5'
