@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.UiThread;
 
 import hugo.weaving.DebugLog;
@@ -16,7 +15,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 /**
  * Created by aykutasil on 2.06.2016.
  */
-@EActivity
 public class BaseActivity extends AppCompatActivity {
 
     @Override
@@ -24,7 +22,6 @@ public class BaseActivity extends AppCompatActivity {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @UiThread
     @DebugLog
     public void makeBlur(Context context, ViewGroup viewGroup) {
         Blurry.delete(viewGroup);
@@ -34,7 +31,6 @@ public class BaseActivity extends AppCompatActivity {
                 .onto(viewGroup);
     }
 
-    @UiThread
     @DebugLog
     public void makeBlur(Context context, View view, ImageView into) {
         Blurry.with(context)

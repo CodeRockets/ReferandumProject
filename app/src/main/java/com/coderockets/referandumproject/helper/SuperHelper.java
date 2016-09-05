@@ -14,6 +14,8 @@ import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.orhanobut.logger.Logger;
 import com.slmyldz.random.Randoms;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,11 +36,10 @@ public class SuperHelper extends com.aykuttasil.androidbasichelperlib.SuperHelpe
     @DebugLog
     public static String setRandomImage(Context context, final ImageView imageView, String signature) {
         String randomUrl = Randoms.imageUrl("png");
-        Glide.with(context)
+        Picasso.with(context)
                 .load(randomUrl)
-                .signature(new StringSignature(signature))
-                .placeholder(new IconDrawable(context, FontAwesomeIcons.fa_cog).sizeDp(50).color(Color.GRAY).getCurrent())
-                .centerCrop()
+                .memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE)
+                .placeholder(new IconDrawable(context, FontAwesomeIcons.fa_angle_up).sizeDp(50).color(Color.GRAY).getCurrent())
                 .into(imageView);
         Logger.i("Random Image Url: " + randomUrl);
         return randomUrl;

@@ -25,7 +25,7 @@
                 android:layout_height="150dp"
                 android:src="@drawable/ok" />
 
-            <com.mikhaellopez.circularimageview.CircularImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/ProfilePicture"
                 android:layout_width="70dp"
                 android:layout_height="70dp"

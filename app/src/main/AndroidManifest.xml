@@ -24,12 +24,30 @@
 
         <activity
             android:name=".activity.MainActivity_"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activity.ProfileActivity_"
+            android:parentActivityName=".activity.MainActivity_">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity_" />
+        </activity>
+
+        <activity
+            android:name=".activity.QuestionActivity_"
+            android:parentActivityName=".activity.MainActivity_">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity_" />
         </activity>
 
         <activity

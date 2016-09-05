@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.MainActivity;
+import com.coderockets.referandumproject.activity.ProfileActivity;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
@@ -17,11 +18,11 @@ public class ProfileMyQuestions extends BaseProfile {
 
     //
     Context mContext;
-    MainActivity mActivity;
+    ProfileActivity mActivity;
 
     @AfterViews
     public void ProfileMeInit() {
         this.mContext = getActivity();
-        this.mActivity = (MainActivity) getActivity();
+        this.mActivity = (ProfileActivity) getActivity();
     }
 }

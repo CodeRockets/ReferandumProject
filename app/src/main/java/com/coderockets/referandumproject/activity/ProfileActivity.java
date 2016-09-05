@@ -1,23 +1,22 @@
-package com.coderockets.referandumproject.fragment;
+package com.coderockets.referandumproject.activity;
 
 import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.coderockets.referandumproject.R;
-import com.coderockets.referandumproject.activity.MainActivity;
 import com.coderockets.referandumproject.db.DbManager;
+import com.coderockets.referandumproject.fragment.ProfileMe_;
+import com.coderockets.referandumproject.fragment.ProfileMyQuestions_;
 import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.rest.ApiManager;
 import com.coderockets.referandumproject.rest.RestModel.UserRequest;
@@ -36,8 +35,7 @@ import com.orhanobut.logger.Logger;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
 import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
 import hugo.weaving.DebugLog;
@@ -45,10 +43,13 @@ import jp.wasabeef.blurry.Blurry;
 import rx.android.schedulers.AndroidSchedulers;
 
 /**
- * Created by aykutasil on 2.06.2016.
+ * Created by aykutasil on 5.09.2016.
  */
-@EFragment(R.layout.fragment_profile_layout)
-public class ProfileFragment extends BaseFragment {
+@EActivity(R.layout.activiy_profile)
+public class ProfileActivity extends BaseActivity {
+
+    @ViewById(R.id.toolbar)
+    Toolbar mToolbar;
 
     @ViewById(R.id.ProfileMainLayout)
     ViewGroup mProfileMainLayout;
@@ -68,33 +69,34 @@ public class ProfileFragment extends BaseFragment {
     @ViewById(R.id.ProfileViewPager)
     ViewPager mProfileViewPager;
     //
-    Context mContext;
-    MainActivity mActivity;
     CallbackManager mCallbackManager;
     AccessTokenTracker mAccessTokenTracker;
     ProfileTracker mProfileTracker;
     RxPermissions mRxPermissions;
 
-
-    @DebugLog
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     @DebugLog
     @AfterViews
-    public void ProfileFragmentInit() {
-        mContext = getActivity();
-        mActivity = (MainActivity) getActivity();
+    public void ProfileActivityInit() {
         mCallbackManager = CallbackManager.Factory.create();
-        mRxPermissions = RxPermissions.getInstance(mContext);
+        mRxPermissions = RxPermissions.getInstance(this);
         mRxPermissions.setLogging(true);
         //
+        setToolbar();
         setLoginButton();
         setAccesTokenTracker();
         setProfileTracker();
         updateUI();
+    }
+
+    @DebugLog
+    private void setToolbar() {
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle("Profil");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+        //getSupportActionBar().setHomeAsUpIndicator(new IconDrawable(this, FontAwesomeIcons.fa_home).actionBarSize().getCurrent());
     }
 
     @DebugLog
@@ -107,7 +109,7 @@ public class ProfileFragment extends BaseFragment {
             }
             hideMainContent();
             showLoginContent();
-            mActivity.makeBlur(mContext, mImageViewLoginBackground, mImageViewLoginBackground);
+            makeBlur(this, mImageViewLoginBackground, mImageViewLoginBackground);
         } else {
             Blurry.delete(mProfileMainLayout);
             hideLoginContent();
@@ -119,7 +121,7 @@ public class ProfileFragment extends BaseFragment {
 
     private void setupViewPager(ViewPager viewPager) {
 
-        MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getChildFragmentManager());
+        MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(ProfileMe_.builder().build(), "Profil");
         adapter.addFragment(ProfileMyQuestions_.builder().build(), "Sorularım");
         viewPager.setAdapter(adapter);
@@ -127,15 +129,14 @@ public class ProfileFragment extends BaseFragment {
 
     private void setLoginButton() {
         mLoginButton.setReadPermissions("public_profile");
-        mLoginButton.setFragment(this);
     }
 
     @DebugLog
     public void saveUser(String token) {
 
-        MaterialDialog materialDialog = new MaterialDialog.Builder(mContext)
+        MaterialDialog materialDialog = new MaterialDialog.Builder(ProfileActivity.this)
                 .cancelable(false)
-                .icon(new IconDrawable(mContext, FontAwesomeIcons.fa_angle_right).actionBarSize().colorRes(com.aykuttasil.androidbasichelperlib.R.color.accent))
+                .icon(new IconDrawable(ProfileActivity.this, FontAwesomeIcons.fa_angle_right).actionBarSize().colorRes(com.aykuttasil.androidbasichelperlib.R.color.accent))
                 .content("Lütfen Bekleyiniz..")
                 .progress(true, 0)
                 .show();
@@ -144,11 +145,11 @@ public class ProfileFragment extends BaseFragment {
         userRequest.setToken(token);
 
         Logger.i(userRequest.getToken());
-        Logger.i(SuperHelper.getDeviceId(mContext));
+        Logger.i(SuperHelper.getDeviceId(ProfileActivity.this));
         Logger.i("User save request: " + new Gson().toJson(userRequest));
 
         try {
-            ApiManager.getInstance(mContext).SaveUser(userRequest)
+            ApiManager.getInstance(ProfileActivity.this).SaveUser(userRequest)
                     .subscribe(response -> {
                                 Logger.i(response.getData().getName());
                                 response.getData().save();
@@ -156,7 +157,7 @@ public class ProfileFragment extends BaseFragment {
 
                             }, error -> {
                                 materialDialog.dismiss();
-                                UiHelper.UiSnackBar.showSimpleSnackBar(getView(), error.getMessage(), Snackbar.LENGTH_INDEFINITE);
+                                UiHelper.UiSnackBar.showSimpleSnackBar(getCurrentFocus(), error.getMessage(), Snackbar.LENGTH_INDEFINITE);
                             },
                             materialDialog::dismiss
                     );
@@ -188,7 +189,7 @@ public class ProfileFragment extends BaseFragment {
                                     Logger.i("Permission denied !");
                                 }
                             }, error -> {
-                                UiHelper.UiDialog.showSimpleDialog(mContext, "RxPermission", error.getMessage());
+                                UiHelper.UiDialog.showSimpleDialog(ProfileActivity.this, "RxPermission", error.getMessage());
                             });
                 } else {
 
@@ -215,7 +216,6 @@ public class ProfileFragment extends BaseFragment {
             @Override
             protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
                 Profile.setCurrentProfile(currentProfile);
-                //updateUI();
             }
         };
         mProfileTracker.startTracking();
@@ -237,56 +237,15 @@ public class ProfileFragment extends BaseFragment {
         mProfileMainLayout.setVisibility(View.GONE);
     }
 
-    @DebugLog
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        mCallbackManager.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @DebugLog
-    @Override
-    public void onDestroyView() {
-        mAccessTokenTracker.stopTracking();
-        mProfileTracker.stopTracking();
-        super.onDestroyView();
-    }
-    /*
-    private void clickLoginButton() {
-        // Must be done during an initialization phase like onCreate
-        RxView.clicks(mButtonCikisYap)
-                .compose(RxPermissions.getInstance(mContext).ensure(Manifest.permission.READ_PHONE_STATE))
-                .subscribe(granted -> {
-                    // R.id.enableCamera has been clicked
-                });
-    }
-    */
-
-    /*
-    @DebugLog
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        switch (requestCode) {
-            case Const.PERMISIONS_REQUEST_GENERAL: {
-
-                boolean allPermissionGranted = true;
-                for (int a = 0; a < permissions.length; a++) {
-                    if (grantResults[a] != PackageManager.PERMISSION_GRANTED) {
-                        allPermissionGranted = false;
-                        break;
-                    }
-                }
-                if (allPermissionGranted) {
-                    Logger.i("Permissions Granted !");
-                    saveUser(AccessToken.getCurrentAccessToken().getToken());
-                } else {
-                    ActivityCompat.requestPermissions(mActivity, Const.PERMISSIONS_GENERAL, Const.PERMISIONS_REQUEST_GENERAL);
-                }
-            }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
         }
+        return super.onOptionsItemSelected(item);
     }
-    */
 
 }

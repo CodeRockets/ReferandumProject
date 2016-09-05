@@ -140,7 +140,7 @@ public class ReferandumFragment extends BaseFragment {
         if (modControl.get(mViewPagerSorular.getCurrentItem()) == null) {
             Logger.i("ViewPagerSorular.getCurrentItem(): " + mViewPagerSorular.getCurrentItem());
             Logger.i("SorularAdapter.getCount(): " + mSorularAdapter.getCount());
-            if ((mViewPagerSorular.getCurrentItem() < mSorularAdapter.getCount() - 10
+            if ((mViewPagerSorular.getCurrentItem() > mSorularAdapter.getCount() - 10
                     && mViewPagerSorular.getCurrentItem() != 0)
                     || mViewPagerSorular.getCurrentItem() + 1 == mSorularAdapter.getCount())
             //if (mViewPagerSorular.getCurrentItem() % 10 == 0 && mViewPagerSorular.getCurrentItem() != 0)
@@ -194,6 +194,7 @@ public class ReferandumFragment extends BaseFragment {
         }
     }
 
+    @DebugLog
     private void addQuestionsToAdapter(int count) {
         try {
 

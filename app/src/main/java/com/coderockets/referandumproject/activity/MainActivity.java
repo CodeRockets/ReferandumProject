@@ -1,13 +1,12 @@
 package com.coderockets.referandumproject.activity;
 
 
+import android.content.Intent;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.coderockets.referandumproject.R;
-import com.coderockets.referandumproject.fragment.AskQuestionFragment_;
-import com.coderockets.referandumproject.fragment.ProfileFragment_;
 import com.coderockets.referandumproject.fragment.ReferandumFragment_;
 import com.coderockets.referandumproject.helper.SuperHelper;
 import com.joanzapata.iconify.IconDrawable;
@@ -25,12 +24,6 @@ public class MainActivity extends BaseActivity {
     @ViewById(R.id.toolbar)
     Toolbar mToolbar;
 
-    //@ViewById(R.id.viewPager)
-    //ViewPager mViewPager;
-
-    //@ViewById(R.id.tabLayout)
-    //TabLayout mTabLayout;
-    //
     public static int FRAGMENT_CONTAINER = R.id.Container;
 
     @DebugLog
@@ -38,8 +31,6 @@ public class MainActivity extends BaseActivity {
     public void MainActivityInit() {
         setToolbar();
         setFragment();
-        //setupViewPager(mViewPager);
-        //setTabLayout();
     }
 
     @DebugLog
@@ -54,7 +45,7 @@ public class MainActivity extends BaseActivity {
     @DebugLog
     private void setToolbar() {
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("REFERANDUM");
+        getSupportActionBar().setTitle("Referandum");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(new IconDrawable(this, FontAwesomeIcons.fa_home).actionBarSize().getCurrent());
@@ -98,26 +89,42 @@ public class MainActivity extends BaseActivity {
             case R.id.menuAskQuestion: {
 
                 if (!SuperHelper.checkUser()) {
+                    Intent activityIntent = new Intent(this, ProfileActivity_.class);
+                    activityIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(activityIntent);
+
+                    /*
                     SuperHelper.ReplaceFragmentBeginTransaction(
                             this,
                             ProfileFragment_.builder().build(),
                             FRAGMENT_CONTAINER,
                             true);
+                            */
                 } else {
+                    Intent activityIntent = new Intent(this, QuestionActivity_.class);
+                    activityIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(activityIntent);
+
+                    /*
                     SuperHelper.ReplaceFragmentBeginTransaction(
                             this,
                             AskQuestionFragment_.builder().build(),
                             FRAGMENT_CONTAINER,
                             true);
+                            */
                 }
                 break;
             }
             case R.id.menuProfil: {
-                SuperHelper.ReplaceFragmentBeginTransaction(
+                Intent activityIntent = new Intent(this, ProfileActivity_.class);
+                activityIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(activityIntent);
+
+                /*SuperHelper.ReplaceFragmentBeginTransaction(
                         this,
                         ProfileFragment_.builder().build(),
                         FRAGMENT_CONTAINER,
-                        true);
+                        true);*/
                 break;
             }
             case android.R.id.home: {

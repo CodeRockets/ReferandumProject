@@ -16,12 +16,12 @@ import com.coderockets.referandumproject.model.ModelQuestionInformation;
 import com.coderockets.referandumproject.util.AutoFitTextView;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
-import com.mikhaellopez.circularimageview.CircularImageView;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import hugo.weaving.DebugLog;
 
 /**
@@ -34,7 +34,7 @@ public class QuestionFragment extends Fragment {
     ImageView mImageView_SoruImage;
 
     @ViewById(R.id.ProfilePicture)
-    CircularImageView mProfilePicture;
+    CircleImageView mProfilePicture;
 
     @ViewById(R.id.SoruText)
     AutoFitTextView mSoruText;
