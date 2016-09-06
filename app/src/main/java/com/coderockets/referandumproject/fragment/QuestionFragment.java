@@ -69,6 +69,7 @@ public class QuestionFragment extends Fragment {
         Uri soruImageUri = Uri.parse(mqi.getQuestionImage());
         Picasso.with(mContext)
                 .load(soruImageUri)
+                .fit()
                 .placeholder(new IconDrawable(mContext, FontAwesomeIcons.fa_refresh).sizeDp(50).color(Color.GRAY).getCurrent())
                 .into(mImageView_SoruImage);
 

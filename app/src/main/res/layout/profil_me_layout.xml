@@ -98,14 +98,14 @@
             app:flexDirection="column"
             app:flexWrap="wrap">
 
-            <TextView
+           <!-- <TextView
                 android:id="@+id/abc"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="Profil"
-                app:layout_flexBasisPercent="80%" />
+                app:layout_flexBasisPercent="80%" />-->
 
             <!--  <Button
                   android:id="@+id/ButtonCikisYap"
