@@ -89,7 +89,7 @@ public class ProfileMe extends BaseProfile implements AppBarLayout.OnOffsetChang
     @DebugLog
     @Click(R.id.ButtonCikisYap)
     public void ButtonCikisYapClick() {
-        ((ProfileFragment) getParentFragment()).mLoginButton.performClick();
+        mActivity.mLoginButton.performClick();
     }
 
     @DebugLog

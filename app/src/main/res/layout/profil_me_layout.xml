@@ -29,7 +29,7 @@
             <ImageView
                 android:id="@+id/ImageviewCollapsingBackground"
                 android:layout_width="match_parent"
-                android:layout_height="280dp"
+                android:layout_height="300dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/anonym"
                 app:layout_collapseMode="parallax"
@@ -38,7 +38,7 @@
             <FrameLayout
                 android:id="@+id/FrameLayoutCollapsingInfContainer"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center_horizontal"
                 android:background="@color/white"
                 android:orientation="vertical">
@@ -67,6 +67,14 @@
                         android:text="Merhaba"
                         android:textColor="@android:color/holo_blue_light" />
 
+                    <Button
+                        android:id="@+id/ButtonCikisYap"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="Çıkış Yap"
+                        android:visibility="visible"
+                        app:layout_flexBasisPercent="20%" />
                 </LinearLayout>
             </FrameLayout>
 
@@ -99,13 +107,13 @@
                 android:text="Profil"
                 app:layout_flexBasisPercent="80%" />
 
-            <Button
-                android:id="@+id/ButtonCikisYap"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Çıkış Yap"
-                android:visibility="invisible"
-                app:layout_flexBasisPercent="20%" />
+            <!--  <Button
+                  android:id="@+id/ButtonCikisYap"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="Çıkış Yap"
+                  android:visibility="invisible"
+                  app:layout_flexBasisPercent="20%" />-->
 
         </com.google.android.flexbox.FlexboxLayout>
 

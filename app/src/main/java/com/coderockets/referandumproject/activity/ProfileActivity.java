@@ -1,6 +1,8 @@
 package com.coderockets.referandumproject.activity;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.NavUtils;
@@ -10,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.aykuttasil.androidbasichelperlib.UiHelper;
@@ -36,6 +39,7 @@ import com.tbruyelle.rxpermissions.RxPermissions;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
 import hugo.weaving.DebugLog;
@@ -58,10 +62,13 @@ public class ProfileActivity extends BaseActivity {
     ViewGroup mProfileLoginLayout;
 
     @ViewById(R.id.LoginButton)
-    LoginButton mLoginButton;
+    public LoginButton mLoginButton;
 
     @ViewById(R.id.ImageViewLoginBackground)
     ImageView mImageViewLoginBackground;
+
+    @ViewById(R.id.ImageViewLoginBackgroundContainer)
+    LinearLayout mImageViewLoginBackgroundContainer;
 
     @ViewById(R.id.tabs)
     TabLayout mTabs;
@@ -109,7 +116,7 @@ public class ProfileActivity extends BaseActivity {
             }
             hideMainContent();
             showLoginContent();
-            makeBlur(this, mImageViewLoginBackground, mImageViewLoginBackground);
+            makeBlur(ProfileActivity.this, mImageViewLoginBackground, mImageViewLoginBackground);
         } else {
             Blurry.delete(mProfileMainLayout);
             hideLoginContent();
@@ -117,6 +124,18 @@ public class ProfileActivity extends BaseActivity {
             setupViewPager(mProfileViewPager);
             mTabs.setupWithViewPager(mProfileViewPager);
         }
+    }
+
+    @UiThread
+    @DebugLog
+    public void makeBlur(Context context, View view, ImageView into) {
+        Blurry.with(context)
+                .async()
+                .radius(25)
+                .sampling(2)
+                .capture(view)
+                .into(into);
+
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -246,6 +265,22 @@ public class ProfileActivity extends BaseActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @DebugLog
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        mAccessTokenTracker.stopTracking();
+        mProfileTracker.stopTracking();
+        super.onDestroy();
     }
 
 }

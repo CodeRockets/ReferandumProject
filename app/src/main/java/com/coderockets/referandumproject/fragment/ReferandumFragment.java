@@ -223,9 +223,10 @@ public class ReferandumFragment extends BaseFragment {
                                         answerAndTempQuestionControl.put(mqi.getSoruId(), false);
                                     }
                                 }
-                            },
-                            Throwable::printStackTrace
-                            //this::setQuestionFragment
+                            }, error -> {
+                                error.printStackTrace();
+                                UiHelper.UiSnackBar.showSimpleSnackBar(getView(), error.getMessage(), Snackbar.LENGTH_LONG);
+                            }
                     );
         } catch (Exception e) {
             e.printStackTrace();

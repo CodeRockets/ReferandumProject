@@ -1,12 +1,11 @@
 package com.coderockets.referandumproject.activity;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
-import org.androidannotations.annotations.UiThread;
 
 import hugo.weaving.DebugLog;
 import jp.wasabeef.blurry.Blurry;
@@ -24,20 +23,25 @@ public class BaseActivity extends AppCompatActivity {
 
     @DebugLog
     public void makeBlur(Context context, ViewGroup viewGroup) {
-        Blurry.delete(viewGroup);
+        //Blurry.delete(viewGroup);
         Blurry.with(context)
                 .radius(25)
                 .sampling(2)
+                .color(Color.argb(66, 255, 255, 0))
+                .async()
+                .animate(500)
                 .onto(viewGroup);
     }
 
     @DebugLog
     public void makeBlur(Context context, View view, ImageView into) {
-        Blurry.with(context)
+        runOnUiThread(() -> Blurry.with(context)
+                .async()
                 .radius(25)
                 .sampling(2)
                 .capture(view)
-                .into(into);
+                .into(into));
+
     }
 
 

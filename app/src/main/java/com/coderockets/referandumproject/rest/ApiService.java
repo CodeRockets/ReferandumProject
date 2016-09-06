@@ -2,11 +2,16 @@ package com.coderockets.referandumproject.rest;
 
 import com.coderockets.referandumproject.rest.RestModel.AnswerRequest;
 import com.coderockets.referandumproject.rest.RestModel.AnswerResponse;
+import com.coderockets.referandumproject.rest.RestModel.FavoriteRequest;
+import com.coderockets.referandumproject.rest.RestModel.FavoriteResponse;
 import com.coderockets.referandumproject.rest.RestModel.ImageUploadResponse;
+import com.coderockets.referandumproject.rest.RestModel.ReportAbuseRequest;
+import com.coderockets.referandumproject.rest.RestModel.ReportAbuseResponse;
 import com.coderockets.referandumproject.rest.RestModel.SoruGetirBaseResponse;
 import com.coderockets.referandumproject.rest.RestModel.SoruSorRequest;
 import com.coderockets.referandumproject.rest.RestModel.SoruSorResponse;
 import com.coderockets.referandumproject.rest.RestModel.SorularResponse;
+import com.coderockets.referandumproject.rest.RestModel.UserQuestionsResponse;
 import com.coderockets.referandumproject.rest.RestModel.UserRequest;
 import com.coderockets.referandumproject.rest.RestModel.UserResponse;
 
@@ -33,6 +38,14 @@ public interface ApiService {
                                   @Header("x-voter-version") String version,
                                   @Header("x-voter-installation") String installation,
                                   @Body UserRequest userRequest);
+
+    @GET("v1/user/questions")
+    Observable<UserQuestionsResponse> UserQuestions(@Header("x-voter-client-id") String clientId,
+                                                    @Header("x-voter-version") String version,
+                                                    @Header("x-voter-installation") String installation,
+                                                    @Query(value = "app") int app,
+                                                    @Query(value = "limit") int limit,
+                                                    @Query(value = "user_id") String userId);
 
     @POST("v1/question")
     Observable<SoruSorResponse> SoruSor(@Header("x-voter-client-id") String clientId,
@@ -64,6 +77,20 @@ public interface ApiService {
                                       @Header("x-voter-version") String version,
                                       @Header("x-voter-installation") String installation,
                                       @Body AnswerRequest answerRequest);
+
+
+    @POST("v1/reportabuse")
+    Observable<ReportAbuseResponse> ReportAbuse(@Header("x-voter-client-id") String clientId,
+                                                @Header("x-voter-version") String version,
+                                                @Header("x-voter-installation") String installation,
+                                                @Body ReportAbuseRequest request);
+
+
+    @POST("v1/favorite")
+    Observable<FavoriteResponse> Favorite(@Header("x-voter-client-id") String clientId,
+                                          @Header("x-voter-version") String version,
+                                          @Header("x-voter-installation") String installation,
+                                          @Body FavoriteRequest request);
 
 
     //@Multipart

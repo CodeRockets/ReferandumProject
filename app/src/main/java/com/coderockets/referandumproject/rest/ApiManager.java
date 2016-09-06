@@ -5,12 +5,14 @@ import android.content.Context;
 import com.coderockets.referandumproject.app.Const;
 import com.coderockets.referandumproject.db.DbManager;
 import com.coderockets.referandumproject.helper.SuperHelper;
+import com.coderockets.referandumproject.model.ModelUser;
 import com.coderockets.referandumproject.rest.RestModel.AnswerRequest;
 import com.coderockets.referandumproject.rest.RestModel.AnswerResponse;
 import com.coderockets.referandumproject.rest.RestModel.ImageUploadResponse;
 import com.coderockets.referandumproject.rest.RestModel.SoruGetirBaseResponse;
 import com.coderockets.referandumproject.rest.RestModel.SoruSorRequest;
 import com.coderockets.referandumproject.rest.RestModel.SoruSorResponse;
+import com.coderockets.referandumproject.rest.RestModel.UserQuestionsResponse;
 import com.coderockets.referandumproject.rest.RestModel.UserRequest;
 import com.coderockets.referandumproject.rest.RestModel.UserResponse;
 
@@ -45,7 +47,6 @@ public class ApiManager {
         return mInstance;
     }
 
-    //region SoruSor
     @DebugLog
     public Observable<SoruSorResponse> SoruSor(SoruSorRequest soruSorRequest) {
 
@@ -60,8 +61,6 @@ public class ApiManager {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    //endregion
-
 
     public Observable<AnswerResponse> Answer(AnswerRequest answerRequest) {
 
@@ -114,6 +113,24 @@ public class ApiManager {
 
     }
 
+    public Observable<UserQuestionsResponse> UserQuestions(int limit) {
+
+        ModelUser modelUser = DbManager.getModelUser();
+
+        return RestClient.getInstance().getApiService()
+                .UserQuestions(
+                        Const.CLIENT_ID,
+                        Const.REFERANDUM_VERSION,
+                        SuperHelper.getDeviceId(mContext),
+                        0,
+                        limit,
+                        modelUser.getUserId()
+                )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+        //
+        // dfsdf
+    }
     /*
     public static Observable<String> uploadImage() {
 

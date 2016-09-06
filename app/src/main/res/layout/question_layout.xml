@@ -33,7 +33,9 @@
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="113dp"
-                android:src="@drawable/ic_account_circle_pink_900_48dp" />
+                android:src="@drawable/ic_account_circle_pink_900_48dp"
+                app:civ_border_color="@color/white"
+                app:civ_border_width="5dp" />
 
 
             <RelativeLayout

@@ -16,6 +16,7 @@ import com.coderockets.referandumproject.model.ModelQuestionInformation;
 import com.coderockets.referandumproject.util.AutoFitTextView;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+import com.squareup.picasso.Picasso;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
@@ -66,19 +67,16 @@ public class QuestionFragment extends Fragment {
     private void setSoru(ModelQuestionInformation mqi) {
 
         Uri soruImageUri = Uri.parse(mqi.getQuestionImage());
-        Glide.with(this)
+        Picasso.with(mContext)
                 .load(soruImageUri)
                 .placeholder(new IconDrawable(mContext, FontAwesomeIcons.fa_refresh).sizeDp(50).color(Color.GRAY).getCurrent())
-                .centerCrop()
-                .signature(new StringSignature(mqi.getSoruId()))
                 .into(mImageView_SoruImage);
 
 
         Uri profileImageUri = Uri.parse(mqi.getAskerProfileImg());
-        Glide.with(this)
+        Picasso.with(mContext)
                 .load(profileImageUri)
                 .placeholder(mContext.getDrawable(R.drawable.anonym))
-                .signature(new StringSignature(mqi.getAskerProfileImg()))
                 .into(mProfilePicture);
         //mProfilePicture.setImageDrawable(new IconDrawable(mContext, FontAwesomeIcons.fa_github).sizeDp(150).getCurrent());
         mSoruText.setText(mqi.getQuestionText().toUpperCase());

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -17,15 +18,20 @@ import com.slmyldz.random.Randoms;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
+import org.androidannotations.annotations.EBean;
+import org.androidannotations.annotations.UiThread;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 import hugo.weaving.DebugLog;
+import jp.wasabeef.blurry.Blurry;
 
 /**
  * Created by aykutasil on 30.07.2016.
  */
+@EBean
 public class SuperHelper extends com.aykuttasil.androidbasichelperlib.SuperHelper {
 
     @DebugLog
@@ -45,6 +51,17 @@ public class SuperHelper extends com.aykuttasil.androidbasichelperlib.SuperHelpe
         return randomUrl;
     }
 
+    @UiThread
+    @DebugLog
+    public void makeBlur(Context context, View view, ImageView into) {
+        Blurry.with(context)
+                .async()
+                .radius(25)
+                .sampling(2)
+                .capture(view)
+                .into(into);
+
+    }
 //    /**
 //     * İstenilen Activity içerisindeki bir container a fragment replace etmek için kullanılır.
 //     * Eğer replace edilmeye çalışılan Fragment daha önce replace edilmiş ise popstack yapılarak yükleme yapılır.
