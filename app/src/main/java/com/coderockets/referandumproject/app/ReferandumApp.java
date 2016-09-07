@@ -18,6 +18,7 @@ import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
+import com.squareup.leakcanary.LeakCanary;
 
 import org.androidannotations.annotations.EApplication;
 
@@ -59,6 +60,7 @@ public class ReferandumApp extends Application {
         AppEventsLogger.activateApp(this);
 
         RxPaparazzo.register(this);
+        LeakCanary.install(this);
 
     }
 
