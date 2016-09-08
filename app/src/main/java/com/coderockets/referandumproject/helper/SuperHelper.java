@@ -2,17 +2,13 @@ package com.coderockets.referandumproject.helper;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.signature.StringSignature;
+import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.db.DbManager;
 import com.facebook.AccessToken;
-import com.joanzapata.iconify.IconDrawable;
-import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.orhanobut.logger.Logger;
 import com.slmyldz.random.Randoms;
 import com.squareup.picasso.MemoryPolicy;
@@ -44,8 +40,10 @@ public class SuperHelper extends com.aykuttasil.androidbasichelperlib.SuperHelpe
         String randomUrl = Randoms.imageUrl("png");
         Picasso.with(context)
                 .load(randomUrl)
-                .memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE)
-                .placeholder(new IconDrawable(context, FontAwesomeIcons.fa_angle_up).sizeDp(50).color(Color.GRAY).getCurrent())
+                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                .placeholder(R.drawable.loading)
+                .resize(1280, 680)
+                .centerCrop()
                 .into(imageView);
         Logger.i("Random Image Url: " + randomUrl);
         return randomUrl;

@@ -355,6 +355,7 @@ public class QuestionActivity extends BaseActivity {
         Picasso.with(this)
                 .load(imageFile)
                 .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                .placeholder(R.drawable.loading)
                 .fit()
                 .into(mImageView_SoruImage);
     }

@@ -18,12 +18,15 @@ import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
-import com.squareup.leakcanary.LeakCanary;
 
 import org.androidannotations.annotations.EApplication;
 
+import java.util.concurrent.Callable;
+
 import hugo.weaving.DebugLog;
 import io.fabric.sdk.android.Fabric;
+import rx.Observable;
+import rx.functions.Action1;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
@@ -60,7 +63,7 @@ public class ReferandumApp extends Application {
         AppEventsLogger.activateApp(this);
 
         RxPaparazzo.register(this);
-        LeakCanary.install(this);
+        //LeakCanary.install(this);
 
     }
 

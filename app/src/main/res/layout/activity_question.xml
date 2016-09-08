@@ -20,9 +20,9 @@
     </android.support.design.widget.AppBarLayout>
 
     <RelativeLayout
-        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <com.google.android.flexbox.FlexboxLayout
@@ -40,11 +40,11 @@
 
                 <ImageView
                     android:id="@+id/ImageView_SoruImage"
-                    android:scaleType="centerCrop"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true" />
+                    android:layout_alignParentTop="true"
+                    android:scaleType="center" />
 
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/FabRefreshImage"

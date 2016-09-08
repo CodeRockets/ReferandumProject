@@ -22,8 +22,6 @@ import com.coderockets.referandumproject.rest.ApiManager;
 import com.coderockets.referandumproject.rest.RestModel.FavoriteRequest;
 import com.coderockets.referandumproject.rest.RestModel.ReportAbuseRequest;
 import com.coderockets.referandumproject.util.AutoFitTextView;
-import com.joanzapata.iconify.IconDrawable;
-import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Picasso;
 
@@ -105,14 +103,14 @@ public class QuestionFragment extends Fragment {
         Picasso.with(mContext)
                 .load(soruImageUri)
                 .fit()
-                .placeholder(new IconDrawable(mContext, FontAwesomeIcons.fa_refresh).sizeDp(50).color(Color.GRAY).getCurrent())
+                .placeholder(R.drawable.loading)
                 .into(mImageView_SoruImage);
 
 
         Uri profileImageUri = Uri.parse(mqi.getAskerProfileImg());
         Picasso.with(mContext)
                 .load(profileImageUri)
-                .placeholder(mContext.getDrawable(R.drawable.anonym))
+                .placeholder(R.drawable.loading)
                 .into(mProfilePicture);
         //mProfilePicture.setImageDrawable(new IconDrawable(mContext, FontAwesomeIcons.fa_github).sizeDp(150).getCurrent());
         mSoruText.setText(mqi.getQuestionText().toUpperCase());
@@ -137,9 +135,7 @@ public class QuestionFragment extends Fragment {
                     } else {
                         UiHelper.UiSnackBar.showSimpleSnackBar(getView(), "Favorilerden Çıkarıldı", Snackbar.LENGTH_SHORT);
                     }
-                }, error -> {
-                    error.printStackTrace();
-                });
+                }, Throwable::printStackTrace);
     }
 
     @DebugLog
