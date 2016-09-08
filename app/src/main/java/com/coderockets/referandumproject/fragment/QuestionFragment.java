@@ -1,6 +1,7 @@
 package com.coderockets.referandumproject.fragment;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -78,6 +79,15 @@ public class QuestionFragment extends Fragment {
         //
         mqi = getArguments().getParcelable(ModelQuestionInformation.class.getSimpleName());
         setSoru(mqi);
+        changeFavoriteFabColor();
+    }
+
+    private void changeFavoriteFabColor() {
+        if (!mIsFavorite) {
+            mFabFavorite.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
+        } else {
+            mFabFavorite.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.accentColor)));
+        }
     }
 
     public ModelQuestionInformation getQuestion() {
@@ -105,8 +115,8 @@ public class QuestionFragment extends Fragment {
 
     @Click(R.id.FabFavorite)
     public void FabFavoriteClick() {
-
         mIsFavorite = !mIsFavorite;
+        changeFavoriteFabColor();
 
         FavoriteRequest favoriteRequest = FavoriteRequest.FavoriteRequestInit();
         favoriteRequest.setQuestionId(mqi.getSoruId());
