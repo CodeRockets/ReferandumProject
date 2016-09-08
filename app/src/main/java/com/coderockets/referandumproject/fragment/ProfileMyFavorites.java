@@ -6,8 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.ProfileActivity;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
@@ -27,13 +25,13 @@ import hugo.weaving.DebugLog;
 import rx.Observable;
 
 /**
- * Created by aykutasil on 2.09.2016.
+ * Created by aykutasil on 8.09.2016.
  */
-@EFragment(R.layout.profile_myquestions_layout)
-public class ProfileMyQuestions extends BaseProfile {
+@EFragment(R.layout.profile_myfavorites_layout)
+public class ProfileMyFavorites extends BaseProfile {
 
-    @ViewById(R.id.RecyclerViewMyQuestions)
-    RecyclerView mRecyclerViewMyQuestions;
+    @ViewById(R.id.RecyclerViewFavorites)
+    RecyclerView mRecyclerViewFavorites;
     //
     Context mContext;
     ProfileActivity mActivity;
@@ -52,24 +50,21 @@ public class ProfileMyQuestions extends BaseProfile {
 
     @DebugLog
     @AfterViews
-    public void ProfileMyQuestionsInit() {
-        getUserQuestions();
+    public void ProfileMyFavoritesInit() {
+        getUserFavorites();
         setAdapter();
     }
 
     private void setAdapter() {
-        mRecyclerViewMyQuestions.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
-        mRecyclerViewMyQuestions.setAdapter(mMyQuestionsAdapter);
+        mRecyclerViewFavorites.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
+        mRecyclerViewFavorites.setAdapter(mMyQuestionsAdapter);
     }
 
-    private void getUserQuestions() {
-
-        MaterialDialog progressDialog = UiHelper.UiDialog.newInstance(mContext).getProgressDialog("Lütfen bekleyiniz..", null);
-        progressDialog.show();
+    private void getUserFavorites() {
 
         ApiManager.getInstance(mContext).UserQuestions(9999)
                 .flatMap(map -> {
-                    List<ModelQuestionInformation> lst = map.getData().getQuestions().getRows();
+                    List<ModelQuestionInformation> lst = map.getData().getFavorites().getRows();
                     Collections.reverse(lst);
                     return Observable.just(lst);
                 })
@@ -77,9 +72,7 @@ public class ProfileMyQuestions extends BaseProfile {
                         this::convertResponseToUiView,
                         error -> {
                             Logger.e(error, "HATA");
-                            progressDialog.dismiss();
-                        },
-                        progressDialog::dismiss);
+                        });
     }
 
     @DebugLog

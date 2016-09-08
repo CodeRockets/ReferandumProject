@@ -9,6 +9,9 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.view.ContextMenu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.aykuttasil.androidbasichelperlib.UiHelper;
@@ -80,6 +83,7 @@ public class QuestionFragment extends Fragment {
         mqi = getArguments().getParcelable(ModelQuestionInformation.class.getSimpleName());
         setSoru(mqi);
         changeFavoriteFabColor();
+        registerForContextMenu(mSoruText);
     }
 
     private void changeFavoriteFabColor() {
@@ -134,4 +138,25 @@ public class QuestionFragment extends Fragment {
                 });
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        if (v.getId() == mSoruText.getId()) {
+            menu.clearHeader();
+            menu.add(0, 0, 1, "Şikayet Et");
+        }
+        super.onCreateContextMenu(menu, v, menuInfo);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        Logger.i("ItemId: " + item.getItemId());
+        switch (item.getItemId()) {
+            case 0: {
+                
+                UiHelper.UiSnackBar.showSimpleSnackBar(getView(), item.getTitle().toString(), Snackbar.LENGTH_LONG);
+                return true;
+            }
+        }
+        return super.onContextItemSelected(item);
+    }
 }

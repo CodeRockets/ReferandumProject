@@ -19,6 +19,7 @@ import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.db.DbManager;
 import com.coderockets.referandumproject.fragment.ProfileMe_;
+import com.coderockets.referandumproject.fragment.ProfileMyFavorites_;
 import com.coderockets.referandumproject.fragment.ProfileMyQuestions_;
 import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.rest.ApiManager;
@@ -143,6 +144,7 @@ public class ProfileActivity extends BaseActivity {
         MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(ProfileMe_.builder().build(), "Profil");
         adapter.addFragment(ProfileMyQuestions_.builder().build(), "Sorularım");
+        adapter.addFragment(ProfileMyFavorites_.builder().build(), "Favorilerim");
         viewPager.setAdapter(adapter);
     }
 
@@ -267,14 +269,12 @@ public class ProfileActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
     @DebugLog
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
-
 
     @Override
     protected void onDestroy() {

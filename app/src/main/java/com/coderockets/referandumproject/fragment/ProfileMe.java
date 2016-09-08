@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.ProfileActivity;
 import com.coderockets.referandumproject.db.DbManager;
+import com.coderockets.referandumproject.model.ModelUser;
 import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Picasso;
 
@@ -35,6 +36,9 @@ public class ProfileMe extends BaseProfile implements AppBarLayout.OnOffsetChang
 
     @ViewById(R.id.TextViewToolbarTitle)
     TextView mTextViewToolbarTitle;
+
+    @ViewById(R.id.TextViewAdsoyad)
+    TextView mTextViewAdsoyad;
 
     @ViewById(R.id.ButtonCikisYap)
     Button mButtonCikisYap;
@@ -66,13 +70,14 @@ public class ProfileMe extends BaseProfile implements AppBarLayout.OnOffsetChang
     public void ProfileMeInit() {
         this.mContext = getActivity();
         this.mActivity = (ProfileActivity) getActivity();
-        setProfilePicture();
+        setProfile();
         mProfileMeAppBarLayout.addOnOffsetChangedListener(this);
     }
 
-    private void setProfilePicture() {
+    private void setProfile() {
 
-        Uri profileImageUri = Uri.parse(DbManager.getModelUser().getProfileImageUrl());
+        ModelUser modelUser = DbManager.getModelUser();
+        Uri profileImageUri = Uri.parse(modelUser.getProfileImageUrl());
 
         Picasso.with(mContext)
                 .load(profileImageUri)
@@ -84,6 +89,9 @@ public class ProfileMe extends BaseProfile implements AppBarLayout.OnOffsetChang
                 .load(profileImageUri)
                 .placeholder(mContext.getDrawable(R.drawable.anonym))
                 .into(mCircleimageviewProfilePicture);
+
+        mTextViewToolbarTitle.setText(modelUser.getName());
+        mTextViewAdsoyad.setText(modelUser.getName());
     }
 
     @DebugLog
