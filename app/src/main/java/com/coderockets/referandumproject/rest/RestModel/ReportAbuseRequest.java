@@ -1,5 +1,8 @@
 package com.coderockets.referandumproject.rest.RestModel;
 
+import com.coderockets.referandumproject.app.Const;
+import com.coderockets.referandumproject.db.DbManager;
+import com.coderockets.referandumproject.model.ModelUser;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -27,6 +30,19 @@ public class ReportAbuseRequest extends BaseRequest {
     @SerializedName("client_id")
     @Expose
     private int ClientId;
+
+    private ReportAbuseRequest() {
+    }
+
+    public static ReportAbuseRequest ReportAbuseRequestInit() {
+        ModelUser modelUser = DbManager.getModelUser();
+
+        ReportAbuseRequest reportAbuseRequest = new ReportAbuseRequest();
+        reportAbuseRequest.setUserId(modelUser.getUserId());
+        reportAbuseRequest.setClientId(Integer.parseInt(Const.CLIENT_ID));
+
+        return reportAbuseRequest;
+    }
 
     public String getQuestionId() {
         return QuestionId;

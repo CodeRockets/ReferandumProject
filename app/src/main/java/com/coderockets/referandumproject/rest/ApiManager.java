@@ -11,6 +11,8 @@ import com.coderockets.referandumproject.rest.RestModel.AnswerResponse;
 import com.coderockets.referandumproject.rest.RestModel.FavoriteRequest;
 import com.coderockets.referandumproject.rest.RestModel.FavoriteResponse;
 import com.coderockets.referandumproject.rest.RestModel.ImageUploadResponse;
+import com.coderockets.referandumproject.rest.RestModel.ReportAbuseRequest;
+import com.coderockets.referandumproject.rest.RestModel.ReportAbuseResponse;
 import com.coderockets.referandumproject.rest.RestModel.SoruGetirBaseResponse;
 import com.coderockets.referandumproject.rest.RestModel.SoruSorRequest;
 import com.coderockets.referandumproject.rest.RestModel.SoruSorResponse;
@@ -136,6 +138,19 @@ public class ApiManager {
 
         return RestClient.getInstance().getApiService()
                 .Favorite(
+                        Const.CLIENT_ID,
+                        Const.REFERANDUM_VERSION,
+                        SuperHelper.getDeviceId(mContext),
+                        request
+                )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<ReportAbuseResponse> ReportAbuse(ReportAbuseRequest request) {
+
+        return RestClient.getInstance().getApiService()
+                .ReportAbuse(
                         Const.CLIENT_ID,
                         Const.REFERANDUM_VERSION,
                         SuperHelper.getDeviceId(mContext),

@@ -20,6 +20,7 @@ import com.coderockets.referandumproject.activity.MainActivity;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
 import com.coderockets.referandumproject.rest.ApiManager;
 import com.coderockets.referandumproject.rest.RestModel.FavoriteRequest;
+import com.coderockets.referandumproject.rest.RestModel.ReportAbuseRequest;
 import com.coderockets.referandumproject.util.AutoFitTextView;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
@@ -152,8 +153,16 @@ public class QuestionFragment extends Fragment {
         Logger.i("ItemId: " + item.getItemId());
         switch (item.getItemId()) {
             case 0: {
-                
-                UiHelper.UiSnackBar.showSimpleSnackBar(getView(), item.getTitle().toString(), Snackbar.LENGTH_LONG);
+
+                ReportAbuseRequest reportAbuseRequest = ReportAbuseRequest.ReportAbuseRequestInit();
+                reportAbuseRequest.setQuestionId(mqi.getSoruId());
+
+                ApiManager.getInstance(mContext).ReportAbuse(reportAbuseRequest)
+                        .subscribe(success -> {
+                            UiHelper.UiSnackBar.showSimpleSnackBar(getView(), "Şikayetiniz bize ulaştı. Teşekkür ederiz.", Snackbar.LENGTH_LONG);
+                        }, error -> {
+                            UiHelper.UiSnackBar.showSimpleSnackBar(getView(), error.getMessage(), Snackbar.LENGTH_LONG);
+                        });
                 return true;
             }
         }
