@@ -118,6 +118,7 @@ public class QuestionFragment extends Fragment {
         mSoruText.setText(mqi.getQuestionText().toUpperCase());
     }
 
+    @DebugLog
     @Click(R.id.FabFavorite)
     public void FabFavoriteClick() {
         mIsFavorite = !mIsFavorite;
@@ -125,6 +126,8 @@ public class QuestionFragment extends Fragment {
 
         FavoriteRequest favoriteRequest = FavoriteRequest.FavoriteRequestInit();
         favoriteRequest.setQuestionId(mqi.getSoruId());
+
+        Logger.i("Favorite Soru Id: " + mqi.getSoruId());
         favoriteRequest.setUnFavorite(!mIsFavorite);
 
         ApiManager.getInstance(mContext).Favorite(favoriteRequest)
@@ -139,6 +142,7 @@ public class QuestionFragment extends Fragment {
                 });
     }
 
+    @DebugLog
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if (v.getId() == mSoruText.getId()) {
@@ -148,22 +152,30 @@ public class QuestionFragment extends Fragment {
         super.onCreateContextMenu(menu, v, menuInfo);
     }
 
+    @DebugLog
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         Logger.i("ItemId: " + item.getItemId());
-        switch (item.getItemId()) {
-            case 0: {
+        Logger.i("getUserVisibleHint():" + getUserVisibleHint());
+        if (getUserVisibleHint()) {
+            switch (item.getItemId()) {
+                case 0: {
 
-                ReportAbuseRequest reportAbuseRequest = ReportAbuseRequest.ReportAbuseRequestInit();
-                reportAbuseRequest.setQuestionId(mqi.getSoruId());
+                    ReportAbuseRequest reportAbuseRequest = ReportAbuseRequest.ReportAbuseRequestInit();
+                    reportAbuseRequest.setQuestionId(mqi.getSoruId());
 
-                ApiManager.getInstance(mContext).ReportAbuse(reportAbuseRequest)
-                        .subscribe(success -> {
-                            UiHelper.UiSnackBar.showSimpleSnackBar(getView(), "Şikayetiniz bize ulaştı. Teşekkür ederiz.", Snackbar.LENGTH_LONG);
-                        }, error -> {
-                            UiHelper.UiSnackBar.showSimpleSnackBar(getView(), error.getMessage(), Snackbar.LENGTH_LONG);
-                        });
-                return true;
+                    Logger.i("Abuse Soru Id: " + mqi.getSoruId());
+
+                    ApiManager.getInstance(mContext).ReportAbuse(reportAbuseRequest)
+                            .subscribe(success -> {
+                                Logger.i("Abuse Success");
+                                UiHelper.UiSnackBar.showSimpleSnackBar(getView(), "Şikayetiniz bize ulaştı. Teşekkür ederiz.", Snackbar.LENGTH_LONG);
+                            }, error -> {
+                                Logger.e(error, "HATA");
+                                UiHelper.UiSnackBar.showSimpleSnackBar(getView(), error.getMessage(), Snackbar.LENGTH_LONG);
+                            });
+                    return true;
+                }
             }
         }
         return super.onContextItemSelected(item);
