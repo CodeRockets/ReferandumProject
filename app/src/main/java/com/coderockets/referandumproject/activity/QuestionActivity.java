@@ -115,7 +115,7 @@ public class QuestionActivity extends BaseActivity {
         RxTextView.textChanges(mEditText_SoruText)
                 .map(charSequence -> charSequence.toString().toUpperCase())
                 .subscribe(text -> {
-                    mRxAutoFitTextViewSoru.setText(text);
+                    mRxAutoFitTextViewSoru.setText(text + " ?");
                 });
     }
 

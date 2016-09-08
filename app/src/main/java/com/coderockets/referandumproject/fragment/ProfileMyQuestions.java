@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.aykuttasil.androidbasichelperlib.UiHelper;
@@ -21,9 +20,11 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import hugo.weaving.DebugLog;
+import rx.Observable;
 
 /**
  * Created by aykutasil on 2.09.2016.
@@ -46,7 +47,7 @@ public class ProfileMyQuestions extends BaseProfile {
         this.mContext = getActivity();
         this.mActivity = (ProfileActivity) getActivity();
         mList = new ArrayList<>();
-        mMyQuestionsAdapter = new MyQuestionsAdapter(mContext,mList);
+        mMyQuestionsAdapter = new MyQuestionsAdapter(mContext, mList);
     }
 
     @DebugLog
@@ -66,28 +67,28 @@ public class ProfileMyQuestions extends BaseProfile {
         MaterialDialog progressDialog = UiHelper.UiDialog.newInstance(mContext).getProgressDialog("Lütfen bekleyiniz..", null);
         progressDialog.show();
 
-        ApiManager.getInstance(mContext).UserQuestions(10)
-                .subscribe(success -> {
-                    List<ModelQuestionInformation> rows = success.getData().getQuestions().getRows();
-                    convertResponseToUiView(rows);
-                }, error -> {
-                    Logger.e(error, "HATA");
-                    progressDialog.dismiss();
-                }, progressDialog::dismiss);
+        ApiManager.getInstance(mContext).UserQuestions(9999)
+                .flatMap(map -> {
+                    List<ModelQuestionInformation> lst = map.getData().getQuestions().getRows();
+                    Collections.reverse(lst);
+                    return Observable.just(lst);
+                })
+                .subscribe(
+                        this::convertResponseToUiView,
+                        error -> {
+                            Logger.e(error, "HATA");
+                            progressDialog.dismiss();
+                        },
+                        progressDialog::dismiss);
     }
 
     @DebugLog
     private void convertResponseToUiView(List<ModelQuestionInformation> rows) {
 
-        StringBuilder stringBuilder = new StringBuilder();
         for (ModelQuestionInformation mqi : rows) {
             mMyQuestionsAdapter.addUserQuestion(mqi);
-            //stringBuilder.append(mqi.getQuestionText());
-            //stringBuilder.append("\n");
-            //mTextViewSorular.setText(mqi.getQuestionText() + "\n");
-            //Logger.i(mqi.getQuestionText());
         }
-        //mTextViewSorular.setText(stringBuilder.toString());
+
     }
 
 }

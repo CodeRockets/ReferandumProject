@@ -1,5 +1,8 @@
 package com.coderockets.referandumproject.rest.RestModel;
 
+import com.coderockets.referandumproject.app.Const;
+import com.coderockets.referandumproject.db.DbManager;
+import com.coderockets.referandumproject.model.ModelUser;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -31,6 +34,21 @@ public class FavoriteRequest extends BaseRequest {
     @SerializedName("unfavorite")
     @Expose
     private boolean UnFavorite;
+
+
+    private FavoriteRequest() {
+    }
+
+    public static FavoriteRequest FavoriteRequestInit() {
+
+        ModelUser modelUser = DbManager.getModelUser();
+
+        FavoriteRequest favoriteRequest = new FavoriteRequest();
+        favoriteRequest.setUserId(modelUser.getUserId());
+        favoriteRequest.setClientId(Integer.parseInt(Const.CLIENT_ID));
+
+        return favoriteRequest;
+    }
 
     public String getQuestionId() {
         return QuestionId;

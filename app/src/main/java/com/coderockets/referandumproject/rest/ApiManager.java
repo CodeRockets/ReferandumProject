@@ -8,6 +8,8 @@ import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.model.ModelUser;
 import com.coderockets.referandumproject.rest.RestModel.AnswerRequest;
 import com.coderockets.referandumproject.rest.RestModel.AnswerResponse;
+import com.coderockets.referandumproject.rest.RestModel.FavoriteRequest;
+import com.coderockets.referandumproject.rest.RestModel.FavoriteResponse;
 import com.coderockets.referandumproject.rest.RestModel.ImageUploadResponse;
 import com.coderockets.referandumproject.rest.RestModel.SoruGetirBaseResponse;
 import com.coderockets.referandumproject.rest.RestModel.SoruSorRequest;
@@ -128,9 +130,26 @@ public class ApiManager {
                 )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
-        //
-        // dfsdf
     }
+
+    public Observable<FavoriteResponse> Favorite(FavoriteRequest request) {
+
+        return RestClient.getInstance().getApiService()
+                .Favorite(
+                        Const.CLIENT_ID,
+                        Const.REFERANDUM_VERSION,
+                        SuperHelper.getDeviceId(mContext),
+                        request
+                )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+
+
+
+
+
     /*
     public static Observable<String> uploadImage() {
 
