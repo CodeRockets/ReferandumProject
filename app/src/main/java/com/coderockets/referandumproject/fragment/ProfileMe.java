@@ -52,6 +52,9 @@ public class ProfileMe extends BaseProfile implements AppBarLayout.OnOffsetChang
     @ViewById(R.id.CircleimageviewProfilePicture)
     CircleImageView mCircleimageviewProfilePicture;
 
+    //@ViewById(R.id.ImageViewGestureZoom)
+    //ImageView mImageViewGestureZoom;
+
     //@ViewById(R.id.ImageViewProfileMe)
     //ImageView mImageViewProfileMe;
     //
@@ -72,6 +75,14 @@ public class ProfileMe extends BaseProfile implements AppBarLayout.OnOffsetChang
         this.mActivity = (ProfileActivity) getActivity();
         setProfile();
         mProfileMeAppBarLayout.addOnOffsetChangedListener(this);
+        //setGestureImage();
+    }
+
+    private void setGestureImage() {
+        /*PhotoViewAttacher photoViewAttacher = new PhotoViewAttacher(mImageViewGestureZoom);
+        photoViewAttacher.setOnScaleChangeListener((scaleFactor, focusX, focusY) -> {
+
+        });*/
     }
 
     private void setProfile() {

@@ -33,6 +33,8 @@ import com.jakewharton.rxbinding.widget.RxTextView;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.orhanobut.logger.Logger;
+import com.slmyldz.random.Randoms;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.tbruyelle.rxpermissions.RxPermissions;
@@ -45,7 +47,6 @@ import org.androidannotations.annotations.ViewById;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import hugo.weaving.DebugLog;
 import io.github.yavski.fabspeeddial.FabSpeedDial;
@@ -83,6 +84,7 @@ public class QuestionActivity extends BaseActivity {
 
     RxPermissions mRxPermissions;
     private String mFilePath = null;
+    //PhotoViewAttacher photoViewAttacher;
 
     @DebugLog
     @Override
@@ -98,6 +100,10 @@ public class QuestionActivity extends BaseActivity {
         setFab();
         setReactiveEditText();
         updateUI();
+        //photoViewAttacher = new PhotoViewAttacher(mImageView_SoruImage);
+        //photoViewAttacher.setAllowParentInterceptOnEdge(true);
+        //photoViewAttacher.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
     }
 
     @DebugLog
@@ -152,22 +158,36 @@ public class QuestionActivity extends BaseActivity {
     }
 
     private void updateUI() {
-        SuperHelper.setRandomImage(this, mImageView_SoruImage, UUID.randomUUID().toString());
+        setRandomImage();
     }
 
     @DebugLog
     @Click(R.id.FabRefreshImage)
     public void FabRefreshImageClick() {
-        SuperHelper.setRandomImage(this, mImageView_SoruImage, UUID.randomUUID().toString());
+        setRandomImage();
     }
 
-    /*
     @DebugLog
-    @Click(R.id.FabUploadImage)
-    public void FabUploadImageClick() {
-        //captureImageWithCrop();
+    public void setRandomImage() {
+        mImageView_SoruImage.setScaleType(ImageView.ScaleType.CENTER);
+        String randomUrl = Randoms.imageUrl("png");
+        Picasso.with(this)
+                .load(randomUrl)
+                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                .placeholder(R.drawable.loading)
+                .into(mImageView_SoruImage, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        //photoViewAttacher.update();
+                        mImageView_SoruImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+                });
     }
-    */
 
     @DebugLog
     @Click(R.id.Button_SoruGonder)
@@ -277,8 +297,8 @@ public class QuestionActivity extends BaseActivity {
         //options.useSourceImageAspectRatio();
         options.setToolbarTitle("Düzenle");
         options.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
-        options.setMaxResultSize(1024, 640);
-        options.setAspectRatio(150, 60);
+        //options.setMaxResultSize(1600, 980);
+        options.setAspectRatio(16, 6);
         //options.setAspectRatio(100, 60);
         //options.setMaxResultSize(640, 480);
         //options.setActiveWidgetColor(getResources().getColor(R.color.bpDark_gray)); //
@@ -307,8 +327,10 @@ public class QuestionActivity extends BaseActivity {
         //options.useSourceImageAspectRatio();
         options.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
         options.setToolbarTitle("Düzenle");
-        options.setMaxResultSize(1024, 640);
-        options.setAspectRatio(150, 60);
+        //options.setMaxResultSize(1600, 980);
+        options.setAspectRatio(16, 6);
+        options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
+        //options.withAspectRatio(150,60);
 
         RxPaparazzo.takeImage(this)
                 .useInternalStorage()
@@ -345,19 +367,26 @@ public class QuestionActivity extends BaseActivity {
     }
 
     private void loadImage(String filePath) {
-        //mFilesPaths.clear();
-        //mFilesPaths.add(filePath);
-        //imageView.setVisibility(View.VISIBLE);
-        //recyclerView.setVisibility(View.GONE);
+
+        mImageView_SoruImage.setScaleType(ImageView.ScaleType.CENTER);
 
         File imageFile = new File(filePath);
-
         Picasso.with(this)
                 .load(imageFile)
                 .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                 .placeholder(R.drawable.loading)
-                .fit()
-                .into(mImageView_SoruImage);
+                .into(mImageView_SoruImage, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        //photoViewAttacher.update();
+                        mImageView_SoruImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+                });
     }
 
     private void showUserCanceled() {

@@ -23,6 +23,7 @@ import com.coderockets.referandumproject.rest.RestModel.FavoriteRequest;
 import com.coderockets.referandumproject.rest.RestModel.ReportAbuseRequest;
 import com.coderockets.referandumproject.util.AutoFitTextView;
 import com.orhanobut.logger.Logger;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import org.androidannotations.annotations.AfterViews;
@@ -83,6 +84,7 @@ public class QuestionFragment extends Fragment {
         setSoru(mqi);
         changeFavoriteFabColor();
         registerForContextMenu(mSoruText);
+        //PhotoViewAttacher photoViewAttacher = new PhotoViewAttacher(mImageView_SoruImage);
     }
 
     private void changeFavoriteFabColor() {
@@ -99,12 +101,22 @@ public class QuestionFragment extends Fragment {
 
     private void setSoru(ModelQuestionInformation mqi) {
 
+        mImageView_SoruImage.setScaleType(ImageView.ScaleType.CENTER);
         Uri soruImageUri = Uri.parse(mqi.getQuestionImage());
         Picasso.with(mContext)
                 .load(soruImageUri)
-                .fit()
                 .placeholder(R.drawable.loading)
-                .into(mImageView_SoruImage);
+                .into(mImageView_SoruImage, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        mImageView_SoruImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+                });
 
 
         Uri profileImageUri = Uri.parse(mqi.getAskerProfileImg());
