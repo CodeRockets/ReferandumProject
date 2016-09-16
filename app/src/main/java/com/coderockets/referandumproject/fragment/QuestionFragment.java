@@ -31,8 +31,12 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import hugo.weaving.DebugLog;
+import rx.Subscription;
 
 /**
  * Created by aykutasil on 18.08.2016.
@@ -57,6 +61,7 @@ public class QuestionFragment extends Fragment {
     private ModelQuestionInformation mqi;
     private final String FAVORITE_KEY = "Favorite";
     private boolean mIsFavorite = false;
+    List<Subscription> mListSubscription;
 
     @DebugLog
     @Override
@@ -66,6 +71,7 @@ public class QuestionFragment extends Fragment {
             mIsFavorite = savedInstanceState.getBoolean(FAVORITE_KEY, false);
             Logger.i("mIsFavorite: " + mIsFavorite);
         }
+        mListSubscription = new ArrayList<>();
     }
 
     @Override
@@ -140,7 +146,7 @@ public class QuestionFragment extends Fragment {
         Logger.i("Favorite Soru Id: " + mqi.getSoruId());
         favoriteRequest.setUnFavorite(!mIsFavorite);
 
-        ApiManager.getInstance(mContext).Favorite(favoriteRequest)
+        Subscription subscription = ApiManager.getInstance(mContext).Favorite(favoriteRequest)
                 .subscribe(success -> {
                     if (mIsFavorite) {
                         UiHelper.UiSnackBar.showSimpleSnackBar(getView(), "Favorilere Eklendi", Snackbar.LENGTH_SHORT);
@@ -148,9 +154,10 @@ public class QuestionFragment extends Fragment {
                         UiHelper.UiSnackBar.showSimpleSnackBar(getView(), "Favorilerden Çıkarıldı", Snackbar.LENGTH_SHORT);
                     }
                 }, Throwable::printStackTrace);
+
+        mListSubscription.add(subscription);
     }
 
-    @DebugLog
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if (v.getId() == mSoruText.getId()) {
@@ -160,7 +167,6 @@ public class QuestionFragment extends Fragment {
         super.onCreateContextMenu(menu, v, menuInfo);
     }
 
-    @DebugLog
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         Logger.i("ItemId: " + item.getItemId());
@@ -174,7 +180,7 @@ public class QuestionFragment extends Fragment {
 
                     Logger.i("Abuse Soru Id: " + mqi.getSoruId());
 
-                    ApiManager.getInstance(mContext).ReportAbuse(reportAbuseRequest)
+                    Subscription subscription = ApiManager.getInstance(mContext).ReportAbuse(reportAbuseRequest)
                             .subscribe(success -> {
                                 Logger.i("Abuse Success");
                                 UiHelper.UiSnackBar.showSimpleSnackBar(getView(), "Şikayetiniz bize ulaştı. Teşekkür ederiz.", Snackbar.LENGTH_LONG);
@@ -182,10 +188,23 @@ public class QuestionFragment extends Fragment {
                                 Logger.e(error, "HATA");
                                 UiHelper.UiSnackBar.showSimpleSnackBar(getView(), error.getMessage(), Snackbar.LENGTH_LONG);
                             });
+
+                    mListSubscription.add(subscription);
+
                     return true;
                 }
             }
         }
         return super.onContextItemSelected(item);
+    }
+
+    @Override
+    public void onDestroy() {
+        for (Subscription subscription : mListSubscription) {
+            if (!subscription.isUnsubscribed()) {
+                subscription.unsubscribe();
+            }
+        }
+        super.onDestroy();
     }
 }

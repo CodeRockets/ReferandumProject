@@ -61,8 +61,8 @@ public class ProfileMe extends BaseProfile implements AppBarLayout.OnOffsetChang
     Context mContext;
     ProfileActivity mActivity;
 
-    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.7f;
-    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
+    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.5f;
+    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.4f;
     private static final int ALPHA_ANIMATIONS_DURATION = 300;
 
     private boolean mIsTheTitleVisible = false;
@@ -88,6 +88,7 @@ public class ProfileMe extends BaseProfile implements AppBarLayout.OnOffsetChang
     private void setProfile() {
 
         ModelUser modelUser = DbManager.getModelUser();
+
         Uri profileImageUri = Uri.parse(modelUser.getProfileImageUrl());
 
         Picasso.with(mContext)
@@ -126,7 +127,7 @@ public class ProfileMe extends BaseProfile implements AppBarLayout.OnOffsetChang
 
     @DebugLog
     private void handleToolbarTitleVisibility(float percentage) {
-//
+
         if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
 
             if (!mIsTheTitleVisible) {

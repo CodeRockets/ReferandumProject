@@ -174,6 +174,7 @@ public class QuestionActivity extends BaseActivity {
         Picasso.with(this)
                 .load(randomUrl)
                 .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+                //.placeholder(android.R.drawable.progress_indeterminate_horizontal)
                 .placeholder(R.drawable.loading)
                 .into(mImageView_SoruImage, new Callback() {
                     @Override

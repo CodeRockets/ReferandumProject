@@ -352,4 +352,19 @@ public class ModelQuestionInformation extends Model implements Parcelable {
         parcel.writeString(AskerName);
         parcel.writeStringArray(Friens);
     }
+
+    /*
+    @Override
+    public int compareTo(@NonNull ModelQuestionInformation modelQuestionInformation) {
+
+        Date date = new Date(getCreatedAt());
+        Date date2 = new Date(modelQuestionInformation.getCreatedAt());
+
+        if (date.getTime() > date2.getTime()) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+    */
 }

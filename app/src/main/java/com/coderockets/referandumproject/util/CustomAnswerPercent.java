@@ -174,8 +174,6 @@ public class CustomAnswerPercent extends View {
         this.alphaViewValue = val;
     }
 
-
-    @DebugLog
     public void showResult() throws Exception {
 
         ButtonClick = true;
@@ -197,7 +195,6 @@ public class CustomAnswerPercent extends View {
         }
     }
 
-    @DebugLog
     @Override
     protected void onDraw(Canvas canvas) {
         drawBarA(canvas);
@@ -245,7 +242,6 @@ public class CustomAnswerPercent extends View {
         animatorBHeight.start();
     }
 
-    @DebugLog
     private void drawBarA(Canvas canvas) {
         //float center = getWidth() / 2;
         mPaintBarA = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -285,7 +281,6 @@ public class CustomAnswerPercent extends View {
         }
     }
 
-    @DebugLog
     private void drawBarB(Canvas canvas) {
 
         //float center = getWidth() / 2;
@@ -322,8 +317,6 @@ public class CustomAnswerPercent extends View {
         }
     }
 
-
-    @DebugLog
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);

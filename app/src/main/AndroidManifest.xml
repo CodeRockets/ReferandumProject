@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.coderockets.referandumproject">
 
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -36,7 +35,7 @@
         <activity
             android:name=".activity.ProfileActivity_"
             android:parentActivityName=".activity.MainActivity_">
-            <!-- Parent activity meta-data to support 4.0 and lower -->
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity_" />
@@ -107,4 +106,5 @@
             android:value="1" />
 
     </application>
+
 </manifest>

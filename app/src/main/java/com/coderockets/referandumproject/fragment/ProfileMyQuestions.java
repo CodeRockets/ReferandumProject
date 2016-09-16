@@ -3,6 +3,7 @@ package com.coderockets.referandumproject.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -25,6 +26,7 @@ import java.util.List;
 
 import hugo.weaving.DebugLog;
 import rx.Observable;
+import rx.Subscription;
 
 /**
  * Created by aykutasil on 2.09.2016.
@@ -39,6 +41,7 @@ public class ProfileMyQuestions extends BaseProfile {
     ProfileActivity mActivity;
     MyQuestionsAdapter mMyQuestionsAdapter;
     List<ModelQuestionInformation> mList;
+    List<Subscription> mListSubscription;
 
     @DebugLog
     @Override
@@ -48,6 +51,7 @@ public class ProfileMyQuestions extends BaseProfile {
         this.mActivity = (ProfileActivity) getActivity();
         mList = new ArrayList<>();
         mMyQuestionsAdapter = new MyQuestionsAdapter(mContext, mList);
+        mListSubscription = new ArrayList<>();
     }
 
     @DebugLog
@@ -67,19 +71,24 @@ public class ProfileMyQuestions extends BaseProfile {
         MaterialDialog progressDialog = UiHelper.UiDialog.newInstance(mContext).getProgressDialog("Lütfen bekleyiniz..", null);
         progressDialog.show();
 
-        ApiManager.getInstance(mContext).UserQuestions(9999)
+        Subscription subscription = ApiManager.getInstance(mContext).UserQuestions(9999)
                 .flatMap(map -> {
                     List<ModelQuestionInformation> lst = map.getData().getQuestions().getRows();
                     Collections.reverse(lst);
                     return Observable.just(lst);
                 })
                 .subscribe(
-                        this::convertResponseToUiView,
+                        success -> {
+                            convertResponseToUiView(success);
+                        },
                         error -> {
-                            Logger.e(error, "HATA");
                             progressDialog.dismiss();
+                            Logger.e(error, "HATA");
+                            UiHelper.UiSnackBar.showSimpleSnackBar(getView(), error.getMessage(), Snackbar.LENGTH_LONG);
                         },
                         progressDialog::dismiss);
+
+        mListSubscription.add(subscription);
     }
 
     @DebugLog
@@ -88,7 +97,15 @@ public class ProfileMyQuestions extends BaseProfile {
         for (ModelQuestionInformation mqi : rows) {
             mMyQuestionsAdapter.addUserQuestion(mqi);
         }
-
     }
 
+    @Override
+    public void onDestroy() {
+        for (Subscription subscription : mListSubscription) {
+            if (!subscription.isUnsubscribed()) {
+                subscription.unsubscribe();
+            }
+        }
+        super.onDestroy();
+    }
 }

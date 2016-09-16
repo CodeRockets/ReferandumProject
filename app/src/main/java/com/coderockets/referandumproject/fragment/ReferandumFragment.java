@@ -1,6 +1,8 @@
 package com.coderockets.referandumproject.fragment;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -25,10 +27,13 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 import hugo.weaving.DebugLog;
 import rx.Observable;
+import rx.Subscription;
 
 @EFragment(R.layout.fragment_referandum_layout)
 public class ReferandumFragment extends BaseFragment {
@@ -41,25 +46,26 @@ public class ReferandumFragment extends BaseFragment {
 
     @ViewById(R.id.ButtonFalse)
     CustomButton mButtonFalse;
-
-
+    //
     Context mContext;
     MainActivity mActivity;
-
     CustomSorularAdapter mSorularAdapter;
     Hashtable<Integer, Boolean> modControl = new Hashtable<>();
     Hashtable<String, Boolean> answerAndTempQuestionControl = new Hashtable<>();
     Hashtable<String, ModelTempQuestionAnswer> tempAnswer = new Hashtable<>();
-    //QuestionFragment mQuestionFragment;
+    List<Subscription> mListSubscription;
 
-    //boolean isAnswered = false;
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.mContext = getActivity();
+        this.mActivity = (MainActivity) getActivity();
+        this.mListSubscription = new ArrayList<>();
+    }
 
     @DebugLog
     @AfterViews
     public void ReferandumFragmentInit() {
-        this.mContext = getActivity();
-        this.mActivity = (MainActivity) getActivity();
-        //
         setViewPager();
         setSorular();
     }
@@ -201,7 +207,7 @@ public class ReferandumFragment extends BaseFragment {
             MaterialDialog progressDialog = UiHelper.UiDialog.newInstance(mContext).getProgressDialog("Lütfen bekleyiniz..", null);
             progressDialog.show();
 
-            ApiManager.getInstance(mContext)
+            Subscription subscription = ApiManager.getInstance(mContext)
                     .SoruGetir(count)
                     .doOnError(error -> progressDialog.dismiss())
                     .doOnCompleted(progressDialog::dismiss)
@@ -228,6 +234,9 @@ public class ReferandumFragment extends BaseFragment {
                                 UiHelper.UiSnackBar.showSimpleSnackBar(getView(), error.getMessage(), Snackbar.LENGTH_LONG);
                             }
                     );
+
+            mListSubscription.add(subscription);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -251,8 +260,6 @@ public class ReferandumFragment extends BaseFragment {
     @DebugLog
     private void sendQuestionAnswer(String text, String option, ModelQuestionInformation mqi) {
 
-        //if (!checkAnswered(mqi)) {
-
         AnswerRequest answerRequest = AnswerRequest.AnswerRequestInit();
         answerRequest.setOption(option);
         answerRequest.setQuestionId(mqi.getSoruId());
@@ -260,13 +267,15 @@ public class ReferandumFragment extends BaseFragment {
 
         Logger.i("AnswerQuestion: " + new Gson().toJson(answerRequest));
 
-        ApiManager.getInstance(mContext)
+        Subscription subscription = ApiManager.getInstance(mContext)
                 .Answer(answerRequest)
                 .subscribe(success -> {
                     //UiHelper.UiSnackBar.showSimpleSnackBar(getView(), "Cevap gönderildi.", Snackbar.LENGTH_LONG);
                 }, error -> {
                     UiHelper.UiSnackBar.showSimpleSnackBar(getView(), error.getMessage(), Snackbar.LENGTH_LONG);
                 });
+
+        mListSubscription.add(subscription);
     }
 
     private QuestionFragment getQuestionFragment(int position) {
@@ -289,4 +298,13 @@ public class ReferandumFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        for (Subscription subscription : mListSubscription) {
+            if (!subscription.isUnsubscribed()) {
+                subscription.unsubscribe();
+            }
+        }
+        super.onDestroy();
+    }
 }

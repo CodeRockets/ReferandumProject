@@ -43,8 +43,12 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import hugo.weaving.DebugLog;
 import jp.wasabeef.blurry.Blurry;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
 /**
@@ -81,6 +85,7 @@ public class ProfileActivity extends BaseActivity {
     AccessTokenTracker mAccessTokenTracker;
     ProfileTracker mProfileTracker;
     RxPermissions mRxPermissions;
+    List<Subscription> mListSubscription;
 
     @DebugLog
     @AfterViews
@@ -88,6 +93,7 @@ public class ProfileActivity extends BaseActivity {
         mCallbackManager = CallbackManager.Factory.create();
         mRxPermissions = RxPermissions.getInstance(this);
         mRxPermissions.setLogging(true);
+        mListSubscription = new ArrayList<>();
         //
         setToolbar();
         setLoginButton();
@@ -170,7 +176,7 @@ public class ProfileActivity extends BaseActivity {
         Logger.i("User save request: " + new Gson().toJson(userRequest));
 
         try {
-            ApiManager.getInstance(ProfileActivity.this).SaveUser(userRequest)
+            Subscription subscription = ApiManager.getInstance(ProfileActivity.this).SaveUser(userRequest)
                     .subscribe(response -> {
                                 Logger.i(response.getData().getName());
                                 response.getData().save();
@@ -182,6 +188,7 @@ public class ProfileActivity extends BaseActivity {
                             },
                             materialDialog::dismiss
                     );
+            mListSubscription.add(subscription);
         } catch (Exception e) {
             materialDialog.dismiss();
             e.printStackTrace();
@@ -280,6 +287,13 @@ public class ProfileActivity extends BaseActivity {
     protected void onDestroy() {
         mAccessTokenTracker.stopTracking();
         mProfileTracker.stopTracking();
+
+        for (Subscription subscription : mListSubscription) {
+            if (!subscription.isUnsubscribed()) {
+                subscription.unsubscribe();
+            }
+        }
+
         super.onDestroy();
     }
 

@@ -9,8 +9,6 @@ import android.view.MenuItem;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.fragment.ReferandumFragment_;
 import com.coderockets.referandumproject.helper.SuperHelper;
-import com.joanzapata.iconify.IconDrawable;
-import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -48,7 +46,7 @@ public class MainActivity extends BaseActivity {
         getSupportActionBar().setTitle("Referandum");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(new IconDrawable(this, FontAwesomeIcons.fa_home).actionBarSize().getCurrent());
+        getSupportActionBar().setHomeAsUpIndicator(getDrawable(R.mipmap.ic_launcher));
     }
 
 
