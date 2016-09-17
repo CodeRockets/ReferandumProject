@@ -339,6 +339,7 @@ public class QuestionActivity extends BaseActivity {
                 .size(Size.Screen)
                 .usingGallery()
                 .subscribe(response -> {
+                    Logger.i(response.data());
                     if (response.resultCode() != Activity.RESULT_OK) {
                         response.targetUI().showUserCanceled();
                         return;
@@ -346,6 +347,9 @@ public class QuestionActivity extends BaseActivity {
                     Logger.i(response.data());
                     mFilePath = response.data();
                     response.targetUI().loadImage(response.data());
+                }, error -> {
+                    error.printStackTrace();
+                    UiHelper.UiSnackBar.showSimpleSnackBar(mToolbar, error.getMessage(), Snackbar.LENGTH_INDEFINITE);
                 });
     }
 
@@ -367,6 +371,7 @@ public class QuestionActivity extends BaseActivity {
                 });
     }
 
+    @DebugLog
     private void loadImage(String filePath) {
 
         mImageView_SoruImage.setScaleType(ImageView.ScaleType.CENTER);

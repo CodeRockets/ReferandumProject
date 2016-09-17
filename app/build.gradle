@@ -28,8 +28,8 @@ android {
     defaultConfig {
         applicationId "com.coderockets.referandumproject"
         targetSdkVersion 24
-        versionCode 3
-        versionName "1.0.2"
+        versionCode 4
+        versionName "1.0.3"
         multiDexEnabled true
     }
 
@@ -56,7 +56,6 @@ android {
             minSdkVersion 17
             buildConfigField('String', 'BACKEND_URL', '"http://cr-vote.herokuapp.com/"')
             buildConfigField('String', 'VOTER_VERSION', '"1"')
-            signingConfig signingConfigs.release
         }
     }
 
@@ -69,7 +68,7 @@ android {
         }
         debug {
             minifyEnabled false
-            //signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
             debuggable true
 
         }
