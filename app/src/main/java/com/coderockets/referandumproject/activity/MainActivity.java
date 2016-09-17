@@ -46,7 +46,7 @@ public class MainActivity extends BaseActivity {
         getSupportActionBar().setTitle("Referandum");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(getDrawable(R.mipmap.ic_launcher));
+        getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.mipmap.ic_launcher));
     }
 
 
