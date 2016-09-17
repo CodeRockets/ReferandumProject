@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.MainActivity;
+import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
 import com.coderockets.referandumproject.rest.ApiManager;
 import com.coderockets.referandumproject.rest.RestModel.FavoriteRequest;
@@ -89,6 +90,7 @@ public class QuestionFragment extends Fragment {
         mqi = getArguments().getParcelable(ModelQuestionInformation.class.getSimpleName());
         setSoru(mqi);
         changeFavoriteFabColor();
+        setFavoriteFab();
         registerForContextMenu(mSoruText);
         //PhotoViewAttacher photoViewAttacher = new PhotoViewAttacher(mImageView_SoruImage);
     }
@@ -98,6 +100,14 @@ public class QuestionFragment extends Fragment {
             mFabFavorite.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
         } else {
             mFabFavorite.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.accentColor)));
+        }
+    }
+
+    private void setFavoriteFab() {
+        if (SuperHelper.checkUser()) {
+            mFabFavorite.show();
+        } else {
+            mFabFavorite.hide();
         }
     }
 
@@ -171,6 +181,11 @@ public class QuestionFragment extends Fragment {
     public boolean onContextItemSelected(MenuItem item) {
         Logger.i("ItemId: " + item.getItemId());
         Logger.i("getUserVisibleHint():" + getUserVisibleHint());
+
+        if (!SuperHelper.checkUser()) {
+            return true;
+        }
+        
         if (getUserVisibleHint()) {
             switch (item.getItemId()) {
                 case 0: {
