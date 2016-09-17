@@ -33,3 +33,6 @@ local.properties
 *.ipr
 *~
 *.swp
+app/coderockets_keystore.jks
+app/libs/
+app/src/main/java/com/coderockets/referandumproject/trying/
