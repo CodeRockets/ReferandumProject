@@ -12,6 +12,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.MainActivity;
+import com.coderockets.referandumproject.app.Const;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
 import com.coderockets.referandumproject.model.ModelTempQuestionAnswer;
 import com.coderockets.referandumproject.rest.ApiManager;
@@ -21,6 +22,7 @@ import com.coderockets.referandumproject.util.CustomButton;
 import com.coderockets.referandumproject.util.adapter.CustomSorularAdapter;
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
+import com.tbruyelle.rxpermissions.RxPermissions;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -49,6 +51,7 @@ public class ReferandumFragment extends BaseFragment {
     //
     Context mContext;
     MainActivity mActivity;
+    RxPermissions mRxPermission;
     CustomSorularAdapter mSorularAdapter;
     Hashtable<Integer, Boolean> modControl = new Hashtable<>();
     Hashtable<String, Boolean> answerAndTempQuestionControl = new Hashtable<>();
@@ -61,6 +64,7 @@ public class ReferandumFragment extends BaseFragment {
         this.mContext = getActivity();
         this.mActivity = (MainActivity) getActivity();
         this.mListSubscription = new ArrayList<>();
+        this.mRxPermission = RxPermissions.getInstance(mContext);
     }
 
     @DebugLog
@@ -108,10 +112,21 @@ public class ReferandumFragment extends BaseFragment {
     @DebugLog
     private void setSorular() {
 
-        Logger.i("mSorularAdapter.getCount(): " + mSorularAdapter.getCount());
-        if (mSorularAdapter.getCount() == 0) {
-            addQuestionsToAdapter(20);
-        }
+        mRxPermission.request(Const.PERMISSIONS_GENERAL)
+                .subscribe(success -> {
+                    if (success) {
+                        Logger.i("mSorularAdapter.getCount(): " + mSorularAdapter.getCount());
+                        if (mSorularAdapter.getCount() == 0) {
+                            addQuestionsToAdapter(20);
+                        }
+                    } else {
+                        UiHelper.UiSnackBar.showSimpleSnackBar(getView(), "Tüm izinleri vermelisiniz.", Snackbar.LENGTH_INDEFINITE);
+                    }
+                }, error -> {
+                    UiHelper.UiSnackBar.showSimpleSnackBar(getView(), error.getMessage(), Snackbar.LENGTH_INDEFINITE);
+
+                });
+
     }
 
     @Click(R.id.ButtonTrue)

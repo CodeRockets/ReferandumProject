@@ -185,7 +185,7 @@ public class QuestionFragment extends Fragment {
         if (!SuperHelper.checkUser()) {
             return true;
         }
-        
+
         if (getUserVisibleHint()) {
             switch (item.getItemId()) {
                 case 0: {
