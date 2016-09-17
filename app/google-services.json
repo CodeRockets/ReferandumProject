@@ -1,74 +1,43 @@
 {
   "project_info": {
-    "project_number": "558996751150",
-    "firebase_url": "https://referandum-1291.firebaseio.com",
-    "project_id": "referandum-1291",
-    "storage_bucket": "referandum-1291.appspot.com"
+    "project_number": "1010890578715",
+    "firebase_url": "https://referandumproject.firebaseio.com",
+    "project_id": "referandumproject",
+    "storage_bucket": "referandumproject.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:558996751150:android:b277336820a93d5c",
-        "android_client_info": {
-          "package_name": "coderockets.com.referandum"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "558996751150-4dshd8hcgk0hs57ts70pidro6rag49i7.apps.googleusercontent.com",
-          "client_type": 3
-        },
-        {
-          "client_id": "558996751150-svhkj6eg6bc34bco1qcodg7gbg2op3ra.apps.googleusercontent.com",
-          "client_type": 3
-        },
-        {
-          "client_id": "558996751150-nnlbssfg3hdkeoqfq6pceapdu0o3bskt.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCivIgKVmfnsP2pDoMtEPWt3zsk-vevp7Q"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:558996751150:android:fcb1471fdc77efe5",
+        "mobilesdk_app_id": "1:1010890578715:android:fcb1471fdc77efe5",
         "android_client_info": {
           "package_name": "com.coderockets.referandumproject"
         }
       },
       "oauth_client": [
         {
-          "client_id": "558996751150-4dshd8hcgk0hs57ts70pidro6rag49i7.apps.googleusercontent.com",
-          "client_type": 3
+          "client_id": "1010890578715-lk91ioa04lgb0986ba28dk0pcl6ofue2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.coderockets.referandumproject",
+            "certificate_hash": "187062A7B719F1B39370ED56B7499C62CF885848"
+          }
         },
         {
-          "client_id": "558996751150-svhkj6eg6bc34bco1qcodg7gbg2op3ra.apps.googleusercontent.com",
-          "client_type": 3
+          "client_id": "1010890578715-s1h3mjffsurl1pm7ubfr24dnsq36357i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.coderockets.referandumproject",
+            "certificate_hash": "DBB5C0A24C9A551FE99937452AC2C03BA4AB2CF8"
+          }
         },
         {
-          "client_id": "558996751150-nnlbssfg3hdkeoqfq6pceapdu0o3bskt.apps.googleusercontent.com",
+          "client_id": "1010890578715-ochukf3broqero1lgqqcp40gkvr9fg9g.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCivIgKVmfnsP2pDoMtEPWt3zsk-vevp7Q"
+          "current_key": "AIzaSyCHtSPt4RofsgCbSSS1W7-NT_LrFa6LseI"
         }
       ],
       "services": {
@@ -76,8 +45,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1010890578715-ochukf3broqero1lgqqcp40gkvr9fg9g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

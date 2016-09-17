@@ -16,14 +16,14 @@
         android:name=".app.ReferandumApp_"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="Referandum"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:name">
+        tools:replace="android:label">
 
         <activity
             android:name=".activity.MainActivity_"
-            android:label="@string/app_name"
+            android:label="Referandum"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
