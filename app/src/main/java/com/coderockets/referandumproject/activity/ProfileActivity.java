@@ -3,7 +3,6 @@ package com.coderockets.referandumproject.activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
@@ -155,7 +154,7 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void setLoginButton() {
-        mLoginButton.setReadPermissions("public_profile");
+        mLoginButton.setReadPermissions("public_profile","email","user_friends");
     }
 
     @DebugLog
@@ -184,7 +183,7 @@ public class ProfileActivity extends BaseActivity {
 
                             }, error -> {
                                 materialDialog.dismiss();
-                                UiHelper.UiSnackBar.showSimpleSnackBar(getCurrentFocus(), error.getMessage(), Snackbar.LENGTH_INDEFINITE);
+                                UiHelper.UiDialog.newInstance(ProfileActivity.this).getOKDialog("HATA", error.getMessage(), null).show();
                             },
                             materialDialog::dismiss
                     );

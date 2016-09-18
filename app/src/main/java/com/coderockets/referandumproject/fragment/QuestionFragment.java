@@ -118,6 +118,7 @@ public class QuestionFragment extends Fragment {
     private void setSoru(ModelQuestionInformation mqi) {
 
         mImageView_SoruImage.setScaleType(ImageView.ScaleType.CENTER);
+
         Uri soruImageUri = Uri.parse(mqi.getQuestionImage());
         Picasso.with(mContext)
                 .load(soruImageUri)
@@ -125,7 +126,9 @@ public class QuestionFragment extends Fragment {
                 .into(mImageView_SoruImage, new Callback() {
                     @Override
                     public void onSuccess() {
-                        mImageView_SoruImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                        if (mImageView_SoruImage != null) {
+                            mImageView_SoruImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                        }
                     }
 
                     @Override
