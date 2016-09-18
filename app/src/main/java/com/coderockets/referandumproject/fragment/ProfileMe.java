@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.ProfileActivity;
 import com.coderockets.referandumproject.db.DbManager;
+import com.coderockets.referandumproject.model.Event.UpdateLoginEvent;
 import com.coderockets.referandumproject.model.ModelUser;
 import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Picasso;
@@ -21,6 +22,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
+import org.greenrobot.eventbus.EventBus;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import hugo.weaving.DebugLog;
@@ -110,6 +112,7 @@ public class ProfileMe extends BaseProfile implements AppBarLayout.OnOffsetChang
     @Click(R.id.ButtonCikisYap)
     public void ButtonCikisYapClick() {
         mActivity.mLoginButton.performClick();
+        EventBus.getDefault().postSticky(new UpdateLoginEvent());
     }
 
     @DebugLog

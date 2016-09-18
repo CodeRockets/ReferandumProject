@@ -21,6 +21,7 @@ import com.coderockets.referandumproject.fragment.ProfileMe_;
 import com.coderockets.referandumproject.fragment.ProfileMyFavorites_;
 import com.coderockets.referandumproject.fragment.ProfileMyQuestions_;
 import com.coderockets.referandumproject.helper.SuperHelper;
+import com.coderockets.referandumproject.model.Event.UpdateLoginEvent;
 import com.coderockets.referandumproject.rest.ApiManager;
 import com.coderockets.referandumproject.rest.RestModel.UserRequest;
 import com.coderockets.referandumproject.util.adapter.MyFragmentPagerAdapter;
@@ -41,6 +42,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -154,7 +156,7 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void setLoginButton() {
-        mLoginButton.setReadPermissions("public_profile","email","user_friends");
+        mLoginButton.setReadPermissions("public_profile", "email", "user_friends");
     }
 
     @DebugLog
@@ -179,6 +181,7 @@ public class ProfileActivity extends BaseActivity {
                     .subscribe(response -> {
                                 Logger.i(response.getData().getName());
                                 response.getData().save();
+                                EventBus.getDefault().postSticky(new UpdateLoginEvent());
                                 updateUI();
 
                             }, error -> {
