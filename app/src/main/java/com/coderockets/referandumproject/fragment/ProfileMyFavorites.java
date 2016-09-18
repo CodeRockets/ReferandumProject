@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.ProfileActivity;
+import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
 import com.coderockets.referandumproject.rest.ApiManager;
 import com.coderockets.referandumproject.util.adapter.MyQuestionsAdapter;
@@ -71,6 +72,7 @@ public class ProfileMyFavorites extends BaseProfile {
                 .subscribe(
                         this::convertResponseToUiView,
                         error -> {
+                            SuperHelper.CrashlyticsLog(error);
                             Logger.e(error, "HATA");
                         });
     }

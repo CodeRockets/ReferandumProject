@@ -11,6 +11,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.ProfileActivity;
+import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
 import com.coderockets.referandumproject.rest.ApiManager;
 import com.coderockets.referandumproject.util.adapter.MyQuestionsAdapter;
@@ -83,6 +84,7 @@ public class ProfileMyQuestions extends BaseProfile {
                         },
                         error -> {
                             progressDialog.dismiss();
+                            SuperHelper.CrashlyticsLog(error);
                             Logger.e(error, "HATA");
                             UiHelper.UiSnackBar.showSimpleSnackBar(getView(), error.getMessage(), Snackbar.LENGTH_LONG);
                         },

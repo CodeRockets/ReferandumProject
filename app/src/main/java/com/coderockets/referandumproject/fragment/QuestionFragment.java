@@ -166,7 +166,10 @@ public class QuestionFragment extends Fragment {
                     } else {
                         UiHelper.UiSnackBar.showSimpleSnackBar(getView(), "Favorilerden Çıkarıldı", Snackbar.LENGTH_SHORT);
                     }
-                }, Throwable::printStackTrace);
+                }, error -> {
+                    error.printStackTrace();
+                    SuperHelper.CrashlyticsLog(error);
+                });
 
         mListSubscription.add(subscription);
     }
@@ -204,6 +207,7 @@ public class QuestionFragment extends Fragment {
                                 UiHelper.UiSnackBar.showSimpleSnackBar(getView(), "Şikayetiniz bize ulaştı. Teşekkür ederiz.", Snackbar.LENGTH_LONG);
                             }, error -> {
                                 Logger.e(error, "HATA");
+                                SuperHelper.CrashlyticsLog(error);
                                 UiHelper.UiSnackBar.showSimpleSnackBar(getView(), error.getMessage(), Snackbar.LENGTH_LONG);
                             });
 

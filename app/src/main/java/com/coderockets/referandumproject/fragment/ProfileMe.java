@@ -93,13 +93,13 @@ public class ProfileMe extends BaseProfile implements AppBarLayout.OnOffsetChang
 
         Picasso.with(mContext)
                 .load(profileImageUri)
-                .placeholder(mContext.getDrawable(R.drawable.anonym))
+                .placeholder(mContext.getResources().getDrawable(R.drawable.anonym))
                 .into(mImageviewCollapsingBackground);
 
 
         Picasso.with(mContext)
                 .load(profileImageUri)
-                .placeholder(mContext.getDrawable(R.drawable.anonym))
+                .placeholder(mContext.getResources().getDrawable(R.drawable.anonym))
                 .into(mCircleimageviewProfilePicture);
 
         mTextViewToolbarTitle.setText(modelUser.getName());

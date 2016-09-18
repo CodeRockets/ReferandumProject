@@ -8,6 +8,8 @@ import android.widget.ImageView;
 
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.db.DbManager;
+import com.coderockets.referandumproject.model.ModelUser;
+import com.crashlytics.android.Crashlytics;
 import com.facebook.AccessToken;
 import com.orhanobut.logger.Logger;
 import com.slmyldz.random.Randoms;
@@ -158,6 +160,16 @@ public class SuperHelper extends com.aykuttasil.androidbasichelperlib.SuperHelpe
             }
         }
         return false;
+    }
+
+    public static void CrashlyticsLog(Throwable e) {
+        ModelUser modelUser = DbManager.getModelUser();
+        if (modelUser != null) {
+            Crashlytics.setUserIdentifier(modelUser.getUserId());
+            Crashlytics.setUserName(modelUser.getName());
+        }
+
+        Crashlytics.logException(e);
     }
 
 }

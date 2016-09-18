@@ -122,6 +122,9 @@ public class QuestionActivity extends BaseActivity {
                 .map(charSequence -> charSequence.toString().toUpperCase())
                 .subscribe(text -> {
                     mRxAutoFitTextViewSoru.setText(text + " ?");
+                }, error -> {
+                    error.printStackTrace();
+                    SuperHelper.CrashlyticsLog(error);
                 });
     }
 
@@ -204,9 +207,9 @@ public class QuestionActivity extends BaseActivity {
                                         Snackbar.LENGTH_INDEFINITE);
                             }
                         }, error -> {
-                            UiHelper.UiSnackBar.showSimpleSnackBar(getCurrentFocus(),
-                                    error.getMessage(),
-                                    Snackbar.LENGTH_INDEFINITE);
+                            //UiHelper.UiDialog.newInstance(QuestionActivity.this).getOKDialog("HATA", error.getMessage(), null).show();
+                            UiHelper.UiDialog.showSimpleDialog(QuestionActivity.this, "HATA", error.getMessage());
+                            SuperHelper.CrashlyticsLog(error);
                         }
                 );
     }
@@ -264,14 +267,16 @@ public class QuestionActivity extends BaseActivity {
                                 }
                             }, error -> {
                                 materialDialog.dismiss();
+                                SuperHelper.CrashlyticsLog(error);
                                 error.printStackTrace();
-                                UiHelper.UiDialog.showSimpleDialog(this, "HATA", error.getMessage());
+                                UiHelper.UiDialog.showSimpleDialog(QuestionActivity.this, "HATA", error.getMessage());
                             }, materialDialog::dismiss);
 
 
-        } catch (Exception e) {
+        } catch (Exception error) {
             materialDialog.dismiss();
-            UiHelper.UiSnackBar.showSimpleSnackBar(getCurrentFocus(), e.getMessage(), Snackbar.LENGTH_INDEFINITE);
+            SuperHelper.CrashlyticsLog(error);
+            UiHelper.UiDialog.showSimpleDialog(QuestionActivity.this, "HATA", error.getMessage());
         }
     }
 
@@ -320,6 +325,9 @@ public class QuestionActivity extends BaseActivity {
                     Logger.i(response.data());
                     mFilePath = response.data();
                     response.targetUI().loadImage(response.data());
+                }, error -> {
+                    error.printStackTrace();
+                    SuperHelper.CrashlyticsLog(error);
                 });
     }
 
@@ -349,7 +357,9 @@ public class QuestionActivity extends BaseActivity {
                     response.targetUI().loadImage(response.data());
                 }, error -> {
                     error.printStackTrace();
-                    UiHelper.UiSnackBar.showSimpleSnackBar(mToolbar, error.getMessage(), Snackbar.LENGTH_INDEFINITE);
+                    SuperHelper.CrashlyticsLog(error);
+                    UiHelper.UiDialog.showSimpleDialog(QuestionActivity.this, "HATA", error.getMessage());
+                    //UiHelper.UiSnackBar.showSimpleSnackBar(mToolbar, error.getMessage(), Snackbar.LENGTH_INDEFINITE);
                 });
     }
 

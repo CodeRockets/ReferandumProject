@@ -13,6 +13,7 @@ import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.MainActivity;
 import com.coderockets.referandumproject.app.Const;
+import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
 import com.coderockets.referandumproject.model.ModelTempQuestionAnswer;
 import com.coderockets.referandumproject.rest.ApiManager;
@@ -124,7 +125,7 @@ public class ReferandumFragment extends BaseFragment {
                     }
                 }, error -> {
                     UiHelper.UiSnackBar.showSimpleSnackBar(getView(), error.getMessage(), Snackbar.LENGTH_INDEFINITE);
-
+                    SuperHelper.CrashlyticsLog(error);
                 });
 
     }
@@ -246,6 +247,7 @@ public class ReferandumFragment extends BaseFragment {
                                 }
                             }, error -> {
                                 error.printStackTrace();
+                                SuperHelper.CrashlyticsLog(error);
                                 UiHelper.UiSnackBar.showSimpleSnackBar(getView(), error.getMessage(), Snackbar.LENGTH_LONG);
                             }
                     );
@@ -287,6 +289,7 @@ public class ReferandumFragment extends BaseFragment {
                 .subscribe(success -> {
                     //UiHelper.UiSnackBar.showSimpleSnackBar(getView(), "Cevap gönderildi.", Snackbar.LENGTH_LONG);
                 }, error -> {
+                    SuperHelper.CrashlyticsLog(error);
                     UiHelper.UiSnackBar.showSimpleSnackBar(getView(), error.getMessage(), Snackbar.LENGTH_LONG);
                 });
 

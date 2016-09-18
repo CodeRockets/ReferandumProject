@@ -183,12 +183,14 @@ public class ProfileActivity extends BaseActivity {
 
                             }, error -> {
                                 materialDialog.dismiss();
+                                SuperHelper.CrashlyticsLog(error);
                                 UiHelper.UiDialog.newInstance(ProfileActivity.this).getOKDialog("HATA", error.getMessage(), null).show();
                             },
                             materialDialog::dismiss
                     );
             mListSubscription.add(subscription);
         } catch (Exception e) {
+            SuperHelper.CrashlyticsLog(e);
             materialDialog.dismiss();
             e.printStackTrace();
             //UiHelper.UiSnackBar.showSimpleSnackBar(getView(), e.getMessage(), Snackbar.LENGTH_INDEFINITE);
@@ -216,6 +218,7 @@ public class ProfileActivity extends BaseActivity {
                                     Logger.i("Permission denied !");
                                 }
                             }, error -> {
+                                SuperHelper.CrashlyticsLog(error);
                                 UiHelper.UiDialog.showSimpleDialog(ProfileActivity.this, "RxPermission", error.getMessage());
                             });
                 } else {
