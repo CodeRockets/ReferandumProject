@@ -43,6 +43,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.HashMap;
@@ -269,7 +270,9 @@ public class QuestionActivity extends BaseActivity {
                                 {
                                     mFilePath = null;
                                     mEditText_SoruText.setText("");
-                                    UiHelper.UiSnackBar.showSimpleSnackBar(getCurrentFocus(), "Sorunuz gönderildi.", Snackbar.LENGTH_LONG);
+                                    //UiHelper.UiSnackBar.showSimpleSnackBar(getCurrentFocus(), "Sorunuz gönderildi.", Snackbar.LENGTH_LONG);
+                                    EventBus.getDefault().postSticky(response.getData());
+                                    NavUtils.navigateUpFromSameTask(QuestionActivity.this);
                                 }
                             }, error -> {
                                 materialDialog.dismiss();

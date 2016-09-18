@@ -13,9 +13,11 @@ import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.MainActivity;
 import com.coderockets.referandumproject.app.Const;
+import com.coderockets.referandumproject.db.DbManager;
 import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
 import com.coderockets.referandumproject.model.ModelTempQuestionAnswer;
+import com.coderockets.referandumproject.model.ModelUser;
 import com.coderockets.referandumproject.rest.ApiManager;
 import com.coderockets.referandumproject.rest.RestModel.AnswerRequest;
 import com.coderockets.referandumproject.util.CustomAnswerPercent;
@@ -29,6 +31,9 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -59,6 +64,7 @@ public class ReferandumFragment extends BaseFragment {
     Hashtable<String, ModelTempQuestionAnswer> tempAnswer = new Hashtable<>();
     List<Subscription> mListSubscription;
 
+    @DebugLog
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +72,13 @@ public class ReferandumFragment extends BaseFragment {
         this.mActivity = (MainActivity) getActivity();
         this.mListSubscription = new ArrayList<>();
         this.mRxPermission = RxPermissions.getInstance(mContext);
+    }
+
+    @DebugLog
+    @Override
+    public void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
     }
 
     @DebugLog
@@ -296,6 +309,16 @@ public class ReferandumFragment extends BaseFragment {
         mListSubscription.add(subscription);
     }
 
+    @DebugLog
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onEvent(ModelQuestionInformation mqi) {
+        ModelUser modelUser = DbManager.getModelUser();
+        mqi.setAskerProfileImg(modelUser.getProfileImageUrl());
+        getCurrentQuestionFragment().setQuestion(mqi);
+
+        EventBus.getDefault().removeStickyEvent(mqi);
+    }
+
     private QuestionFragment getQuestionFragment(int position) {
         return (QuestionFragment) mSorularAdapter.getItem(position);
     }
@@ -316,6 +339,14 @@ public class ReferandumFragment extends BaseFragment {
         }
     }
 
+    @DebugLog
+    @Override
+    public void onPause() {
+        EventBus.getDefault().unregister(this);
+        super.onPause();
+    }
+
+    @DebugLog
     @Override
     public void onDestroy() {
         for (Subscription subscription : mListSubscription) {

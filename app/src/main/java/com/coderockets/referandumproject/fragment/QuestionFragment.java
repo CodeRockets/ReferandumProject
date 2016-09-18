@@ -115,6 +115,13 @@ public class QuestionFragment extends Fragment {
         return mqi;
     }
 
+    public void setQuestion(ModelQuestionInformation mqi) {
+        this.mqi = mqi;
+        setSoru(mqi);
+        changeFavoriteFabColor();
+        setFavoriteFab();
+    }
+
     private void setSoru(ModelQuestionInformation mqi) {
 
         mImageView_SoruImage.setScaleType(ImageView.ScaleType.CENTER);

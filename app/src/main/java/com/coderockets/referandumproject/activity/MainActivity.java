@@ -2,6 +2,8 @@ package com.coderockets.referandumproject.activity;
 
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,6 +11,8 @@ import android.view.MenuItem;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.fragment.ReferandumFragment_;
 import com.coderockets.referandumproject.helper.SuperHelper;
+import com.coderockets.referandumproject.model.ModelQuestionInformation;
+import com.orhanobut.logger.Logger;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
