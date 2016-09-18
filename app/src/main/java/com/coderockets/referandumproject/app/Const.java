@@ -17,6 +17,12 @@ public class Const {
 
 
     public static final String[] PERMISSIONS_GENERAL = new String[]{Manifest.permission.READ_PHONE_STATE};
+    public static final String[] PERMISSIONS_ASK_QUESTION = new String[]
+            {
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            };
     public static final int PERMISIONS_REQUEST_GENERAL = 111;
 
 

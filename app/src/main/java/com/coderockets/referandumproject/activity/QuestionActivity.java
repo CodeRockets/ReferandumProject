@@ -194,7 +194,7 @@ public class QuestionActivity extends BaseActivity {
     @Click(R.id.Button_SoruGonder)
     public void Button_SoruGonderClick() {
 
-        mRxPermissions.request(Const.PERMISSIONS_GENERAL)
+        mRxPermissions.request(Const.PERMISSIONS_ASK_QUESTION)
                 .subscribe(granted -> {
                             if (granted) {
                                 sendQuestionRequest();
