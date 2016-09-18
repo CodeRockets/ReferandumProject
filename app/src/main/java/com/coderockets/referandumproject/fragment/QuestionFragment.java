@@ -144,7 +144,12 @@ public class QuestionFragment extends Fragment {
                 .placeholder(R.drawable.loading)
                 .into(mProfilePicture);
         //mProfilePicture.setImageDrawable(new IconDrawable(mContext, FontAwesomeIcons.fa_github).sizeDp(150).getCurrent());
-        mSoruText.setText(mqi.getQuestionText().toUpperCase());
+
+        String soruText = mqi.getQuestionText();
+        if (soruText.length() > 0) {
+            soruText = soruText.substring(0, 1).toUpperCase() + soruText.substring(1).toLowerCase();
+        }
+        mSoruText.setText(soruText);
     }
 
     @DebugLog

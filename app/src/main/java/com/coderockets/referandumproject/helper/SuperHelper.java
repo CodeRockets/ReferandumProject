@@ -151,6 +151,7 @@ public class SuperHelper extends com.aykuttasil.androidbasichelperlib.SuperHelpe
             return true;
         } catch (IOException e) {
             Log.e("app", e.getMessage());
+            CrashlyticsLog(e);
             if (fos != null) {
                 try {
                     fos.close();
