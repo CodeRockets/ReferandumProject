@@ -268,6 +268,7 @@ public class ReferandumFragment extends BaseFragment {
             mListSubscription.add(subscription);
 
         } catch (Exception e) {
+            SuperHelper.CrashlyticsLog(e);
             e.printStackTrace();
         }
     }

@@ -4,7 +4,6 @@
         <attr name="shape" format="enum">
             <enum name="circle" value="0" />
         </attr>
-        <!-- CircleView sınıfında bahsedilen, R.styleable.CircleView_dim asagıdaki  name="dim" den karsılık gelmektedir  -->
         <attr name="dim" format="dimension" />
         <attr name="shape_color" format="color" />
     </declare-styleable>

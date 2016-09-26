@@ -2,6 +2,7 @@ package com.coderockets.referandumproject.rest;
 
 import android.content.Context;
 
+import com.coderockets.referandumproject.BuildConfig;
 import com.coderockets.referandumproject.app.Const;
 import com.coderockets.referandumproject.db.DbManager;
 import com.coderockets.referandumproject.helper.SuperHelper;
@@ -19,6 +20,8 @@ import com.coderockets.referandumproject.rest.RestModel.SoruSorResponse;
 import com.coderockets.referandumproject.rest.RestModel.UserQuestionsResponse;
 import com.coderockets.referandumproject.rest.RestModel.UserRequest;
 import com.coderockets.referandumproject.rest.RestModel.UserResponse;
+import com.orhanobut.logger.Logger;
+import com.slmyldz.random.Randoms;
 
 import java.util.Map;
 
@@ -60,7 +63,7 @@ public class ApiManager {
                 .SoruSor(
                         Const.CLIENT_ID,
                         Const.REFERANDUM_VERSION,
-                        SuperHelper.getDeviceId(mContext),
+                        BuildConfig.DEBUG ? Randoms.alphaNumericString(11) : SuperHelper.getDeviceId(mContext),
                         soruSorRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -72,19 +75,24 @@ public class ApiManager {
                 .Answer(
                         Const.CLIENT_ID,
                         Const.REFERANDUM_VERSION,
-                        com.coderockets.referandumproject.helper.SuperHelper.getDeviceId(mContext),
+                        BuildConfig.DEBUG ? Randoms.alphaNumericString(11) : SuperHelper.getDeviceId(mContext),
                         answerRequest
                 )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    @DebugLog
     public Observable<SoruGetirBaseResponse> SoruGetir(int count) {
+
+        Logger.i(SuperHelper.getDeviceId(mContext));
+
+
         return RestClient.getInstance().getApiService()
                 .SoruGetir(
                         Const.CLIENT_ID,
                         Const.REFERANDUM_VERSION,
-                        SuperHelper.getDeviceId(mContext),
+                        BuildConfig.DEBUG ? Randoms.alphaNumericString(11) : SuperHelper.getDeviceId(mContext),
                         String.valueOf(count),
                         SuperHelper.checkUser() ? DbManager.getModelUser().getUserId() : ""
                 )
@@ -97,7 +105,7 @@ public class ApiManager {
                 .User(
                         Const.CLIENT_ID,
                         Const.REFERANDUM_VERSION,
-                        SuperHelper.getDeviceId(mContext),
+                        BuildConfig.DEBUG ? Randoms.alphaNumericString(11) : SuperHelper.getDeviceId(mContext),
                         userRequest
                 )
                 .observeOn(AndroidSchedulers.mainThread())
@@ -109,7 +117,7 @@ public class ApiManager {
                 .ImageUpload(
                         Const.CLIENT_ID,
                         Const.REFERANDUM_VERSION,
-                        SuperHelper.getDeviceId(mContext),
+                        BuildConfig.DEBUG ? Randoms.alphaNumericString(11) : SuperHelper.getDeviceId(mContext),
                         map
                 )
                 .subscribeOn(Schedulers.io())
@@ -125,7 +133,7 @@ public class ApiManager {
                 .UserQuestions(
                         Const.CLIENT_ID,
                         Const.REFERANDUM_VERSION,
-                        SuperHelper.getDeviceId(mContext),
+                        BuildConfig.DEBUG ? Randoms.alphaNumericString(11) : SuperHelper.getDeviceId(mContext),
                         0,
                         limit,
                         modelUser.getUserId()
@@ -140,7 +148,7 @@ public class ApiManager {
                 .Favorite(
                         Const.CLIENT_ID,
                         Const.REFERANDUM_VERSION,
-                        SuperHelper.getDeviceId(mContext),
+                        BuildConfig.DEBUG ? Randoms.alphaNumericString(11) : SuperHelper.getDeviceId(mContext),
                         request
                 )
                 .subscribeOn(Schedulers.io())
@@ -153,7 +161,7 @@ public class ApiManager {
                 .ReportAbuse(
                         Const.CLIENT_ID,
                         Const.REFERANDUM_VERSION,
-                        SuperHelper.getDeviceId(mContext),
+                        BuildConfig.DEBUG ? Randoms.alphaNumericString(11) : SuperHelper.getDeviceId(mContext),
                         request
                 )
                 .subscribeOn(Schedulers.io())
