@@ -148,6 +148,12 @@ public class ReferandumFragment extends BaseFragment {
         if (mSorularAdapter.getCount() == 0) return;
         try {
             ModelQuestionInformation modelQuestionInformation = getCurrentQuestionFragment().getQuestion();
+
+            for (ModelQuestionInformation.Friend friend : modelQuestionInformation.getFriends()) {
+                Logger.i(friend.getName());
+                Logger.i(friend.getOption());
+                Logger.i(friend.getFacebookId());
+            }
             if (!checkAnswered(modelQuestionInformation)) {
                 answerAndTempQuestionControl.put(modelQuestionInformation.getSoruId(), true);
                 showAnswerResult("evet");

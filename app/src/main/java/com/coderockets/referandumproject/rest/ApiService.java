@@ -63,7 +63,8 @@ public interface ApiService {
                                                 @Header("x-voter-version") String version,
                                                 @Header("x-voter-installation") String installation,
                                                 @Query(value = "limit") String limit,
-                                                @Query(value = "user_id") String userId);
+                                                @Query(value = "user_id") String userId,
+                                                @Query(value = "debug") String debug);
 
     @Multipart
     @POST("v1/question/image")

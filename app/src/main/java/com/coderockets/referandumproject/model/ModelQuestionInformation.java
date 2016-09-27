@@ -9,6 +9,8 @@ import com.activeandroid.annotation.Table;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Created by aykutasil on 13.03.2016.
  */
@@ -132,12 +134,50 @@ public class ModelQuestionInformation extends Model implements Parcelable {
     @Expose
     @Column
     @SerializedName("friends")
-    private String[] Friens;
+    private List<Friend> Friends;
 
 
     public ModelQuestionInformation() {
         super();
     }
+
+    /*
+    protected ModelQuestionInformation(Parcel in) {
+        SoruId = in.readString();
+        QuestionText = in.readString();
+        QuestionImage = in.readString();
+        UserId = in.readString();
+        App = in.readInt();
+        Option_A = in.readString();
+        Option_B = in.readString();
+        Option_A_Count = in.readInt();
+        Option_B_Count = in.readInt();
+        Skip_Count = in.readInt();
+        CreatedAt = in.readString();
+        UpdatedAt = in.readString();
+        IsDeleted = in.readByte() != 0;
+        No = in.readInt();
+        AbuseCount = in.readInt();
+        FavoriteCount = in.readInt();
+        AskerProfileImg = in.readString();
+        AskerName = in.readString();
+        Friends = in.readArrayList(ClassLoader.getSystemClassLoader());
+    }
+    */
+
+    /*
+    public static final Creator<ModelQuestionInformation> CREATOR = new Creator<ModelQuestionInformation>() {
+        @Override
+        public ModelQuestionInformation createFromParcel(Parcel in) {
+            return new ModelQuestionInformation(in);
+        }
+
+        @Override
+        public ModelQuestionInformation[] newArray(int size) {
+            return new ModelQuestionInformation[size];
+        }
+    };
+    */
 
     protected ModelQuestionInformation(Parcel in) {
         SoruId = in.readString();
@@ -158,7 +198,6 @@ public class ModelQuestionInformation extends Model implements Parcelable {
         FavoriteCount = in.readInt();
         AskerProfileImg = in.readString();
         AskerName = in.readString();
-        Friens = in.createStringArray();
     }
 
     public static final Creator<ModelQuestionInformation> CREATOR = new Creator<ModelQuestionInformation>() {
@@ -301,14 +340,6 @@ public class ModelQuestionInformation extends Model implements Parcelable {
         AskerName = askerName;
     }
 
-    public String[] getFriens() {
-        return Friens;
-    }
-
-    public void setFriens(String[] friens) {
-        Friens = friens;
-    }
-
     public String getSoruId() {
         return SoruId;
     }
@@ -325,6 +356,42 @@ public class ModelQuestionInformation extends Model implements Parcelable {
         UserId = userId;
     }
 
+    public List<Friend> getFriends() {
+        return Friends;
+    }
+
+    public void setFriends(List<Friend> friends) {
+        Friends = friends;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(SoruId);
+        dest.writeString(QuestionText);
+        dest.writeString(QuestionImage);
+        dest.writeString(UserId);
+        dest.writeInt(App);
+        dest.writeString(Option_A);
+        dest.writeString(Option_B);
+        dest.writeInt(Option_A_Count);
+        dest.writeInt(Option_B_Count);
+        dest.writeInt(Skip_Count);
+        dest.writeString(CreatedAt);
+        dest.writeString(UpdatedAt);
+        dest.writeByte((byte) (IsDeleted ? 1 : 0));
+        dest.writeInt(No);
+        dest.writeInt(AbuseCount);
+        dest.writeInt(FavoriteCount);
+        dest.writeString(AskerProfileImg);
+        dest.writeString(AskerName);
+    }
+
+    /*
     @Override
     public int describeContents() {
         return 0;
@@ -352,7 +419,7 @@ public class ModelQuestionInformation extends Model implements Parcelable {
         parcel.writeString(AskerName);
         parcel.writeStringArray(Friens);
     }
-
+*/
     /*
     @Override
     public int compareTo(@NonNull ModelQuestionInformation modelQuestionInformation) {
@@ -367,4 +434,64 @@ public class ModelQuestionInformation extends Model implements Parcelable {
         }
     }
     */
+
+
+    public class Friend {
+        /*
+        {
+            "name": "Eyüp Ferhat Güdücü",
+            "option": "a",
+            "profile_img": "http://res.cloudinary.com/dlxdlp9jz/image/upload/v1474197552/bxf6p5qpr8vgar0fuayq.jpg",
+            "facebook_id": "10154914805130139"
+          }
+         */
+
+        @SerializedName("name")
+        @Expose
+        private String Name;
+
+        @SerializedName("option")
+        @Expose
+        private String Option;
+
+        @SerializedName("profile_img")
+        @Expose
+        private String ProfileImage;
+
+        @SerializedName("facebook_id")
+        @Expose
+        private String FacebookId;
+
+        public String getName() {
+            return Name;
+        }
+
+        public void setName(String name) {
+            Name = name;
+        }
+
+        public String getOption() {
+            return Option;
+        }
+
+        public void setOption(String option) {
+            Option = option;
+        }
+
+        public String getProfileImage() {
+            return ProfileImage;
+        }
+
+        public void setProfileImage(String profileImage) {
+            ProfileImage = profileImage;
+        }
+
+        public String getFacebookId() {
+            return FacebookId;
+        }
+
+        public void setFacebookId(String facebookId) {
+            FacebookId = facebookId;
+        }
+    }
 }

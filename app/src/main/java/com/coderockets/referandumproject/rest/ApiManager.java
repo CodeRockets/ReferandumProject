@@ -94,7 +94,8 @@ public class ApiManager {
                         Const.REFERANDUM_VERSION,
                         BuildConfig.DEBUG ? Randoms.alphaNumericString(11) : SuperHelper.getDeviceId(mContext),
                         String.valueOf(count),
-                        SuperHelper.checkUser() ? DbManager.getModelUser().getUserId() : ""
+                        SuperHelper.checkUser() ? DbManager.getModelUser().getUserId() : "",
+                        BuildConfig.DEBUG ? "1" : "0"
                 )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
