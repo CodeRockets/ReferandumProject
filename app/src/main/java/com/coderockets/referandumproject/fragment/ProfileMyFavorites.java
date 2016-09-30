@@ -11,7 +11,7 @@ import com.coderockets.referandumproject.activity.ProfileActivity;
 import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
 import com.coderockets.referandumproject.rest.ApiManager;
-import com.coderockets.referandumproject.util.adapter.MyQuestionsAdapter;
+import com.coderockets.referandumproject.util.adapter.MyFavoritesAdapter;
 import com.orhanobut.logger.Logger;
 
 import org.androidannotations.annotations.AfterViews;
@@ -36,7 +36,7 @@ public class ProfileMyFavorites extends BaseProfile {
     //
     Context mContext;
     ProfileActivity mActivity;
-    MyQuestionsAdapter mMyQuestionsAdapter;
+    MyFavoritesAdapter mMyFavoritesAdapter;
     List<ModelQuestionInformation> mList;
 
     @DebugLog
@@ -46,7 +46,7 @@ public class ProfileMyFavorites extends BaseProfile {
         this.mContext = getActivity();
         this.mActivity = (ProfileActivity) getActivity();
         mList = new ArrayList<>();
-        mMyQuestionsAdapter = new MyQuestionsAdapter(mContext, mList);
+        mMyFavoritesAdapter = new MyFavoritesAdapter(mContext, mList);
     }
 
     @DebugLog
@@ -58,7 +58,7 @@ public class ProfileMyFavorites extends BaseProfile {
 
     private void setAdapter() {
         mRecyclerViewFavorites.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
-        mRecyclerViewFavorites.setAdapter(mMyQuestionsAdapter);
+        mRecyclerViewFavorites.setAdapter(mMyFavoritesAdapter);
     }
 
     private void getUserFavorites() {
@@ -81,7 +81,7 @@ public class ProfileMyFavorites extends BaseProfile {
     private void convertResponseToUiView(List<ModelQuestionInformation> rows) {
 
         for (ModelQuestionInformation mqi : rows) {
-            mMyQuestionsAdapter.addUserQuestion(mqi);
+            mMyFavoritesAdapter.addUserQuestion(mqi);
         }
 
     }

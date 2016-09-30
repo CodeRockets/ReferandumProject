@@ -1,6 +1,7 @@
 package com.coderockets.referandumproject.util.adapter;
 
 import android.content.Context;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.coderockets.referandumproject.R;
+import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
+import com.coderockets.referandumproject.rest.ApiManager;
+import com.coderockets.referandumproject.rest.RestModel.FavoriteRequest;
 import com.coderockets.referandumproject.util.AutoFitTextView;
 import com.coderockets.referandumproject.util.CustomAnswerPercent;
 import com.orhanobut.logger.Logger;
@@ -17,26 +21,27 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 /**
- * Created by aykutasil on 7.09.2016.
+ * Created by aykutasil on 30.09.2016.
  */
-public class MyQuestionsAdapter extends RecyclerView.Adapter<MyQuestionsAdapter.ViewHolder> {
+
+public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.ViewHolder> {
 
     List<ModelQuestionInformation> mList;
     static Context mContext;
 
-    public MyQuestionsAdapter(Context context, List<ModelQuestionInformation> list) {
+    public MyFavoritesAdapter(Context context, List<ModelQuestionInformation> list) {
         mList = list;
         mContext = context;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View vi = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_myquestions_layout, parent, false);
-        return new ViewHolder(vi);
+    public MyFavoritesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View vi = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_myfavorites_layout, parent, false);
+        return new MyFavoritesAdapter.ViewHolder(vi);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(MyFavoritesAdapter.ViewHolder holder, int position) {
         Logger.i(mList.get(position).getQuestionText());
         holder.bind(mList.get(position));
     }
@@ -60,6 +65,7 @@ public class MyQuestionsAdapter extends RecyclerView.Adapter<MyQuestionsAdapter.
         ModelQuestionInformation mMqi;
         AutoFitTextView TextViewSoru;
         ImageView ImageViewSoruImage;
+        FloatingActionButton mFabFavorite;
         CustomAnswerPercent customAnswerPercent;
 
         ViewHolder(View itemView) {
@@ -67,6 +73,7 @@ public class MyQuestionsAdapter extends RecyclerView.Adapter<MyQuestionsAdapter.
             TextViewSoru = (AutoFitTextView) itemView.findViewById(R.id.TextViewSoru);
             ImageViewSoruImage = (ImageView) itemView.findViewById(R.id.ImageViewSoruImage);
             customAnswerPercent = (CustomAnswerPercent) itemView.findViewById(R.id.MyCustomAnswerPercent);
+            mFabFavorite = (FloatingActionButton) itemView.findViewById(R.id.FabFavorite);
         }
 
         void bind(ModelQuestionInformation mqi) {
@@ -75,6 +82,22 @@ public class MyQuestionsAdapter extends RecyclerView.Adapter<MyQuestionsAdapter.
 
             mMqi = mqi;
             TextViewSoru.setText(mqi.getQuestionText());
+            mFabFavorite.setOnClickListener(v -> {
+
+                FavoriteRequest favoriteRequest = FavoriteRequest.FavoriteRequestInit();
+                favoriteRequest.setQuestionId(mqi.getSoruId());
+                favoriteRequest.setUnFavorite(true);
+
+                ApiManager.getInstance(mContext).Favorite(favoriteRequest)
+                        .subscribe(success -> {
+                            //UiHelper.UiSnackBar.showSimpleSnackBar(mFabFavorite, "Favorilerden Çıkarıldı", Snackbar.LENGTH_SHORT);
+                        }, error -> {
+                            error.printStackTrace();
+                            SuperHelper.CrashlyticsLog(error);
+                        }, () -> {
+                            removeItem(getAdapterPosition());
+                        });
+            });
             Picasso.with(mContext).load(mqi.getQuestionImage()).into(ImageViewSoruImage);
             showCustomAnswerPercent();
 
