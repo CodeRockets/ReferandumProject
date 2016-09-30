@@ -230,7 +230,6 @@ public class QuestionActivity extends BaseActivity {
         materialDialog.show();
 
         try {
-
             if (mFilePath == null) {
                 Drawable drawable = mImageView_SoruImage.getDrawable();
                 File externalDir = new File(Environment.getExternalStorageDirectory().getPath() + "/ReferandumProject");

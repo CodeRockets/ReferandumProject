@@ -117,6 +117,7 @@ public class QuestionFragment extends Fragment {
 
     public void setQuestion(ModelQuestionInformation mqi) {
         this.mqi = mqi;
+        mIsFavorite = false;
         setSoru(mqi);
         changeFavoriteFabColor();
         setFavoriteFab();

@@ -16,7 +16,6 @@ import com.coderockets.referandumproject.activity.MainActivity;
 import com.coderockets.referandumproject.app.Const;
 import com.coderockets.referandumproject.db.DbManager;
 import com.coderockets.referandumproject.helper.SuperHelper;
-import com.coderockets.referandumproject.model.ModelFriend;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
 import com.coderockets.referandumproject.model.ModelTempQuestionAnswer;
 import com.coderockets.referandumproject.model.ModelUser;
@@ -150,12 +149,6 @@ public class ReferandumFragment extends BaseFragment {
         if (mSorularAdapter.getCount() == 0) return;
         try {
             ModelQuestionInformation modelQuestionInformation = getCurrentQuestionFragment().getQuestion();
-
-            for (ModelFriend friend : modelQuestionInformation.getModelFriends()) {
-                Logger.i("ModelFriend: " + friend.getName());
-                Logger.i(friend.getOption());
-                Logger.i(friend.getFacebookId());
-            }
             if (!checkAnswered(modelQuestionInformation)) {
                 answerAndTempQuestionControl.put(modelQuestionInformation.getSoruId(), true);
                 showAnswerResult("evet");
@@ -170,12 +163,17 @@ public class ReferandumFragment extends BaseFragment {
     @Click(R.id.ButtonFalse)
     public void ButtonFalseClick() {
         if (mSorularAdapter.getCount() == 0) return;
-        ModelQuestionInformation modelQuestionInformation = getCurrentQuestionFragment().getQuestion();
-        if (!checkAnswered(modelQuestionInformation)) {
-            answerAndTempQuestionControl.put(modelQuestionInformation.getSoruId(), true);
-            showAnswerResult("hayir");
-            sendQuestionAnswer("hayir", "b", modelQuestionInformation);
-            skipNextQuestion();
+        try {
+            ModelQuestionInformation modelQuestionInformation = getCurrentQuestionFragment().getQuestion();
+            if (!checkAnswered(modelQuestionInformation)) {
+                answerAndTempQuestionControl.put(modelQuestionInformation.getSoruId(), true);
+                showAnswerResult("hayir");
+                sendQuestionAnswer("hayir", "b", modelQuestionInformation);
+                skipNextQuestion();
+            }
+        } catch (Exception error) {
+            error.printStackTrace();
+            SuperHelper.CrashlyticsLog(error);
         }
     }
 

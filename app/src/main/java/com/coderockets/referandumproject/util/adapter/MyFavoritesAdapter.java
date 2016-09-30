@@ -20,6 +20,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 /**
  * Created by aykutasil on 30.09.2016.
  */
@@ -89,6 +92,8 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
                 favoriteRequest.setUnFavorite(true);
 
                 ApiManager.getInstance(mContext).Favorite(favoriteRequest)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(success -> {
                             //UiHelper.UiSnackBar.showSimpleSnackBar(mFabFavorite, "Favorilerden Çıkarıldı", Snackbar.LENGTH_SHORT);
                         }, error -> {
