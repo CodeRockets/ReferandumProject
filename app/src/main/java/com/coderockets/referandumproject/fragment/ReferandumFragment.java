@@ -126,7 +126,7 @@ public class ReferandumFragment extends BaseFragment {
 
     @DebugLog
     private void setSorular() {
-
+        //
         mRxPermission.request(Const.PERMISSIONS_GENERAL)
                 .subscribe(success -> {
                     if (success) {
