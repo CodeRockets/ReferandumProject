@@ -5,12 +5,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
@@ -27,7 +24,6 @@ import android.widget.RelativeLayout;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 import com.coderockets.referandumproject.R;
-import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.model.ModelFriend;
 import com.coderockets.referandumproject.util.adapter.FriendAnswerListAdapter;
 import com.orhanobut.logger.Logger;
@@ -39,7 +35,6 @@ import java.util.List;
 import hugo.weaving.DebugLog;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by aykutasil on 18.08.2016.
@@ -470,95 +465,93 @@ public class CustomAnswerPercent extends View {
 
         Picasso.with(mContext)
                 .load(R.drawable.ic_add_circle_outline_indigo_900_24dp)
-                .transform(new PicassoCircleTransform())
-                .resize(100, 100)
-                .centerCrop()
+                .resize(40, 40)
                 .into(imageButton);
     }
 
-    private void drawFriendAnswerFalse_(Canvas canvas, float startPoint) {
-
-        int nextImageH = 100;
-
-        int answerFriendCount = 0;
-        for (int a = 0; a < mListFriendsAnswer.size(); a++) {
-            int finalA = a;
-            ModelFriend friend = mListFriendsAnswer.get(a);
-
-            Logger.i("ModelFriend Option: " + friend.getOption());
-
-            // Sadece hayır cevabını verenlerin resmini göstermek için evet olanları eliyoruz.
-            if (!friend.getOption().equals("b")) {
-                continue;
-            }
-
-            // Cevap verenlerin profil fotolarının yükseklikleri toplam yüksekliğin yarısından büyükse
-            // daha fazla resim ekleme + işareti koy diyoruz.
-            Logger.i("DrawBarA: " + (answerFriendCount > 5 ? "answerFriendCount > 5" : "answerFriendCount <= 5"));
-            Logger.i("DrawBarA: " + (finalA == mListFriendsAnswer.size() - 1 ? "finalA == mListFriendsAnswer.size() - 1" : "finalA != mListFriendsAnswer.size() - 1"));
-            Logger.i("DrawBarA: " + finalA);
-            Logger.i("DrawBarA: " + mListFriendsAnswer.size());
-
-            answerFriendCount++;
-            Logger.i("DrawbarA Picasso yükleniyor.");
-
-
-            Observable.create((Observable.OnSubscribe<Bitmap>) subscriber -> {
-                try {
-                    Logger.i("abc");
-                    Bitmap friendPictureBitmap = Picasso.with(mContext)
-                            .load(mListFriendsAnswer.get(finalA).getProfileImage())
-                            .get();
-
-                    subscriber.onNext(getCroppedBitmap(Bitmap.createScaledBitmap(friendPictureBitmap, 100, 100, false)));
-                } catch (Exception error) {
-                    Logger.e(error, "HATA");
-                    subscriber.onError(error);
-                }
-
-            })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.immediate())
-                    .subscribe(bitmap -> {
-
-                        try {
-                            Logger.i("abcdef");
-
-                            Paint paintFriendsAnswer = new Paint(Paint.ANTI_ALIAS_FLAG);
-
-                            canvas.drawBitmap(
-                                    bitmap,
-                                    startPoint - widthBarA - 100 + ((finalA % 2 == 0) ? 10 : (-10)),
-                                    getHeight() - 50 - (nextImageH * (finalA + 1)) + ((finalA + 1) * 50),
-                                    paintFriendsAnswer);
-
-                        } catch (Exception error) {
-                            Logger.e(error, "HATA");
-                        }
-
-
-                    }, error -> {
-                        Logger.e(error, "HATA");
-                    });
-
-            if (answerFriendCount > 5 || finalA == mListFriendsAnswer.size() - 1) {
-                Paint paint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
-
-                Bitmap bitmapAdd = SuperHelper.drawableToBitmap(getResources().getDrawable(R.drawable.ic_add_circle_outline_indigo_900_24dp));
-                Bitmap scaledBitmap1 = getCroppedBitmap(Bitmap.createScaledBitmap(bitmapAdd, 100, 100, false));
-
-                canvas.drawBitmap(
-                        scaledBitmap1,
-                        startPoint - widthBarA - 100,
-                        getHeight() - (nextImageH * (finalA + 1)) - (finalA == 0 ? 0 : 10) + 20,
-                        paint1
-                );
-                break;
-            }
-
-
-        }
-    }
+//    private void drawFriendAnswerFalse_(Canvas canvas, float startPoint) {
+//
+//        int nextImageH = 100;
+//
+//        int answerFriendCount = 0;
+//        for (int a = 0; a < mListFriendsAnswer.size(); a++) {
+//            int finalA = a;
+//            ModelFriend friend = mListFriendsAnswer.get(a);
+//
+//            Logger.i("ModelFriend Option: " + friend.getOption());
+//
+//            // Sadece hayır cevabını verenlerin resmini göstermek için evet olanları eliyoruz.
+//            if (!friend.getOption().equals("b")) {
+//                continue;
+//            }
+//
+//            // Cevap verenlerin profil fotolarının yükseklikleri toplam yüksekliğin yarısından büyükse
+//            // daha fazla resim ekleme + işareti koy diyoruz.
+//            Logger.i("DrawBarA: " + (answerFriendCount > 5 ? "answerFriendCount > 5" : "answerFriendCount <= 5"));
+//            Logger.i("DrawBarA: " + (finalA == mListFriendsAnswer.size() - 1 ? "finalA == mListFriendsAnswer.size() - 1" : "finalA != mListFriendsAnswer.size() - 1"));
+//            Logger.i("DrawBarA: " + finalA);
+//            Logger.i("DrawBarA: " + mListFriendsAnswer.size());
+//
+//            answerFriendCount++;
+//            Logger.i("DrawbarA Picasso yükleniyor.");
+//
+//
+//            Observable.create((Observable.OnSubscribe<Bitmap>) subscriber -> {
+//                try {
+//                    Logger.i("abc");
+//                    Bitmap friendPictureBitmap = Picasso.with(mContext)
+//                            .load(mListFriendsAnswer.get(finalA).getProfileImage())
+//                            .get();
+//
+//                    subscriber.onNext(getCroppedBitmap(Bitmap.createScaledBitmap(friendPictureBitmap, 100, 100, false)));
+//                } catch (Exception error) {
+//                    Logger.e(error, "HATA");
+//                    subscriber.onError(error);
+//                }
+//
+//            })
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(Schedulers.immediate())
+//                    .subscribe(bitmap -> {
+//
+//                        try {
+//                            Logger.i("abcdef");
+//
+//                            Paint paintFriendsAnswer = new Paint(Paint.ANTI_ALIAS_FLAG);
+//
+//                            canvas.drawBitmap(
+//                                    bitmap,
+//                                    startPoint - widthBarA - 100 + ((finalA % 2 == 0) ? 10 : (-10)),
+//                                    getHeight() - 50 - (nextImageH * (finalA + 1)) + ((finalA + 1) * 50),
+//                                    paintFriendsAnswer);
+//
+//                        } catch (Exception error) {
+//                            Logger.e(error, "HATA");
+//                        }
+//
+//
+//                    }, error -> {
+//                        Logger.e(error, "HATA");
+//                    });
+//
+//            if (answerFriendCount > 5 || finalA == mListFriendsAnswer.size() - 1) {
+//                Paint paint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
+//
+//                Bitmap bitmapAdd = SuperHelper.drawableToBitmap(getResources().getDrawable(R.drawable.ic_add_circle_outline_indigo_900_24dp));
+//                Bitmap scaledBitmap1 = getCroppedBitmap(Bitmap.createScaledBitmap(bitmapAdd, 100, 100, false));
+//
+//                canvas.drawBitmap(
+//                        scaledBitmap1,
+//                        startPoint - widthBarA - 100,
+//                        getHeight() - (nextImageH * (finalA + 1)) - (finalA == 0 ? 0 : 10) + 20,
+//                        paint1
+//                );
+//                break;
+//            }
+//
+//
+//        }
+//    }
 
     private void drawBarB(Canvas canvas) {
 
@@ -686,33 +679,31 @@ public class CustomAnswerPercent extends View {
 
         Picasso.with(mContext)
                 .load(R.drawable.ic_add_circle_outline_indigo_900_24dp)
-                .transform(new PicassoCircleTransform())
-                .resize(100, 100)
-                .centerCrop()
+                .resize(40, 40)
                 .into(imageButton);
     }
 
-    public Bitmap getCroppedBitmap(Bitmap bitmap) {
-        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
-                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
-
-        final int color = 0xff424242;
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(color);
-        // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-        canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
-                bitmap.getWidth() / 2, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-        //Bitmap _bmp = Bitmap.createScaledBitmap(output, 60, 60, false);
-        //return _bmp;
-        return output;
-    }
+//    public Bitmap getCroppedBitmap(Bitmap bitmap) {
+//        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+//                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+//        Canvas canvas = new Canvas(output);
+//
+//        final int color = 0xff424242;
+//        final Paint paint = new Paint();
+//        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+//
+//        paint.setAntiAlias(true);
+//        canvas.drawARGB(0, 0, 0, 0);
+//        paint.setColor(color);
+//        // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+//        canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
+//                bitmap.getWidth() / 2, paint);
+//        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+//        canvas.drawBitmap(bitmap, rect, rect, paint);
+//        //Bitmap _bmp = Bitmap.createScaledBitmap(output, 60, 60, false);
+//        //return _bmp;
+//        return output;
+//    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -736,13 +727,6 @@ public class CustomAnswerPercent extends View {
         //Logger.i("makeMeasureSpec.toString(height):" + MeasureSpec.toString(specHeight));
         //setMeasuredDimension(specWidth, specHeight);
         //setMeasuredDimension(measureWidth(widthMeasureSpec), measureHeight(heightMeasureSpec));
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-
-
-        return super.onTouchEvent(event);
     }
 
     private void drawBar(Canvas canvas) {

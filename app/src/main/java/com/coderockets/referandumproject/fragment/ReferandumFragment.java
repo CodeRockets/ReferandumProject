@@ -2,6 +2,7 @@ package com.coderockets.referandumproject.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
@@ -159,6 +160,7 @@ public class ReferandumFragment extends BaseFragment {
                 answerAndTempQuestionControl.put(modelQuestionInformation.getSoruId(), true);
                 showAnswerResult("evet");
                 sendQuestionAnswer("evet", "a", getCurrentQuestionFragment().getQuestion());
+                skipNextQuestion();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -173,6 +175,16 @@ public class ReferandumFragment extends BaseFragment {
             answerAndTempQuestionControl.put(modelQuestionInformation.getSoruId(), true);
             showAnswerResult("hayir");
             sendQuestionAnswer("hayir", "b", modelQuestionInformation);
+            skipNextQuestion();
+        }
+    }
+
+    private void skipNextQuestion() {
+        Handler handler = new Handler();
+
+        // En son soruda değilse
+        if (mViewPagerSorular.getCurrentItem() != mSorularAdapter.getCount()) {
+            handler.postDelayed(() -> mViewPagerSorular.setCurrentItem(mViewPagerSorular.getCurrentItem() + 1, true), 2000);
         }
     }
 
