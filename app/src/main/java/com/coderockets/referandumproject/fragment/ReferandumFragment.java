@@ -107,7 +107,7 @@ public class ReferandumFragment extends BaseFragment {
                 if (position > 0) {
                     ModelQuestionInformation modelQuestionInformation = getQuestionFragment(position - 1).getQuestion();
                     if (!checkAnswered(modelQuestionInformation)) {
-                        answerAndTempQuestionControl.put(modelQuestionInformation.getSoruId(), true);
+                        //answerAndTempQuestionControl.put(modelQuestionInformation.getSoruId(), true);
                         sendQuestionAnswer("atla", "s", modelQuestionInformation);
                     }
 
