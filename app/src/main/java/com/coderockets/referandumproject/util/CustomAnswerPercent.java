@@ -14,7 +14,6 @@ import android.graphics.Typeface;
 import android.support.v4.app.Fragment;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -465,7 +464,7 @@ public class CustomAnswerPercent extends View {
 
         Picasso.with(mContext)
                 .load(R.drawable.ic_add_circle_outline_indigo_900_24dp)
-                .resize(40, 40)
+                .resize(60, 60)
                 .into(imageButton);
     }
 
@@ -679,7 +678,7 @@ public class CustomAnswerPercent extends View {
 
         Picasso.with(mContext)
                 .load(R.drawable.ic_add_circle_outline_indigo_900_24dp)
-                .resize(40, 40)
+                .resize(60, 60)
                 .into(imageButton);
     }
 
