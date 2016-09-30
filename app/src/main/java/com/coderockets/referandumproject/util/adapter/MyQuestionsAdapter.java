@@ -86,6 +86,11 @@ public class MyQuestionsAdapter extends RecyclerView.Adapter<MyQuestionsAdapter.
                 customAnswerPercent.setAValue(mMqi.getOption_B_Count());
                 customAnswerPercent.setBValue(mMqi.getOption_A_Count());
 
+                // FIXME: 29.09.2016 cevap veren arkadaşların bilgisi user/question/fetch route undan geliyor.
+                // FIXME: 29.09.2016 Biz burda user/question route undan bilgileri çekiyoruz
+                //Logger.i(this.getClass().getSimpleName() + mMqi.getModelFriends());
+                //customAnswerPercent.setFriendAnswer(mMqi.getModelFriends());
+
                 customAnswerPercent.showResult();
             } catch (Exception e) {
                 Logger.e("HATA: " + e);

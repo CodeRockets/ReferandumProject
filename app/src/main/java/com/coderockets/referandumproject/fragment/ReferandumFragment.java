@@ -15,6 +15,7 @@ import com.coderockets.referandumproject.activity.MainActivity;
 import com.coderockets.referandumproject.app.Const;
 import com.coderockets.referandumproject.db.DbManager;
 import com.coderockets.referandumproject.helper.SuperHelper;
+import com.coderockets.referandumproject.model.ModelFriend;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
 import com.coderockets.referandumproject.model.ModelTempQuestionAnswer;
 import com.coderockets.referandumproject.model.ModelUser;
@@ -149,8 +150,8 @@ public class ReferandumFragment extends BaseFragment {
         try {
             ModelQuestionInformation modelQuestionInformation = getCurrentQuestionFragment().getQuestion();
 
-            for (ModelQuestionInformation.Friend friend : modelQuestionInformation.getFriends()) {
-                Logger.i(friend.getName());
+            for (ModelFriend friend : modelQuestionInformation.getModelFriends()) {
+                Logger.i("ModelFriend: " + friend.getName());
                 Logger.i(friend.getOption());
                 Logger.i(friend.getFacebookId());
             }
@@ -226,9 +227,11 @@ public class ReferandumFragment extends BaseFragment {
             View alphaView = qf.getView().findViewById(R.id.SoruText);
             CustomAnswerPercent customAnswerPercent = (CustomAnswerPercent) qf.getView().findViewById(R.id.MyCustomAnswerPercent);
             customAnswerPercent.addAlphaView(alphaView);
+            customAnswerPercent.addActivity(mActivity);
+            customAnswerPercent.addFragment(this);
             customAnswerPercent.setAValue(qf.getQuestion().getOption_B_Count());
             customAnswerPercent.setBValue(qf.getQuestion().getOption_A_Count());
-
+            customAnswerPercent.setFriendAnswer(qf.getQuestion().getModelFriends());
             customAnswerPercent.showResult();
         } catch (Exception e) {
             Logger.e("HATA: " + e);
@@ -358,7 +361,7 @@ public class ReferandumFragment extends BaseFragment {
     public void onDestroy() {
         for (Subscription subscription : mListSubscription) {
             if (!subscription.isUnsubscribed()) {
-                subscription.unsubscribe();
+                //subscription.unsubscribe();
             }
         }
         super.onDestroy();

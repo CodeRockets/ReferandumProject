@@ -24,6 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:adjustViewBounds="true"
+                android:cropToPadding="false"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ok" />
 
@@ -68,6 +69,7 @@
                     android:layout_centerHorizontal="true"
                     custom:barAColor="@color/color7"
                     custom:barBColor="@color/colorPrimary" />
+
             </RelativeLayout>
 
 

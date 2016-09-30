@@ -134,50 +134,11 @@ public class ModelQuestionInformation extends Model implements Parcelable {
     @Expose
     @Column
     @SerializedName("friends")
-    private List<Friend> Friends;
-
+    private List<ModelFriend> modelFriends;
 
     public ModelQuestionInformation() {
         super();
     }
-
-    /*
-    protected ModelQuestionInformation(Parcel in) {
-        SoruId = in.readString();
-        QuestionText = in.readString();
-        QuestionImage = in.readString();
-        UserId = in.readString();
-        App = in.readInt();
-        Option_A = in.readString();
-        Option_B = in.readString();
-        Option_A_Count = in.readInt();
-        Option_B_Count = in.readInt();
-        Skip_Count = in.readInt();
-        CreatedAt = in.readString();
-        UpdatedAt = in.readString();
-        IsDeleted = in.readByte() != 0;
-        No = in.readInt();
-        AbuseCount = in.readInt();
-        FavoriteCount = in.readInt();
-        AskerProfileImg = in.readString();
-        AskerName = in.readString();
-        Friends = in.readArrayList(ClassLoader.getSystemClassLoader());
-    }
-    */
-
-    /*
-    public static final Creator<ModelQuestionInformation> CREATOR = new Creator<ModelQuestionInformation>() {
-        @Override
-        public ModelQuestionInformation createFromParcel(Parcel in) {
-            return new ModelQuestionInformation(in);
-        }
-
-        @Override
-        public ModelQuestionInformation[] newArray(int size) {
-            return new ModelQuestionInformation[size];
-        }
-    };
-    */
 
     protected ModelQuestionInformation(Parcel in) {
         SoruId = in.readString();
@@ -356,12 +317,12 @@ public class ModelQuestionInformation extends Model implements Parcelable {
         UserId = userId;
     }
 
-    public List<Friend> getFriends() {
-        return Friends;
+    public List<ModelFriend> getModelFriends() {
+        return modelFriends;
     }
 
-    public void setFriends(List<Friend> friends) {
-        Friends = friends;
+    public void setModelFriends(List<ModelFriend> modelFriends) {
+        this.modelFriends = modelFriends;
     }
 
     @Override
@@ -389,109 +350,5 @@ public class ModelQuestionInformation extends Model implements Parcelable {
         dest.writeInt(FavoriteCount);
         dest.writeString(AskerProfileImg);
         dest.writeString(AskerName);
-    }
-
-    /*
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(SoruId);
-        parcel.writeString(QuestionText);
-        parcel.writeString(QuestionImage);
-        parcel.writeString(UserId);
-        parcel.writeInt(App);
-        parcel.writeString(Option_A);
-        parcel.writeString(Option_B);
-        parcel.writeInt(Option_A_Count);
-        parcel.writeInt(Option_B_Count);
-        parcel.writeInt(Skip_Count);
-        parcel.writeString(CreatedAt);
-        parcel.writeString(UpdatedAt);
-        parcel.writeByte((byte) (IsDeleted ? 1 : 0));
-        parcel.writeInt(No);
-        parcel.writeInt(AbuseCount);
-        parcel.writeInt(FavoriteCount);
-        parcel.writeString(AskerProfileImg);
-        parcel.writeString(AskerName);
-        parcel.writeStringArray(Friens);
-    }
-*/
-    /*
-    @Override
-    public int compareTo(@NonNull ModelQuestionInformation modelQuestionInformation) {
-
-        Date date = new Date(getCreatedAt());
-        Date date2 = new Date(modelQuestionInformation.getCreatedAt());
-
-        if (date.getTime() > date2.getTime()) {
-            return 0;
-        } else {
-            return 1;
-        }
-    }
-    */
-
-
-    public class Friend {
-        /*
-        {
-            "name": "Eyüp Ferhat Güdücü",
-            "option": "a",
-            "profile_img": "http://res.cloudinary.com/dlxdlp9jz/image/upload/v1474197552/bxf6p5qpr8vgar0fuayq.jpg",
-            "facebook_id": "10154914805130139"
-          }
-         */
-
-        @SerializedName("name")
-        @Expose
-        private String Name;
-
-        @SerializedName("option")
-        @Expose
-        private String Option;
-
-        @SerializedName("profile_img")
-        @Expose
-        private String ProfileImage;
-
-        @SerializedName("facebook_id")
-        @Expose
-        private String FacebookId;
-
-        public String getName() {
-            return Name;
-        }
-
-        public void setName(String name) {
-            Name = name;
-        }
-
-        public String getOption() {
-            return Option;
-        }
-
-        public void setOption(String option) {
-            Option = option;
-        }
-
-        public String getProfileImage() {
-            return ProfileImage;
-        }
-
-        public void setProfileImage(String profileImage) {
-            ProfileImage = profileImage;
-        }
-
-        public String getFacebookId() {
-            return FacebookId;
-        }
-
-        public void setFacebookId(String facebookId) {
-            FacebookId = facebookId;
-        }
     }
 }

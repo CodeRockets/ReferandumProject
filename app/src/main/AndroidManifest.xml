@@ -23,6 +23,7 @@
 
         <activity
             android:name=".activity.MainActivity_"
+            android:hardwareAccelerated="true"
             android:label="Referandum"
             android:launchMode="singleTop">
             <intent-filter>
@@ -53,7 +54,8 @@
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            tools:replace="android:theme" />
 
         <activity
             android:name="com.facebook.CustomTabActivity"

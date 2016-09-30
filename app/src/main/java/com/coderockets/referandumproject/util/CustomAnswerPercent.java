@@ -1,23 +1,45 @@
 package com.coderockets.referandumproject.util;
 
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.support.v4.app.Fragment;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 import com.coderockets.referandumproject.R;
+import com.coderockets.referandumproject.helper.SuperHelper;
+import com.coderockets.referandumproject.model.ModelFriend;
+import com.coderockets.referandumproject.util.adapter.FriendAnswerListAdapter;
+import com.orhanobut.logger.Logger;
+import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
+import java.util.List;
 
 import hugo.weaving.DebugLog;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by aykutasil on 18.08.2016.
@@ -26,6 +48,9 @@ public class CustomAnswerPercent extends View {
 
     private static final String TAG = CustomAnswerPercent.class.getSimpleName();
     Context mContext;
+    Activity mActivity;
+    Fragment mFragment;
+    private static Canvas mCanvas;
     boolean ButtonClick = false;
     boolean isFinishAnimBarA = false;
     boolean isFinishAnimBarB = false;
@@ -50,6 +75,9 @@ public class CustomAnswerPercent extends View {
 
     int widthBarA;
     int widthBarB;
+
+    List<ModelFriend> mListFriendsAnswer;
+    final int FRIEND_COUNT = 3;
 
     @DebugLog
     public CustomAnswerPercent(Context context, AttributeSet attrs) {
@@ -142,6 +170,14 @@ public class CustomAnswerPercent extends View {
         this.mAlphaView = hostView;
     }
 
+    public void addActivity(Activity activity) {
+        this.mActivity = activity;
+    }
+
+    public void addFragment(Fragment fragment) {
+        this.mFragment = fragment;
+    }
+
     public void setAValue(int val) {
         this.mValueBarA = val;
     }
@@ -174,6 +210,57 @@ public class CustomAnswerPercent extends View {
         this.alphaViewValue = val;
     }
 
+    public void setFriendAnswer(List<ModelFriend> friends) {
+        this.mListFriendsAnswer = friends;
+
+//        if (mListFriendsAnswer.size() > 0) {
+//            ModelFriend fr = mListFriendsAnswer.get(0);
+//            Logger.i("ModelFriend -> setFriendAnswer: " + fr.getName());
+//            Logger.i("ModelFriend -> setFriendAnswer: " + fr.getOption());
+//
+//            mListFriendsAnswer.add(fr);
+//            mListFriendsAnswer.add(fr);
+//            mListFriendsAnswer.add(fr);
+//            mListFriendsAnswer.add(fr);
+//            mListFriendsAnswer.add(fr);
+//
+//            ModelFriend friend = new ModelFriend();
+//            friend.setName("Osman");
+//            friend.setOption("a");
+//            friend.setFacebookId("345345345");
+//            friend.setProfileImage("https://yt3.ggpht.com/-wh6msZtAzCU/AAAAAAAAAAI/AAAAAAAAAAA/ERwt1WSIOUA/s900-c-k-no-rj-c0xffffff/photo.jpg");
+//            mListFriendsAnswer.add(friend);
+//
+//            friend = new ModelFriend();
+//            friend.setName("Osmannn");
+//            friend.setOption("b");
+//            friend.setFacebookId("345345345");
+//            friend.setProfileImage("https://avatars3.githubusercontent.com/u/3179872?v=3&s=400");
+//            mListFriendsAnswer.add(friend);
+//
+//            friend = new ModelFriend();
+//            friend.setName("Kerem");
+//            friend.setOption("b");
+//            friend.setFacebookId("34534345345");
+//            friend.setProfileImage("https://yt3.ggpht.com/-wh6msZtAzCU/AAAAAAAAAAI/AAAAAAAAAAA/ERwt1WSIOUA/s900-c-k-no-rj-c0xffffff/photo.jpg");
+//            mListFriendsAnswer.add(friend);
+//
+//            /*
+//            friend = new ModelFriend();
+//            friend.setName("Aykut Kerem");
+//            friend.setOption("b");
+//            friend.setFacebookId("34534343435345");
+//            friend.setProfileImage("https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAZCAAAAJGM5ODIyMDI2LTVlMzctNDNhMC1hOWQzLTJlNThhYzBlOTczZA.jpg");
+//            mListFriendsAnswer.add(friend);
+//*/
+//
+//            for (ModelFriend fri : mListFriendsAnswer) {
+//                Logger.i("ModelFriend options: " + fri.getOption());
+//            }
+//
+//        }
+    }
+
     public void showResult() throws Exception {
 
         ButtonClick = true;
@@ -195,14 +282,12 @@ public class CustomAnswerPercent extends View {
         }
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        drawBarA(canvas);
-        drawBarB(canvas);
+    private void startBar() {
+        startBarA();
+        startBarB();
     }
 
-    private void startBar() {
-
+    private void startBarA() {
         // Bar A değerini %60 (Sadece 60) haline dönüştürüyoruz.
         int computePercentA = (int) (((float) mValueBarA / (float) (mValueBarA + mValueBarB)) * 100);
 
@@ -225,7 +310,9 @@ public class CustomAnswerPercent extends View {
         });
         animatorAHeight.start();
 
+    }
 
+    private void startBarB() {
         int computePercentB = (int) (((float) mValueBarB / (float) (mValueBarA + mValueBarB)) * 100);
         float computeBarBValue = ((getHeight() - 130) * computePercentB / 100);
 
@@ -242,11 +329,21 @@ public class CustomAnswerPercent extends View {
         animatorBHeight.start();
     }
 
-    private void drawBarA(Canvas canvas) {
+    @Override
+    protected void onDraw(Canvas canvas) {
+        mCanvas = canvas;
+        try {
+            drawBarA(mCanvas);
+            drawBarB(mCanvas);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void drawBarA(Canvas canvas) throws IOException {
         //float center = getWidth() / 2;
         mPaintBarA = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaintBarA.setColor(mColorBarA);
-
 
         Resources resources = getResources();
         float scale = resources.getDisplayMetrics().density;
@@ -256,11 +353,11 @@ public class CustomAnswerPercent extends View {
 
         // Eğer xml içerisinde bar değeri verilmişse animValue yi valueABar a eşitliyoruz.
         if (!ButtonClick) animAValue = mValueBarA;
+
         mRectBarA = new RectF(startPoint, (getHeight() - animAValue), endPoint, getHeight());
         canvas.drawRect(mRectBarA, mPaintBarA);
 
         if (isFinishAnimBarA) {
-            //Logger.i("Anim Bar A finised ");
 
             int computePercentA = (int) (((float) mValueBarA / (float) (mValueBarA + mValueBarB)) * 100);
             float textStart = startPoint + (mRectBarA.width() / 2);
@@ -277,6 +374,188 @@ public class CustomAnswerPercent extends View {
             percentText.getTextBounds(barText, 0, barText.length(), barTextRect);
 
             canvas.drawText(barText, textStart, textEnd, percentText);
+
+            if (mListFriendsAnswer != null && mListFriendsAnswer.size() > 0) {
+                drawFriendAnswerFalse();
+            }
+        }
+    }
+
+    private void drawFriendAnswerFalse() {
+
+        RelativeLayout relativeLayout = (RelativeLayout) getParent();
+
+        Observable.from(mListFriendsAnswer)
+                .filter(modelFriend -> modelFriend.getOption().equals("b"))
+                .take(FRIEND_COUNT)
+                .toList()
+                .filter(modelFriends -> modelFriends.size() > 0)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(list -> {
+                    Logger.i("List Count : " + list.size());
+                    int index = 0;
+                    for (ModelFriend modelFriend : list) {
+
+                        ImageView imageView1 = new ImageView(mContext);
+
+                        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_START);
+                        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                        layoutParams.leftMargin = 30 - (index % 2 == 0 ? 10 : -10);
+                        layoutParams.bottomMargin = index * 50;
+                        imageView1.setLayoutParams(layoutParams);
+                        relativeLayout.addView(imageView1);
+
+                        Logger.i("Friend Answer False, Name: " + modelFriend.getName());
+                        Picasso.with(mContext)
+                                .load(modelFriend.getProfileImage())
+                                .transform(new PicassoCircleTransform())
+                                .resize(100, 100)
+                                .centerCrop()
+                                .into(imageView1);
+
+                        index++;
+                    }
+                    drawAnotherIconAfterLast_False(index);
+
+                }, error -> {
+                    Logger.e(error, "HATA");
+                    error.printStackTrace();
+                });
+    }
+
+    private void drawAnotherIconAfterLast_False(int index) {
+        index++;
+        RelativeLayout relativeLayout = (RelativeLayout) getParent();
+        ImageButton imageButton = new ImageButton(mContext);
+        imageButton.setImageResource(R.drawable.ic_add_circle_outline_indigo_900_24dp);
+        imageButton.setBackgroundColor(Color.TRANSPARENT);
+
+
+        imageButton.setOnClickListener(v -> {
+
+            FriendAnswerListAdapter adapter = new FriendAnswerListAdapter(mContext);
+
+            rx.Observable.from(mListFriendsAnswer)
+                    .filter(modelFriend -> modelFriend.getOption().equals("b"))
+                    .subscribe(item -> {
+
+                        adapter.setModelFriend(item);
+                        MaterialSimpleListItem.Builder materialSimpleItemBuilder = new MaterialSimpleListItem.Builder(mContext)
+                                .content(String.valueOf(item.getName()));
+
+                        adapter.add(materialSimpleItemBuilder.build());
+                    }, error -> {
+
+                    }, () -> {
+                        new MaterialDialog.Builder(mContext)
+                                .title("Arkadaşlarınız")
+                                .adapter(adapter, (mDialog, itemView, which, text) -> {
+                                    //MaterialSimpleListItem item1 = listTopluTeslimStateAdapter.getItem(which);
+                                    //showToast(item.getContent().toString());
+                                })
+                                .show();
+                    });
+        });
+
+
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_START);
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        layoutParams.leftMargin = 30;
+        layoutParams.bottomMargin = index * 50;
+        imageButton.setLayoutParams(layoutParams);
+        relativeLayout.addView(imageButton);
+
+        Picasso.with(mContext)
+                .load(R.drawable.ic_add_circle_outline_indigo_900_24dp)
+                .transform(new PicassoCircleTransform())
+                .resize(100, 100)
+                .centerCrop()
+                .into(imageButton);
+    }
+
+    private void drawFriendAnswerFalse_(Canvas canvas, float startPoint) {
+
+        int nextImageH = 100;
+
+        int answerFriendCount = 0;
+        for (int a = 0; a < mListFriendsAnswer.size(); a++) {
+            int finalA = a;
+            ModelFriend friend = mListFriendsAnswer.get(a);
+
+            Logger.i("ModelFriend Option: " + friend.getOption());
+
+            // Sadece hayır cevabını verenlerin resmini göstermek için evet olanları eliyoruz.
+            if (!friend.getOption().equals("b")) {
+                continue;
+            }
+
+            // Cevap verenlerin profil fotolarının yükseklikleri toplam yüksekliğin yarısından büyükse
+            // daha fazla resim ekleme + işareti koy diyoruz.
+            Logger.i("DrawBarA: " + (answerFriendCount > 5 ? "answerFriendCount > 5" : "answerFriendCount <= 5"));
+            Logger.i("DrawBarA: " + (finalA == mListFriendsAnswer.size() - 1 ? "finalA == mListFriendsAnswer.size() - 1" : "finalA != mListFriendsAnswer.size() - 1"));
+            Logger.i("DrawBarA: " + finalA);
+            Logger.i("DrawBarA: " + mListFriendsAnswer.size());
+
+            answerFriendCount++;
+            Logger.i("DrawbarA Picasso yükleniyor.");
+
+
+            Observable.create((Observable.OnSubscribe<Bitmap>) subscriber -> {
+                try {
+                    Logger.i("abc");
+                    Bitmap friendPictureBitmap = Picasso.with(mContext)
+                            .load(mListFriendsAnswer.get(finalA).getProfileImage())
+                            .get();
+
+                    subscriber.onNext(getCroppedBitmap(Bitmap.createScaledBitmap(friendPictureBitmap, 100, 100, false)));
+                } catch (Exception error) {
+                    Logger.e(error, "HATA");
+                    subscriber.onError(error);
+                }
+
+            })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.immediate())
+                    .subscribe(bitmap -> {
+
+                        try {
+                            Logger.i("abcdef");
+
+                            Paint paintFriendsAnswer = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+                            canvas.drawBitmap(
+                                    bitmap,
+                                    startPoint - widthBarA - 100 + ((finalA % 2 == 0) ? 10 : (-10)),
+                                    getHeight() - 50 - (nextImageH * (finalA + 1)) + ((finalA + 1) * 50),
+                                    paintFriendsAnswer);
+
+                        } catch (Exception error) {
+                            Logger.e(error, "HATA");
+                        }
+
+
+                    }, error -> {
+                        Logger.e(error, "HATA");
+                    });
+
+            if (answerFriendCount > 5 || finalA == mListFriendsAnswer.size() - 1) {
+                Paint paint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+                Bitmap bitmapAdd = SuperHelper.drawableToBitmap(getResources().getDrawable(R.drawable.ic_add_circle_outline_indigo_900_24dp));
+                Bitmap scaledBitmap1 = getCroppedBitmap(Bitmap.createScaledBitmap(bitmapAdd, 100, 100, false));
+
+                canvas.drawBitmap(
+                        scaledBitmap1,
+                        startPoint - widthBarA - 100,
+                        getHeight() - (nextImageH * (finalA + 1)) - (finalA == 0 ? 0 : 10) + 20,
+                        paint1
+                );
+                break;
+            }
+
 
         }
     }
@@ -314,7 +593,125 @@ public class CustomAnswerPercent extends View {
             percentText.getTextBounds(barText, 0, barText.length(), barTextRect);
 
             canvas.drawText(barText, textStart, textEnd, percentText);
+
+
+            if (mListFriendsAnswer != null && mListFriendsAnswer.size() > 0) {
+                drawFriendAnswerTrue();
+            }
         }
+    }
+
+    private void drawFriendAnswerTrue() {
+        RelativeLayout relativeLayout = (RelativeLayout) getParent();
+
+        Observable.from(mListFriendsAnswer)
+                .filter(modelFriend -> modelFriend.getOption().equals("a"))
+                .take(FRIEND_COUNT)
+                .toList()
+                .filter(modelFriends -> modelFriends.size() > 0)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(pairs -> {
+                    int index = 0;
+                    for (ModelFriend modelFriend : pairs) {
+
+                        ImageView imageView1 = new ImageView(mContext);
+
+                        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+                        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                        layoutParams.rightMargin = 30 - (index % 2 == 0 ? 10 : -10);
+                        layoutParams.bottomMargin = index * 50;
+                        imageView1.setLayoutParams(layoutParams);
+                        relativeLayout.addView(imageView1);
+
+                        Logger.i("Friend Answer True, Name: " + modelFriend.getName());
+                        Picasso.with(mContext)
+                                .load(modelFriend.getProfileImage())
+                                .transform(new PicassoCircleTransform())
+                                .resize(100, 100)
+                                .centerCrop()
+                                .into(imageView1);
+
+                        index++;
+                    }
+                    drawAnotherIconAfterLast_True(index);
+                }, error -> {
+                    Logger.e(error, "HATA");
+                    error.printStackTrace();
+                });
+    }
+
+    private void drawAnotherIconAfterLast_True(int index) {
+        index++;
+        RelativeLayout relativeLayout = (RelativeLayout) getParent();
+        ImageButton imageButton = new ImageButton(mContext);
+        imageButton.setImageResource(R.drawable.ic_add_circle_outline_indigo_900_24dp);
+        imageButton.setBackgroundColor(Color.TRANSPARENT);
+
+
+        imageButton.setOnClickListener(v -> {
+
+            FriendAnswerListAdapter adapter = new FriendAnswerListAdapter(mContext);
+
+            rx.Observable.from(mListFriendsAnswer)
+                    .filter(modelFriend -> modelFriend.getOption().equals("a"))
+                    .subscribe(item -> {
+
+                        adapter.setModelFriend(item);
+                        MaterialSimpleListItem.Builder materialSimpleItemBuilder = new MaterialSimpleListItem.Builder(mContext)
+                                .content(String.valueOf(item.getName()));
+
+                        adapter.add(materialSimpleItemBuilder.build());
+                    }, error -> {
+
+                    }, () -> {
+                        new MaterialDialog.Builder(mContext)
+                                .title("Arkadaşlarınız")
+                                .adapter(adapter, (mDialog, itemView, which, text) -> {
+                                    //MaterialSimpleListItem item1 = listTopluTeslimStateAdapter.getItem(which);
+                                    //showToast(item.getContent().toString());
+                                })
+                                .show();
+                    });
+        });
+
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        layoutParams.rightMargin = 30;
+        layoutParams.bottomMargin = index * 50;
+        imageButton.setLayoutParams(layoutParams);
+        relativeLayout.addView(imageButton);
+
+        Picasso.with(mContext)
+                .load(R.drawable.ic_add_circle_outline_indigo_900_24dp)
+                .transform(new PicassoCircleTransform())
+                .resize(100, 100)
+                .centerCrop()
+                .into(imageButton);
+    }
+
+    public Bitmap getCroppedBitmap(Bitmap bitmap) {
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+        canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
+                bitmap.getWidth() / 2, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+        //Bitmap _bmp = Bitmap.createScaledBitmap(output, 60, 60, false);
+        //return _bmp;
+        return output;
     }
 
     @Override
@@ -341,6 +738,12 @@ public class CustomAnswerPercent extends View {
         //setMeasuredDimension(measureWidth(widthMeasureSpec), measureHeight(heightMeasureSpec));
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+
+        return super.onTouchEvent(event);
+    }
 
     private void drawBar(Canvas canvas) {
         /*
