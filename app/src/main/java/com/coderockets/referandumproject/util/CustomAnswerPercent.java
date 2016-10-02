@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.model.ModelFriend;
 import com.coderockets.referandumproject.util.adapter.FriendAnswerListAdapter;
@@ -29,6 +28,7 @@ import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import hugo.weaving.DebugLog;
@@ -429,28 +429,22 @@ public class CustomAnswerPercent extends View {
 
         imageButton.setOnClickListener(v -> {
 
-            FriendAnswerListAdapter adapter = new FriendAnswerListAdapter(mContext);
-
+            List<ModelFriend> friendList = new ArrayList<>();
             rx.Observable.from(mListFriendsAnswer)
                     .filter(modelFriend -> modelFriend.getOption().equals("b"))
-                    .subscribe(item -> {
+                    .subscribe(friendList::add).unsubscribe();
 
-                        adapter.setModelFriend(item);
-                        MaterialSimpleListItem.Builder materialSimpleItemBuilder = new MaterialSimpleListItem.Builder(mContext)
-                                .content(String.valueOf(item.getName()));
+            FriendAnswerListAdapter adapter = new FriendAnswerListAdapter(mContext, friendList);
 
-                        adapter.add(materialSimpleItemBuilder.build());
-                    }, error -> {
+            MaterialDialog dialog = new MaterialDialog.Builder(mContext)
+                    .title("Arkadaşlarınız")
+                    .adapter(adapter, (mDialog, itemView, which, text) -> {
+                        //MaterialSimpleListItem item1 = listTopluTeslimStateAdapter.getItem(which);
+                        //showToast(item.getContent().toString());
+                    }).build();
 
-                    }, () -> {
-                        new MaterialDialog.Builder(mContext)
-                                .title("Arkadaşlarınız")
-                                .adapter(adapter, (mDialog, itemView, which, text) -> {
-                                    //MaterialSimpleListItem item1 = listTopluTeslimStateAdapter.getItem(which);
-                                    //showToast(item.getContent().toString());
-                                })
-                                .show();
-                    });
+            dialog.show();
+
         });
 
 
@@ -644,28 +638,20 @@ public class CustomAnswerPercent extends View {
 
         imageButton.setOnClickListener(v -> {
 
-            FriendAnswerListAdapter adapter = new FriendAnswerListAdapter(mContext);
-
+            List<ModelFriend> answerTrueFriendList = new ArrayList<>();
             rx.Observable.from(mListFriendsAnswer)
                     .filter(modelFriend -> modelFriend.getOption().equals("a"))
-                    .subscribe(item -> {
+                    .subscribe(answerTrueFriendList::add).unsubscribe();
 
-                        adapter.setModelFriend(item);
-                        MaterialSimpleListItem.Builder materialSimpleItemBuilder = new MaterialSimpleListItem.Builder(mContext)
-                                .content(String.valueOf(item.getName()));
 
-                        adapter.add(materialSimpleItemBuilder.build());
-                    }, error -> {
-
-                    }, () -> {
-                        new MaterialDialog.Builder(mContext)
-                                .title("Arkadaşlarınız")
-                                .adapter(adapter, (mDialog, itemView, which, text) -> {
-                                    //MaterialSimpleListItem item1 = listTopluTeslimStateAdapter.getItem(which);
-                                    //showToast(item.getContent().toString());
-                                })
-                                .show();
-                    });
+            FriendAnswerListAdapter adapter = new FriendAnswerListAdapter(mContext, answerTrueFriendList);
+            MaterialDialog dialog = new MaterialDialog.Builder(mContext)
+                    .title("Arkadaşlarınız")
+                    .adapter(adapter, (mDialog, itemView, which, text) -> {
+                        //MaterialSimpleListItem item1 = listTopluTeslimStateAdapter.getItem(which);
+                        //showToast(item.getContent().toString());
+                    }).build();
+            dialog.show();
         });
 
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

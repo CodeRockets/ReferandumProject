@@ -335,7 +335,6 @@ public class ReferandumFragment extends BaseFragment {
         ModelUser modelUser = DbManager.getModelUser();
         mqi.setAskerProfileImg(modelUser.getProfileImageUrl());
         getCurrentQuestionFragment().setQuestion(mqi);
-
         EventBus.getDefault().removeStickyEvent(mqi);
     }
 

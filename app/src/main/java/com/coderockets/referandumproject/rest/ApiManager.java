@@ -168,21 +168,4 @@ public class ApiManager {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-
-
-
-
-
-
-    /*
-    public static Observable<String> uploadImage() {
-
-
-
-        return Observable.create((Observable.OnSubscribe<String>)
-                subscriber -> {
-
-                });
-    }
-    */
 }

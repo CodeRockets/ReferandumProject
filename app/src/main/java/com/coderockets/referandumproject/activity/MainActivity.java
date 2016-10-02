@@ -97,7 +97,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main_menu, menu);
-        updateUi(menu.getItem(0));
+        updateProfileIcon(menu.getItem(0));
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -137,7 +137,13 @@ public class MainActivity extends BaseActivity {
     }
 
     @DebugLog
-    private void updateUi(MenuItem menuItem) {
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onEvent(UpdateLoginEvent loginEvent) {
+        updateProfileIcon(mToolbar.getMenu().getItem(0));
+        EventBus.getDefault().removeStickyEvent(loginEvent);
+    }
+
+    private void updateProfileIcon(MenuItem menuItem) {
         ModelUser modelUser = DbManager.getModelUser();
         if (modelUser != null) {
 
@@ -171,13 +177,6 @@ public class MainActivity extends BaseActivity {
                     .into(target);
 
         }
-    }
-
-    @DebugLog
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void onEvent(UpdateLoginEvent loginEvent) {
-        updateUi(mToolbar.getMenu().getItem(0));
-        EventBus.getDefault().removeStickyEvent(loginEvent);
     }
 
     @Override
