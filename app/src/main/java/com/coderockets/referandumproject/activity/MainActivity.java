@@ -155,8 +155,8 @@ public class MainActivity extends BaseActivity {
                     MenuItem menuItem = itemWeakReference.get();
 
                     if (menuItem != null) {
-                        Drawable drawable = new BitmapDrawable(bitmap);
-                        //drawable.setBounds(0, 0, targetWidth, targetHeight);
+                        Drawable drawable = new BitmapDrawable(getResources(), bitmap);
+                        drawable.setBounds(0, 0, 100, 100);
                         menuItem.setIcon(drawable);
                     }
                 }
