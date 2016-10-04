@@ -113,6 +113,7 @@ public class QuestionActivity extends BaseActivity {
         getSupportActionBar().setTitle("Soru Sor");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_keyboard_backspace_indigo_900_48dp);
         getSupportActionBar().setHomeButtonEnabled(true);
 
         //getSupportActionBar().setHomeAsUpIndicator(new IconDrawable(this, FontAwesomeIcons.fa_home).actionBarSize().getCurrent());

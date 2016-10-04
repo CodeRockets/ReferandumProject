@@ -108,6 +108,7 @@ public class ProfileActivity extends BaseActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Profil");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_keyboard_backspace_indigo_900_48dp);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
