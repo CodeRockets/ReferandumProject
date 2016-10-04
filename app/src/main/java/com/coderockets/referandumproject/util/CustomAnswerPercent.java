@@ -420,10 +420,10 @@ public class CustomAnswerPercent extends View {
     }
 
     private void drawAnotherIconAfterLast_False(int index) {
-        index++;
+        //index++;
         RelativeLayout relativeLayout = (RelativeLayout) getParent();
         ImageButton imageButton = new ImageButton(mContext);
-        imageButton.setImageResource(R.drawable.ic_add_circle_outline_indigo_900_24dp);
+        imageButton.setImageResource(R.drawable.icon_add);
         imageButton.setBackgroundColor(Color.TRANSPARENT);
 
 
@@ -457,94 +457,10 @@ public class CustomAnswerPercent extends View {
         relativeLayout.addView(imageButton);
 
         Picasso.with(mContext)
-                .load(R.drawable.ic_add_circle_outline_indigo_900_24dp)
-                .resize(60, 60)
+                .load(R.drawable.ic_add_circle_indigo_300_48dp)
+                .resize(100, 100)
                 .into(imageButton);
     }
-
-//    private void drawFriendAnswerFalse_(Canvas canvas, float startPoint) {
-//
-//        int nextImageH = 100;
-//
-//        int answerFriendCount = 0;
-//        for (int a = 0; a < mListFriendsAnswer.size(); a++) {
-//            int finalA = a;
-//            ModelFriend friend = mListFriendsAnswer.get(a);
-//
-//            Logger.i("ModelFriend Option: " + friend.getOption());
-//
-//            // Sadece hayır cevabını verenlerin resmini göstermek için evet olanları eliyoruz.
-//            if (!friend.getOption().equals("b")) {
-//                continue;
-//            }
-//
-//            // Cevap verenlerin profil fotolarının yükseklikleri toplam yüksekliğin yarısından büyükse
-//            // daha fazla resim ekleme + işareti koy diyoruz.
-//            Logger.i("DrawBarA: " + (answerFriendCount > 5 ? "answerFriendCount > 5" : "answerFriendCount <= 5"));
-//            Logger.i("DrawBarA: " + (finalA == mListFriendsAnswer.size() - 1 ? "finalA == mListFriendsAnswer.size() - 1" : "finalA != mListFriendsAnswer.size() - 1"));
-//            Logger.i("DrawBarA: " + finalA);
-//            Logger.i("DrawBarA: " + mListFriendsAnswer.size());
-//
-//            answerFriendCount++;
-//            Logger.i("DrawbarA Picasso yükleniyor.");
-//
-//
-//            Observable.create((Observable.OnSubscribe<Bitmap>) subscriber -> {
-//                try {
-//                    Logger.i("abc");
-//                    Bitmap friendPictureBitmap = Picasso.with(mContext)
-//                            .load(mListFriendsAnswer.get(finalA).getProfileImage())
-//                            .get();
-//
-//                    subscriber.onNext(getCroppedBitmap(Bitmap.createScaledBitmap(friendPictureBitmap, 100, 100, false)));
-//                } catch (Exception error) {
-//                    Logger.e(error, "HATA");
-//                    subscriber.onError(error);
-//                }
-//
-//            })
-//                    .subscribeOn(Schedulers.io())
-//                    .observeOn(Schedulers.immediate())
-//                    .subscribe(bitmap -> {
-//
-//                        try {
-//                            Logger.i("abcdef");
-//
-//                            Paint paintFriendsAnswer = new Paint(Paint.ANTI_ALIAS_FLAG);
-//
-//                            canvas.drawBitmap(
-//                                    bitmap,
-//                                    startPoint - widthBarA - 100 + ((finalA % 2 == 0) ? 10 : (-10)),
-//                                    getHeight() - 50 - (nextImageH * (finalA + 1)) + ((finalA + 1) * 50),
-//                                    paintFriendsAnswer);
-//
-//                        } catch (Exception error) {
-//                            Logger.e(error, "HATA");
-//                        }
-//
-//
-//                    }, error -> {
-//                        Logger.e(error, "HATA");
-//                    });
-//
-//            if (answerFriendCount > 5 || finalA == mListFriendsAnswer.size() - 1) {
-//                Paint paint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
-//
-//                Bitmap bitmapAdd = SuperHelper.drawableToBitmap(getResources().getDrawable(R.drawable.ic_add_circle_outline_indigo_900_24dp));
-//                Bitmap scaledBitmap1 = getCroppedBitmap(Bitmap.createScaledBitmap(bitmapAdd, 100, 100, false));
-//
-//                canvas.drawBitmap(
-//                        scaledBitmap1,
-//                        startPoint - widthBarA - 100,
-//                        getHeight() - (nextImageH * (finalA + 1)) - (finalA == 0 ? 0 : 10) + 20,
-//                        paint1
-//                );
-//                break;
-//            }
-//
-//
-//        }
-//    }
 
     private void drawBarB(Canvas canvas) {
 
@@ -629,14 +545,11 @@ public class CustomAnswerPercent extends View {
     }
 
     private void drawAnotherIconAfterLast_True(int index) {
-        index++;
+        //index++;
         RelativeLayout relativeLayout = (RelativeLayout) getParent();
-        ImageButton imageButton = new ImageButton(mContext);
-        imageButton.setImageResource(R.drawable.ic_add_circle_outline_indigo_900_24dp);
-        imageButton.setBackgroundColor(Color.TRANSPARENT);
+        ImageView imageView = new ImageView(mContext);
 
-
-        imageButton.setOnClickListener(v -> {
+        imageView.setOnClickListener(v -> {
 
             List<ModelFriend> answerTrueFriendList = new ArrayList<>();
             rx.Observable.from(mListFriendsAnswer)
@@ -659,13 +572,15 @@ public class CustomAnswerPercent extends View {
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         layoutParams.rightMargin = 30;
         layoutParams.bottomMargin = index * 50;
-        imageButton.setLayoutParams(layoutParams);
-        relativeLayout.addView(imageButton);
+
+        imageView.setLayoutParams(layoutParams);
+
+        relativeLayout.addView(imageView);
 
         Picasso.with(mContext)
-                .load(R.drawable.ic_add_circle_outline_indigo_900_24dp)
-                .resize(60, 60)
-                .into(imageButton);
+                .load(R.drawable.ic_add_circle_indigo_300_48dp)
+                .resize(100, 100)
+                .into(imageView);
     }
 
 //    public Bitmap getCroppedBitmap(Bitmap bitmap) {
