@@ -122,7 +122,8 @@ public class QuestionActivity extends BaseActivity {
         RxTextView.textChanges(mEditText_SoruText)
                 .map(charSequence -> {
                     if (charSequence.length() > 0) {
-                        return charSequence.toString().substring(0, 1).toUpperCase() + charSequence.toString().substring(1).toLowerCase();
+                        //return charSequence.toString().substring(0, 1).toUpperCase() + charSequence.toString().substring(1).toLowerCase();
+                        return charSequence.toString().toLowerCase();
                     } else {
                         return charSequence.toString();
                     }
