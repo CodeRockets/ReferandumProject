@@ -52,14 +52,14 @@
 
                 <com.coderockets.referandumproject.util.AutoFitTextView
                     android:id="@+id/SoruText"
-                    fontPath="fonts/Tabatha Regular.ttf"
+                    fontPath="fonts/Anton.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:ellipsize="none"
                     android:gravity="center"
                     android:maxLines="5"
                     android:text="Auto Resized Text, max 1 line Merhaba Merhaba Merhabaaaaa"
-                    android:textSize="100sp" />
+                    android:textSize="120sp" />
 
                 <com.coderockets.referandumproject.util.CustomAnswerPercent
                     android:id="@+id/MyCustomAnswerPercent"

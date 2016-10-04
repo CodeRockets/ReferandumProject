@@ -60,13 +60,13 @@
 
             <com.coderockets.referandumproject.util.AutoFitTextView
                 android:id="@+id/RxAutoFitTextViewSoru"
-                fontPath="fonts/Tabatha Regular.ttf"
+                fontPath="fonts/Anton.ttf"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:ellipsize="none"
                 android:gravity="center"
                 android:maxLines="5"
-                android:textSize="100sp"
+                android:textSize="120sp"
                 app:layout_flexBasisPercent="50%" />
 
             <LinearLayout
