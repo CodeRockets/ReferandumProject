@@ -16,7 +16,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -72,6 +71,11 @@ public class CustomAnswerPercent extends View {
 
     List<ModelFriend> mListFriendsAnswer;
     final int FRIEND_COUNT = 3;
+
+    private enum ANOTHER_ICON_POSITION {
+        LEFT,
+        RIGHT
+    }
 
     @DebugLog
     public CustomAnswerPercent(Context context, AttributeSet attrs) {
@@ -411,55 +415,11 @@ public class CustomAnswerPercent extends View {
 
                         index++;
                     }
-                    drawAnotherIconAfterLast_False(index);
-
+                    drawAnotherIcon(index, ANOTHER_ICON_POSITION.LEFT);
                 }, error -> {
                     Logger.e(error, "HATA");
                     error.printStackTrace();
                 });
-    }
-
-    private void drawAnotherIconAfterLast_False(int index) {
-        //index++;
-        RelativeLayout relativeLayout = (RelativeLayout) getParent();
-        ImageButton imageButton = new ImageButton(mContext);
-        imageButton.setImageResource(R.drawable.icon_add);
-        imageButton.setBackgroundColor(Color.TRANSPARENT);
-
-
-        imageButton.setOnClickListener(v -> {
-
-            List<ModelFriend> friendList = new ArrayList<>();
-            rx.Observable.from(mListFriendsAnswer)
-                    .filter(modelFriend -> modelFriend.getOption().equals("b"))
-                    .subscribe(friendList::add).unsubscribe();
-
-            FriendAnswerListAdapter adapter = new FriendAnswerListAdapter(mContext, friendList);
-
-            MaterialDialog dialog = new MaterialDialog.Builder(mContext)
-                    .title("Arkadaşlarınız")
-                    .adapter(adapter, (mDialog, itemView, which, text) -> {
-                        //MaterialSimpleListItem item1 = listTopluTeslimStateAdapter.getItem(which);
-                        //showToast(item.getContent().toString());
-                    }).build();
-
-            dialog.show();
-
-        });
-
-
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_START);
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        layoutParams.leftMargin = 30;
-        layoutParams.bottomMargin = index * 50;
-        imageButton.setLayoutParams(layoutParams);
-        relativeLayout.addView(imageButton);
-
-        Picasso.with(mContext)
-                .load(R.drawable.ic_add_circle_indigo_300_48dp)
-                .resize(100, 100)
-                .into(imageButton);
     }
 
     private void drawBarB(Canvas canvas) {
@@ -537,15 +497,14 @@ public class CustomAnswerPercent extends View {
 
                         index++;
                     }
-                    drawAnotherIconAfterLast_True(index);
+                    drawAnotherIcon(index, ANOTHER_ICON_POSITION.RIGHT);
                 }, error -> {
                     Logger.e(error, "HATA");
                     error.printStackTrace();
                 });
     }
 
-    private void drawAnotherIconAfterLast_True(int index) {
-        //index++;
+    private void drawAnotherIcon(int index, ANOTHER_ICON_POSITION position) {
         RelativeLayout relativeLayout = (RelativeLayout) getParent();
         ImageView imageView = new ImageView(mContext);
 
@@ -553,7 +512,7 @@ public class CustomAnswerPercent extends View {
 
             List<ModelFriend> answerTrueFriendList = new ArrayList<>();
             rx.Observable.from(mListFriendsAnswer)
-                    .filter(modelFriend -> modelFriend.getOption().equals("a"))
+                    .filter(modelFriend -> modelFriend.getOption().equals(position == ANOTHER_ICON_POSITION.LEFT ? "b" : "a"))
                     .subscribe(answerTrueFriendList::add).unsubscribe();
 
 
@@ -568,9 +527,10 @@ public class CustomAnswerPercent extends View {
         });
 
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+        layoutParams.addRule(position == ANOTHER_ICON_POSITION.LEFT ? RelativeLayout.ALIGN_PARENT_START : RelativeLayout.ALIGN_PARENT_END);
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        layoutParams.rightMargin = 30;
+        layoutParams.rightMargin = position == ANOTHER_ICON_POSITION.RIGHT ? 30 : 0;
+        layoutParams.leftMargin = position == ANOTHER_ICON_POSITION.LEFT ? 30 : 0;
         layoutParams.bottomMargin = index * 50;
 
         imageView.setLayoutParams(layoutParams);
@@ -582,6 +542,7 @@ public class CustomAnswerPercent extends View {
                 .resize(100, 100)
                 .into(imageView);
     }
+
 
 //    public Bitmap getCroppedBitmap(Bitmap bitmap) {
 //        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
