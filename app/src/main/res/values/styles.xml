@@ -23,6 +23,7 @@
 
 
     <style name="MyCustomButton" parent="Base.Widget.AppCompat.Button">
+        <item name="android:background">@color/blue</item>
         <item name="android:textColor">#ffffff</item>
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
     </style>
