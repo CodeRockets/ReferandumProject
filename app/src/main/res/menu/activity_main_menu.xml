@@ -11,7 +11,7 @@
 
     <item
         android:id="@+id/menuAskQuestion"
-        android:icon="@drawable/icon_add"
+        android:icon="@drawable/icon_add_1"
         android:orderInCategory="100"
         android:title="Soru Sor"
         app:showAsAction="always" />
