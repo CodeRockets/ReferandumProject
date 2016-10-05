@@ -128,6 +128,11 @@ public class QuestionFragment extends Fragment {
         mImageView_SoruImage.setScaleType(ImageView.ScaleType.CENTER);
 
         Uri soruImageUri = Uri.parse(mqi.getQuestionImage());
+
+        if (mqi.getQuestionImage().contains("loremflickr")) {
+            Picasso.with(mContext).invalidate(soruImageUri);
+        }
+
         Picasso.with(mContext)
                 .load(soruImageUri)
                 .placeholder(R.drawable.loading)

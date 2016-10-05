@@ -2,9 +2,7 @@ package com.coderockets.referandumproject.activity;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.design.internal.NavigationMenu;
 import android.support.design.widget.FloatingActionButton;
@@ -33,7 +31,6 @@ import com.jakewharton.rxbinding.widget.RxTextView;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.orhanobut.logger.Logger;
-import com.slmyldz.random.Randoms;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
@@ -182,7 +179,7 @@ public class QuestionActivity extends BaseActivity {
     @DebugLog
     public void setRandomImage() {
         mImageView_SoruImage.setScaleType(ImageView.ScaleType.CENTER);
-        String randomUrl = Randoms.imageUrl("png");
+        String randomUrl = "http://loremflickr.com/g/600/200/abstract/";//Randoms.imageUrl("png");
         Picasso.with(this)
                 .load(randomUrl)
                 .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
@@ -233,6 +230,20 @@ public class QuestionActivity extends BaseActivity {
 
         try {
             if (mFilePath == null) {
+                String randomImageUrl = "http://loremflickr.com/g/800/300/abstract";
+                SoruSorRequest soruSorRequest = SoruSorRequest.SoruSorRequestInstance();
+                soruSorRequest.setQuestionText(mEditText_SoruText.getText().toString());
+                soruSorRequest.setQuestionImage(randomImageUrl);
+
+                ApiManager.getInstance(this).SoruSor(soruSorRequest)
+                        .subscribe(response -> {
+                            mFilePath = null;
+                            mEditText_SoruText.setText("");
+                            EventBus.getDefault().postSticky(response.getData());
+                            NavUtils.navigateUpFromSameTask(QuestionActivity.this);
+                        });
+
+                /*
                 Drawable drawable = mImageView_SoruImage.getDrawable();
                 File externalDir = new File(Environment.getExternalStorageDirectory().getPath() + "/ReferandumProject");
                 if (!externalDir.exists()) externalDir.mkdir();
@@ -243,44 +254,47 @@ public class QuestionActivity extends BaseActivity {
                 String soruImageFilePath = externalDir.getPath() + "/ReferandumSoru.jpg";
                 Logger.i(soruImageFilePath);
                 mFilePath = soruImageFilePath;
+                */
+
+            } else {
+                File file;
+                file = new File(mFilePath);
+                Logger.i("FilePath: " + mFilePath);
+                Map<String, RequestBody> map = new HashMap<>();
+                RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpg"), file);
+                map.put("file\"; filename=\"" + "file", requestBody);
+
+
+                ApiManager.getInstance(this).ImageUpload(map)
+                        .flatMap(response -> {
+                            SoruSorRequest soruSorRequest = SoruSorRequest.SoruSorRequestInstance();
+                            soruSorRequest.setQuestionText(mEditText_SoruText.getText().toString());
+                            //soruSorRequest.setQuestionImage(Randoms.imageUrl("png"));
+
+                            Logger.i("Image Url: " + response.getData());
+                            soruSorRequest.setQuestionImage(response.getData());
+
+                            return ApiManager.getInstance(this).SoruSor(soruSorRequest);
+
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                response -> {
+                                    {
+                                        mFilePath = null;
+                                        mEditText_SoruText.setText("");
+                                        //UiHelper.UiSnackBar.showSimpleSnackBar(getCurrentFocus(), "Sorunuz gönderildi.", Snackbar.LENGTH_LONG);
+                                        EventBus.getDefault().postSticky(response.getData());
+                                        NavUtils.navigateUpFromSameTask(QuestionActivity.this);
+                                    }
+                                }, error -> {
+                                    materialDialog.dismiss();
+                                    SuperHelper.CrashlyticsLog(error);
+                                    error.printStackTrace();
+                                    UiHelper.UiDialog.showSimpleDialog(QuestionActivity.this, "HATA", error.getMessage());
+                                }, materialDialog::dismiss);
             }
-            File file;
-            file = new File(mFilePath);
-            Logger.i("FilePath: " + mFilePath);
-            Map<String, RequestBody> map = new HashMap<>();
-            RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpg"), file);
-            map.put("file\"; filename=\"" + "file", requestBody);
-
-
-            ApiManager.getInstance(this).ImageUpload(map)
-                    .flatMap(response -> {
-                        SoruSorRequest soruSorRequest = SoruSorRequest.SoruSorRequestInstance();
-                        soruSorRequest.setQuestionText(mEditText_SoruText.getText().toString());
-                        //soruSorRequest.setQuestionImage(Randoms.imageUrl("png"));
-
-                        Logger.i("Image Url: " + response.getData());
-                        soruSorRequest.setQuestionImage(response.getData());
-
-                        return ApiManager.getInstance(this).SoruSor(soruSorRequest);
-
-                    })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            response -> {
-                                {
-                                    mFilePath = null;
-                                    mEditText_SoruText.setText("");
-                                    //UiHelper.UiSnackBar.showSimpleSnackBar(getCurrentFocus(), "Sorunuz gönderildi.", Snackbar.LENGTH_LONG);
-                                    EventBus.getDefault().postSticky(response.getData());
-                                    NavUtils.navigateUpFromSameTask(QuestionActivity.this);
-                                }
-                            }, error -> {
-                                materialDialog.dismiss();
-                                SuperHelper.CrashlyticsLog(error);
-                                error.printStackTrace();
-                                UiHelper.UiDialog.showSimpleDialog(QuestionActivity.this, "HATA", error.getMessage());
-                            }, materialDialog::dismiss);
 
 
         } catch (Exception error) {
