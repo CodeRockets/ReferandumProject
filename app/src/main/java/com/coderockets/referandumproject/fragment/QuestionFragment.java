@@ -18,6 +18,7 @@ import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.MainActivity;
 import com.coderockets.referandumproject.helper.SuperHelper;
+import com.coderockets.referandumproject.model.Event.UpdateLoginEvent;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
 import com.coderockets.referandumproject.rest.ApiManager;
 import com.coderockets.referandumproject.rest.RestModel.FavoriteRequest;
@@ -31,6 +32,9 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,6 +97,13 @@ public class QuestionFragment extends Fragment {
         setFavoriteFab();
         registerForContextMenu(mSoruText);
         //PhotoViewAttacher photoViewAttacher = new PhotoViewAttacher(mImageView_SoruImage);
+    }
+
+    @DebugLog
+    @Override
+    public void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
     }
 
     private void changeFavoriteFabColor() {
@@ -192,6 +203,12 @@ public class QuestionFragment extends Fragment {
         mListSubscription.add(subscription);
     }
 
+    @DebugLog
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onEvent(UpdateLoginEvent updateLoginEvent) {
+        setFavoriteFab();
+    }
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if (v.getId() == mSoruText.getId()) {
@@ -238,6 +255,14 @@ public class QuestionFragment extends Fragment {
         return super.onContextItemSelected(item);
     }
 
+    @DebugLog
+    @Override
+    public void onPause() {
+        EventBus.getDefault().unregister(this);
+        super.onPause();
+    }
+
+    @DebugLog
     @Override
     public void onDestroy() {
         for (Subscription subscription : mListSubscription) {

@@ -34,7 +34,7 @@ import hugo.weaving.DebugLog;
 public class MainActivity extends BaseActivity {
 
     @ViewById(R.id.toolbar)
-    Toolbar mToolbar;
+    public Toolbar mToolbar;
 
     public static int FRAGMENT_CONTAINER = R.id.Container;
 
@@ -45,6 +45,7 @@ public class MainActivity extends BaseActivity {
         setFragment();
     }
 
+    @DebugLog
     @Override
     protected void onResume() {
         super.onResume();
@@ -140,10 +141,10 @@ public class MainActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onEvent(UpdateLoginEvent loginEvent) {
         updateProfileIcon(mToolbar.getMenu().getItem(0));
-        EventBus.getDefault().removeStickyEvent(loginEvent);
     }
 
-    private void updateProfileIcon(MenuItem menuItem) {
+    @DebugLog
+    public void updateProfileIcon(MenuItem menuItem) {
         ModelUser modelUser = DbManager.getModelUser();
         if (modelUser != null) {
 
@@ -176,6 +177,8 @@ public class MainActivity extends BaseActivity {
                     .transform(new PicassoCircleTransform())
                     .into(target);
 
+        } else {
+            menuItem.setIcon(R.drawable.ic_account_circle_pink_900_48dp);
         }
     }
 

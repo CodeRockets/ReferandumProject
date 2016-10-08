@@ -76,17 +76,17 @@ public class ReferandumFragment extends BaseFragment {
     }
 
     @DebugLog
-    @Override
-    public void onResume() {
-        super.onResume();
-        EventBus.getDefault().register(this);
-    }
-
-    @DebugLog
     @AfterViews
     public void ReferandumFragmentInit() {
         setViewPager();
         setSorular();
+    }
+
+    @DebugLog
+    @Override
+    public void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
     }
 
     private void setViewPager() {
@@ -102,6 +102,7 @@ public class ReferandumFragment extends BaseFragment {
             @Override
             public void onPageSelected(int position) {
                 //setQuestionFragment();
+                mActivity.updateProfileIcon(mActivity.mToolbar.getMenu().getItem(0));
                 checkTempAnsweredAndShowResult(position);
 
                 if (position > 0) {
@@ -124,7 +125,6 @@ public class ReferandumFragment extends BaseFragment {
         mViewPagerSorular.setPageTransformer(true, new BackgroundToForegroundTransformer());
     }
 
-    @DebugLog
     private void setSorular() {
         //
         mRxPermission.request(Const.PERMISSIONS_GENERAL)
