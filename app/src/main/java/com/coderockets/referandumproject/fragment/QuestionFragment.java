@@ -173,7 +173,7 @@ public class QuestionFragment extends Fragment {
         if (soruText.length() > 0) {
             //soruText = soruText.substring(0, 1).toUpperCase() + soruText.substring(1).toLowerCase();
         }
-        mSoruText.setText(soruText.toLowerCase());
+        mSoruText.setText(soruText.toLowerCase() + " ?");
     }
 
     @DebugLog

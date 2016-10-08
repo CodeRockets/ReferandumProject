@@ -26,7 +26,6 @@ public class CustomSorularAdapter extends FragmentStatePagerAdapter {
         super(fm);
     }
 
-    @DebugLog
     @Override
     public Fragment getItem(int position) {
         QuestionFragment questionFragment = mFragmentList.get(position);
@@ -41,19 +40,16 @@ public class CustomSorularAdapter extends FragmentStatePagerAdapter {
         return questionFragment;
     }
 
-    @DebugLog
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         return super.instantiateItem(container, position);
     }
 
-    @DebugLog
     @Override
     public int getCount() {
         return mFragmentList.size();
     }
 
-    @DebugLog
     public void addFragment(QuestionFragment fragment, ModelQuestionInformation mqi) {
         mFragmentList.add(fragment);
         mSoruList.add(mqi);
