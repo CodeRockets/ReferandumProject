@@ -123,11 +123,11 @@ public class QuestionActivity extends BaseActivity {
                         //return charSequence.toString().substring(0, 1).toUpperCase() + charSequence.toString().substring(1).toLowerCase();
                         return charSequence.toString().toLowerCase();
                     } else {
-                        return charSequence.toString();
+                        return "?";
                     }
                 })
                 .subscribe(text -> {
-                    mRxAutoFitTextViewSoru.setText(text + " ?");
+                    mRxAutoFitTextViewSoru.setText(text);
                 }, error -> {
                     error.printStackTrace();
                     SuperHelper.CrashlyticsLog(error);
