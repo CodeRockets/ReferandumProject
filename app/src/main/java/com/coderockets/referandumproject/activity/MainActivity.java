@@ -43,6 +43,7 @@ public class MainActivity extends BaseActivity {
     public void MainActivityInit() {
         setToolbar();
         setFragment();
+        SuperHelper.sendFacebookToken(this);
     }
 
     @DebugLog

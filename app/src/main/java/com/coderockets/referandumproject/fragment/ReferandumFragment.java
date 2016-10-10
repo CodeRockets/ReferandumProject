@@ -16,14 +16,17 @@ import com.coderockets.referandumproject.activity.MainActivity;
 import com.coderockets.referandumproject.app.Const;
 import com.coderockets.referandumproject.db.DbManager;
 import com.coderockets.referandumproject.helper.SuperHelper;
+import com.coderockets.referandumproject.model.Event.SaveUserEvent;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
 import com.coderockets.referandumproject.model.ModelTempQuestionAnswer;
 import com.coderockets.referandumproject.model.ModelUser;
 import com.coderockets.referandumproject.rest.ApiManager;
 import com.coderockets.referandumproject.rest.RestModel.AnswerRequest;
+import com.coderockets.referandumproject.rest.RestModel.UserRequest;
 import com.coderockets.referandumproject.util.CustomAnswerPercent;
 import com.coderockets.referandumproject.util.CustomButton;
 import com.coderockets.referandumproject.util.adapter.CustomSorularAdapter;
+import com.facebook.AccessToken;
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 import com.tbruyelle.rxpermissions.RxPermissions;
@@ -292,21 +295,6 @@ public class ReferandumFragment extends BaseFragment {
         }
     }
 
-    /*
-    @DebugLog
-    private void setQuestionFragment() {
-        try {
-            if (mSorularAdapter.getCount() == 0) {
-                Logger.i("Soru yok..");
-                return;
-            }
-            mQuestionFragment = (QuestionFragment) mSorularAdapter.getItem(mViewPagerSorular.getCurrentItem());
-        } catch (Exception e) {
-            Logger.e("HATA:" + e);
-        }
-    }
-    */
-
     @DebugLog
     private void sendQuestionAnswer(String text, String option, ModelQuestionInformation mqi) {
 
@@ -336,6 +324,17 @@ public class ReferandumFragment extends BaseFragment {
         mqi.setAskerProfileImg(modelUser.getProfileImageUrl());
         getCurrentQuestionFragment().setQuestion(mqi);
         EventBus.getDefault().removeStickyEvent(mqi);
+    }
+
+    @DebugLog
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onEvent(SaveUserEvent event) {
+        mSorularAdapter.removeAdapterItems();
+        tempAnswer.clear();
+        modControl.clear();
+        answerAndTempQuestionControl.clear();
+        addQuestionsToAdapter(10);
+        EventBus.getDefault().removeStickyEvent(event);
     }
 
     private QuestionFragment getQuestionFragment(int position) {

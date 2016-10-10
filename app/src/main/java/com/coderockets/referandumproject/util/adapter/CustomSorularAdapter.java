@@ -21,6 +21,7 @@ public class CustomSorularAdapter extends FragmentStatePagerAdapter {
 
     private final List<QuestionFragment> mFragmentList = new ArrayList<>();
     private final List<ModelQuestionInformation> mSoruList = new ArrayList<>();
+    private boolean flagRemoveAllItems = false;
 
     public CustomSorularAdapter(FragmentManager fm) {
         super(fm);
@@ -56,21 +57,22 @@ public class CustomSorularAdapter extends FragmentStatePagerAdapter {
         notifyDataSetChanged();
     }
 
-    /*
+    public void removeAdapterItems() {
+        mFragmentList.clear();
+        mSoruList.clear();
+        flagRemoveAllItems = true;
+        notifyDataSetChanged();
+        flagRemoveAllItems = false;
+    }
+
+    @DebugLog
     @Override
     public int getItemPosition(Object object) {
-
-
-        QuestionFragment fragment = (QuestionFragment) object;
-        String title = fragm
-        int position = titles.indexOf(title);
-
-        if (position >= 0) {
-            return position;
-        } else {
+        if (flagRemoveAllItems) {
             return POSITION_NONE;
+        } else {
+            return POSITION_UNCHANGED;
         }
-
     }
-    */
+
 }

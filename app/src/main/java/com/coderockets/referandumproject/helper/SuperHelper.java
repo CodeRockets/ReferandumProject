@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.db.DbManager;
 import com.coderockets.referandumproject.model.ModelUser;
+import com.coderockets.referandumproject.rest.ApiManager;
+import com.coderockets.referandumproject.rest.RestModel.UserRequest;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.AccessToken;
 import com.orhanobut.logger.Logger;
@@ -61,6 +63,15 @@ public class SuperHelper extends com.aykuttasil.androidbasichelperlib.SuperHelpe
                 .capture(view)
                 .into(into);
 
+    }
+
+    @DebugLog
+    public static void sendFacebookToken(Context context) {
+        if (SuperHelper.checkUser()) {
+            UserRequest userRequest = new UserRequest();
+            userRequest.setToken(AccessToken.getCurrentAccessToken().getToken());
+            ApiManager.getInstance(context).SaveUser(userRequest).subscribe();
+        }
     }
 //    /**
 //     * İstenilen Activity içerisindeki bir container a fragment replace etmek için kullanılır.

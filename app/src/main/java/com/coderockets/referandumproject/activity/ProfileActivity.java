@@ -21,6 +21,7 @@ import com.coderockets.referandumproject.fragment.ProfileMe_;
 import com.coderockets.referandumproject.fragment.ProfileMyFavorites_;
 import com.coderockets.referandumproject.fragment.ProfileMyQuestions_;
 import com.coderockets.referandumproject.helper.SuperHelper;
+import com.coderockets.referandumproject.model.Event.SaveUserEvent;
 import com.coderockets.referandumproject.model.Event.UpdateLoginEvent;
 import com.coderockets.referandumproject.rest.ApiManager;
 import com.coderockets.referandumproject.rest.RestModel.UserRequest;
@@ -184,7 +185,6 @@ public class ProfileActivity extends BaseActivity {
                                 response.getData().save();
                                 EventBus.getDefault().postSticky(new UpdateLoginEvent());
                                 updateUI();
-
                             }, error -> {
                                 materialDialog.dismiss();
                                 SuperHelper.CrashlyticsLog(error);
@@ -209,6 +209,7 @@ public class ProfileActivity extends BaseActivity {
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
 
                 AccessToken.setCurrentAccessToken(currentAccessToken);
+                EventBus.getDefault().postSticky(new SaveUserEvent());
 
                 if (!mRxPermissions.isGranted(Manifest.permission.READ_PHONE_STATE)) {
 

@@ -69,6 +69,7 @@ public class ApiManager {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    @DebugLog
     public Observable<AnswerResponse> Answer(AnswerRequest answerRequest) {
 
         return RestClient.getInstance().getApiService()
@@ -101,6 +102,7 @@ public class ApiManager {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    @DebugLog
     public Observable<UserResponse> SaveUser(UserRequest userRequest) {
         return RestClient.getInstance().getApiService()
                 .User(
@@ -113,6 +115,7 @@ public class ApiManager {
                 .subscribeOn(Schedulers.io());
     }
 
+    @DebugLog
     public Observable<ImageUploadResponse> ImageUpload(Map<String, RequestBody> map) {
         return RestClient.getInstance().getApiService()
                 .ImageUpload(
@@ -126,6 +129,7 @@ public class ApiManager {
 
     }
 
+    @DebugLog
     public Observable<UserQuestionsResponse> UserQuestions(int limit) {
 
         ModelUser modelUser = DbManager.getModelUser();
@@ -143,6 +147,7 @@ public class ApiManager {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    @DebugLog
     public Observable<FavoriteResponse> Favorite(FavoriteRequest request) {
 
         return RestClient.getInstance().getApiService()
@@ -156,6 +161,7 @@ public class ApiManager {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    @DebugLog
     public Observable<ReportAbuseResponse> ReportAbuse(ReportAbuseRequest request) {
 
         return RestClient.getInstance().getApiService()
