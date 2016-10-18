@@ -67,7 +67,7 @@ public class SuperHelper extends com.aykuttasil.androidbasichelperlib.SuperHelpe
 
     @DebugLog
     public static void sendFacebookToken(Context context) {
-        if (SuperHelper.checkUser()) {
+        if (checkUser()) {
             UserRequest userRequest = new UserRequest();
             userRequest.setToken(AccessToken.getCurrentAccessToken().getToken());
             ApiManager.getInstance(context).SaveUser(userRequest).subscribe();

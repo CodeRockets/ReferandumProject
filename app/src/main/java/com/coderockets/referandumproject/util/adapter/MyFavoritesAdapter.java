@@ -1,6 +1,5 @@
 package com.coderockets.referandumproject.util.adapter;
 
-import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,6 +19,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import hugo.weaving.DebugLog;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -29,12 +29,10 @@ import rx.schedulers.Schedulers;
 
 public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.ViewHolder> {
 
-    List<ModelQuestionInformation> mList;
-    static Context mContext;
+    private List<ModelQuestionInformation> mList;
 
-    public MyFavoritesAdapter(Context context, List<ModelQuestionInformation> list) {
+    public MyFavoritesAdapter(List<ModelQuestionInformation> list) {
         mList = list;
-        mContext = context;
     }
 
     @Override
@@ -43,10 +41,11 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
         return new MyFavoritesAdapter.ViewHolder(vi);
     }
 
+    @DebugLog
     @Override
     public void onBindViewHolder(MyFavoritesAdapter.ViewHolder holder, int position) {
-        Logger.i(mList.get(position).getQuestionText());
-        holder.bind(mList.get(position));
+        holder.setIsRecyclable(false);
+        holder.bind(mList.get(position), position);
     }
 
     @Override
@@ -64,34 +63,33 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
         notifyItemRemoved(position);
     }
 
+    @DebugLog
     class ViewHolder extends RecyclerView.ViewHolder {
         ModelQuestionInformation mMqi;
-        AutoFitTextView TextViewSoru;
-        ImageView ImageViewSoruImage;
+        AutoFitTextView mTextViewSoru;
+        ImageView mImageViewSoruImage;
         FloatingActionButton mFabFavorite;
-        CustomAnswerPercent customAnswerPercent;
+        CustomAnswerPercent mCustomAnswerPercent;
 
         ViewHolder(View itemView) {
             super(itemView);
-            TextViewSoru = (AutoFitTextView) itemView.findViewById(R.id.TextViewSoru);
-            ImageViewSoruImage = (ImageView) itemView.findViewById(R.id.ImageViewSoruImage);
-            customAnswerPercent = (CustomAnswerPercent) itemView.findViewById(R.id.MyCustomAnswerPercent);
+            mTextViewSoru = (AutoFitTextView) itemView.findViewById(R.id.TextViewSoru);
+            mImageViewSoruImage = (ImageView) itemView.findViewById(R.id.ImageViewSoruImage);
+            mCustomAnswerPercent = (CustomAnswerPercent) itemView.findViewById(R.id.MyCustomAnswerPercent);
             mFabFavorite = (FloatingActionButton) itemView.findViewById(R.id.FabFavorite);
         }
 
-        void bind(ModelQuestionInformation mqi) {
-            Logger.i(mqi.getQuestionText());
-            Logger.i(mqi.getQuestionImage());
-
+        @DebugLog
+        void bind(ModelQuestionInformation mqi, int position) {
             mMqi = mqi;
-            TextViewSoru.setText(mqi.getQuestionText());
+            mTextViewSoru.setText(mqi.getQuestionText());
             mFabFavorite.setOnClickListener(v -> {
 
                 FavoriteRequest favoriteRequest = FavoriteRequest.FavoriteRequestInit();
                 favoriteRequest.setQuestionId(mqi.getSoruId());
                 favoriteRequest.setUnFavorite(true);
 
-                ApiManager.getInstance(mContext).Favorite(favoriteRequest)
+                ApiManager.getInstance(itemView.getContext()).Favorite(favoriteRequest)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(success -> {
@@ -103,33 +101,27 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
                             removeItem(getAdapterPosition());
                         });
             });
-            Picasso.with(mContext).load(mqi.getQuestionImage()).into(ImageViewSoruImage);
-            showCustomAnswerPercent();
 
-            //Glide.with(imageView.getContext()).load(new File("")).into(imageView);
-            //Picasso.with(imageView.getContext()).load(new File(imageUrl)).into(imageView);
+            Picasso.with(mImageViewSoruImage.getContext())
+                    .load(mqi.getQuestionImage())
+                    .into(mImageViewSoruImage);
+
+            showCustomAnswerPercent();
         }
 
-
+        @DebugLog
         private void showCustomAnswerPercent() {
             try {
-                View alphaView = ImageViewSoruImage;
-                //CustomAnswerPercent customAnswerPercent = (CustomAnswerPercent) qf.getView().findViewById(R.id.customAnswerPercent);
-                customAnswerPercent.addAlphaView(alphaView);
-                customAnswerPercent.setAValue(mMqi.getOption_B_Count());
-                customAnswerPercent.setBValue(mMqi.getOption_A_Count());
-
-                // FIXME: 29.09.2016 cevap veren arkadaşların bilgisi user/question/fetch route undan geliyor.
-                // FIXME: 29.09.2016 Biz burda user/question route undan bilgileri çekiyoruz
-                //Logger.i(this.getClass().getSimpleName() + mMqi.getModelFriends());
-                //customAnswerPercent.setFriendAnswer(mMqi.getModelFriends());
-
-                customAnswerPercent.showResult();
+                mCustomAnswerPercent.addAlphaView(mImageViewSoruImage);
+                mCustomAnswerPercent.setAValue(mMqi.getOption_B_Count());
+                mCustomAnswerPercent.setBValue(mMqi.getOption_A_Count());
+                mCustomAnswerPercent.setFriendAnswer(mMqi.getModelFriends());
+                mCustomAnswerPercent.setFriendAnswerViewSize(50);
+                mCustomAnswerPercent.showResult();
             } catch (Exception e) {
-                Logger.e("HATA: " + e);
+                SuperHelper.CrashlyticsLog(e);
+                Logger.e(e, "HATA");
             }
         }
     }
-
-
 }

@@ -71,6 +71,10 @@ public class MainActivity extends BaseActivity {
         getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.mipmap.ic_launcher));
     }
 
+    @Override
+    public void updateUi() {
+
+    }
 
     /*
     @DebugLog
@@ -188,4 +192,5 @@ public class MainActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
         super.onPause();
     }
+
 }

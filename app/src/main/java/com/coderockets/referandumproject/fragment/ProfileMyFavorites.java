@@ -46,13 +46,15 @@ public class ProfileMyFavorites extends BaseProfile {
         this.mContext = getActivity();
         this.mActivity = (ProfileActivity) getActivity();
         mList = new ArrayList<>();
-        mMyFavoritesAdapter = new MyFavoritesAdapter(mContext, mList);
+        mMyFavoritesAdapter = new MyFavoritesAdapter(mList);
     }
 
     @DebugLog
     @AfterViews
     public void ProfileMyFavoritesInit() {
-        getUserFavorites();
+        if (mList.size() == 0) {
+            getUserFavorites();
+        }
         setAdapter();
     }
 
@@ -85,5 +87,4 @@ public class ProfileMyFavorites extends BaseProfile {
         }
 
     }
-
 }

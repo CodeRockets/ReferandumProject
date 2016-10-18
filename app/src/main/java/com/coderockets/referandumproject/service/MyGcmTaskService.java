@@ -32,7 +32,7 @@ public class MyGcmTaskService extends GcmTaskService {
             Bundle bundle = taskParams.getExtras();
 
 
-            switch (bundle.getString(Const.REAKTIF_TASK_TYPE)) {
+            switch (bundle.getString(Const.REFERANDUM_TASK_TYPE)) {
                 /*
                 case Const.REAKTIF_TASK_ZIYARET: {
                     return SchedulerZiyaretTask(bundle);

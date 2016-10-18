@@ -58,8 +58,9 @@
                     android:ellipsize="none"
                     android:gravity="center"
                     android:maxLines="5"
-                    android:text="Auto Resized Text, max 1 line Merhaba Merhaba Merhabaaaaa"
-                    android:textSize="120sp" />
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:textSize="110sp" />
 
                 <com.coderockets.referandumproject.util.CustomAnswerPercent
                     android:id="@+id/MyCustomAnswerPercent"
@@ -79,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="true"
-                android:src="@drawable/ic_favorite_red_900_36dp"
+                android:src="@drawable/ic_grade_red_900_48dp"
                 app:backgroundTint="@color/accentColor"
                 app:fabSize="mini"
                 app:useCompatPadding="true" />

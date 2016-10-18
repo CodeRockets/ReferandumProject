@@ -2,6 +2,7 @@ package com.coderockets.referandumproject.rest;
 
 import android.content.Context;
 
+import com.aykuttasil.androidbasichelperlib.PrefsHelper;
 import com.coderockets.referandumproject.BuildConfig;
 import com.coderockets.referandumproject.app.Const;
 import com.coderockets.referandumproject.db.DbManager;
@@ -38,7 +39,6 @@ public class ApiManager {
 
     private static ApiManager mInstance;
     private Context mContext;
-    private String abc;
 
 
     private ApiManager(Context context) {
@@ -63,7 +63,7 @@ public class ApiManager {
                 .SoruSor(
                         Const.CLIENT_ID,
                         Const.REFERANDUM_VERSION,
-                        BuildConfig.DEBUG ? Randoms.alphaNumericString(11) : SuperHelper.getDeviceId(mContext),
+                        PrefsHelper.readPrefString(mContext,Const.PREFS_KEY_REFERANDUM_UUID),
                         soruSorRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -76,7 +76,7 @@ public class ApiManager {
                 .Answer(
                         Const.CLIENT_ID,
                         Const.REFERANDUM_VERSION,
-                        BuildConfig.DEBUG ? Randoms.alphaNumericString(11) : SuperHelper.getDeviceId(mContext),
+                        PrefsHelper.readPrefString(mContext,Const.PREFS_KEY_REFERANDUM_UUID),
                         answerRequest
                 )
                 .subscribeOn(Schedulers.io())
@@ -86,14 +86,11 @@ public class ApiManager {
     @DebugLog
     public Observable<SoruGetirBaseResponse> SoruGetir(int count) {
 
-        Logger.i(SuperHelper.getDeviceId(mContext));
-
-
         return RestClient.getInstance().getApiService()
                 .SoruGetir(
                         Const.CLIENT_ID,
                         Const.REFERANDUM_VERSION,
-                        BuildConfig.DEBUG ? Randoms.alphaNumericString(11) : SuperHelper.getDeviceId(mContext),
+                        PrefsHelper.readPrefString(mContext,Const.PREFS_KEY_REFERANDUM_UUID),
                         String.valueOf(count),
                         SuperHelper.checkUser() ? DbManager.getModelUser().getUserId() : "",
                         BuildConfig.DEBUG ? "1" : "0"
@@ -104,11 +101,12 @@ public class ApiManager {
 
     @DebugLog
     public Observable<UserResponse> SaveUser(UserRequest userRequest) {
+
         return RestClient.getInstance().getApiService()
                 .User(
                         Const.CLIENT_ID,
                         Const.REFERANDUM_VERSION,
-                        BuildConfig.DEBUG ? Randoms.alphaNumericString(11) : SuperHelper.getDeviceId(mContext),
+                        PrefsHelper.readPrefString(mContext,Const.PREFS_KEY_REFERANDUM_UUID),
                         userRequest
                 )
                 .observeOn(AndroidSchedulers.mainThread())
@@ -117,11 +115,12 @@ public class ApiManager {
 
     @DebugLog
     public Observable<ImageUploadResponse> ImageUpload(Map<String, RequestBody> map) {
+
         return RestClient.getInstance().getApiService()
                 .ImageUpload(
                         Const.CLIENT_ID,
                         Const.REFERANDUM_VERSION,
-                        BuildConfig.DEBUG ? Randoms.alphaNumericString(11) : SuperHelper.getDeviceId(mContext),
+                        PrefsHelper.readPrefString(mContext,Const.PREFS_KEY_REFERANDUM_UUID),
                         map
                 )
                 .subscribeOn(Schedulers.io())
@@ -138,7 +137,7 @@ public class ApiManager {
                 .UserQuestions(
                         Const.CLIENT_ID,
                         Const.REFERANDUM_VERSION,
-                        BuildConfig.DEBUG ? Randoms.alphaNumericString(11) : SuperHelper.getDeviceId(mContext),
+                        PrefsHelper.readPrefString(mContext,Const.PREFS_KEY_REFERANDUM_UUID),
                         0,
                         limit,
                         modelUser.getUserId()
@@ -154,7 +153,7 @@ public class ApiManager {
                 .Favorite(
                         Const.CLIENT_ID,
                         Const.REFERANDUM_VERSION,
-                        BuildConfig.DEBUG ? Randoms.alphaNumericString(11) : SuperHelper.getDeviceId(mContext),
+                        PrefsHelper.readPrefString(mContext,Const.PREFS_KEY_REFERANDUM_UUID),
                         request
                 )
                 .subscribeOn(Schedulers.io())
@@ -168,7 +167,7 @@ public class ApiManager {
                 .ReportAbuse(
                         Const.CLIENT_ID,
                         Const.REFERANDUM_VERSION,
-                        BuildConfig.DEBUG ? Randoms.alphaNumericString(11) : SuperHelper.getDeviceId(mContext),
+                        PrefsHelper.readPrefString(mContext,Const.PREFS_KEY_REFERANDUM_UUID),
                         request
                 )
                 .subscribeOn(Schedulers.io())

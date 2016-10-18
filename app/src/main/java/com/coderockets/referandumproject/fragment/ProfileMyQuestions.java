@@ -51,14 +51,16 @@ public class ProfileMyQuestions extends BaseProfile {
         this.mContext = getActivity();
         this.mActivity = (ProfileActivity) getActivity();
         mList = new ArrayList<>();
-        mMyQuestionsAdapter = new MyQuestionsAdapter(mContext, mList);
+        mMyQuestionsAdapter = new MyQuestionsAdapter(mList);
         mListSubscription = new ArrayList<>();
     }
 
     @DebugLog
     @AfterViews
     public void ProfileMyQuestionsInit() {
-        getUserQuestions();
+        if (mList.size() == 0) {
+            getUserQuestions();
+        }
         setAdapter();
     }
 

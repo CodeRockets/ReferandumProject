@@ -172,7 +172,7 @@ public class CustomViewPagerAdapter extends PagerAdapter {
         ViewGroup sorularView = (ViewGroup) mInflater.inflate(R.layout.soru, container, false);
         container.addView(sorularView);
 
-        TextView textViewSoru = (TextView) sorularView.findViewById(R.id.TextViewSoru);
+        TextView textViewSoru = (TextView) sorularView.findViewById(R.id.mTextViewSoru);
 
         textViewSoru.setText(mListSorular.get(position).getQuestionText());
         //textViewSoru.setText(mContext.getResources().getString(R.string.soru1));

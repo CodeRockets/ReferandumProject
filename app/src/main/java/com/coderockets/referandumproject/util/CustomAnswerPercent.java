@@ -11,6 +11,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -29,6 +30,7 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import hugo.weaving.DebugLog;
 import rx.Observable;
@@ -71,11 +73,63 @@ public class CustomAnswerPercent extends View {
 
     List<ModelFriend> mListFriendsAnswer;
     final int FRIEND_COUNT = 3;
+    int mFriendAnswerViewSize = 100;
 
     private enum ANOTHER_ICON_POSITION {
         LEFT,
         RIGHT
     }
+
+//    Bundle stateBundle;
+//
+//    @DebugLog
+//    @Override
+//    protected Parcelable onSaveInstanceState() {
+//        Parcelable superState = super.onSaveInstanceState();
+//        SavedState savedState = new SavedState(superState);
+//        savedState.bundle = stateBundle;
+//        return savedState;
+//    }
+//
+//    @DebugLog
+//    @Override
+//    protected void onRestoreInstanceState(Parcelable state) {
+//        SavedState ss = (SavedState) state;
+//        super.onRestoreInstanceState(ss.getSuperState());
+//        setStateBundle(ss.bundle);
+//    }
+//
+//    static class SavedState extends BaseSavedState {
+//
+//        Bundle bundle;
+//
+//        SavedState(Parcelable parcelable) {
+//            super(parcelable);
+//        }
+//
+//        SavedState(Parcel source) {
+//            super(source);
+//            bundle = source.readBundle(getClass().getClassLoader());
+//        }
+//
+//        @Override
+//        public void writeToParcel(Parcel out, int flags) {
+//            super.writeToParcel(out, flags);
+//            out.writeBundle(bundle);
+//        }
+//
+//        public static final Parcelable.Creator<SavedState> CREATOR = new Creator<SavedState>() {
+//            @Override
+//            public SavedState createFromParcel(Parcel source) {
+//                return new SavedState(source);
+//            }
+//
+//            @Override
+//            public SavedState[] newArray(int size) {
+//                return new SavedState[0];
+//            }
+//        };
+//    }
 
     @DebugLog
     public CustomAnswerPercent(Context context, AttributeSet attrs) {
@@ -84,10 +138,18 @@ public class CustomAnswerPercent extends View {
     }
 
     @DebugLog
+    public void setStateBundle(Bundle bundle) {
+        Logger.i("TRY STATE BUNDLE" + bundle.getString("STATE_FRIEND_NAME"));
+    }
+
+    @DebugLog
     private void init(Context context, AttributeSet attrs) {
 
-        setSaveEnabled(true);
+        // Custom View lerde state kayıt etmek için manuel olarak aktif hale getirilmelilir. -> setSaveEnabled(true)
+        //setSaveEnabled(true);
+
         this.mContext = context;
+        //stateBundle = new Bundle();
 
         TypedArray ta = context.getTheme().obtainStyledAttributes(attrs, R.styleable.CustomAnswerPercent, 0, 0);
         this.widthBarA = ta.getInt(R.styleable.CustomAnswerPercent_barAWidth, 50);
@@ -101,67 +163,6 @@ public class CustomAnswerPercent extends View {
         this.animAlphaViewDuration = ta.getInt(R.styleable.CustomAnswerPercent_animAlphaViewDuration, 300);
         this.alphaViewValue = ta.getFloat(R.styleable.CustomAnswerPercent_alphaViewValue, 0.3f);
         ta.recycle();
-
-
-
-        /*
-        CountDownTimer countDownTimer = new CountDownTimer(2000, 100) {
-            @Override
-            public void onTick(long l) {
-
-            }
-
-            @Override
-            public void onFinish() {
-
-            }
-        };
-        */
-        /*
-        setSaveEnabled(true);
-
-        //read xml attributes
-        TypedArray ta = context.getTheme().obtainStyledAttributes(attrs, R.styleable.ValueBar, 0, 0);
-        barHeight = ta.getDimensionPixelSize(R.styleable.ValueBar_barHeight, 0);
-        circleRadius = ta.getDimensionPixelSize(R.styleable.ValueBar_circleRadius, 0);
-        spaceAfterBar = ta.getDimensionPixelSize(R.styleable.ValueBar_spaceAfterBar, 0);
-        circleTextSize = ta.getDimensionPixelSize(R.styleable.ValueBar_circleTextSize, 0);
-        maxValueTextSize = ta.getDimensionPixelSize(R.styleable.ValueBar_maxValueTextSize, 0);
-        labelTextSize = ta.getDimensionPixelSize(R.styleable.ValueBar_labelTextSize, 0);
-        labelTextColor = ta.getColor(R.styleable.ValueBar_labelTextColor, Color.BLACK);
-        currentValueTextColor = ta.getColor(R.styleable.ValueBar_maxValueTextColor, Color.BLACK);
-        circleTextColor = ta.getColor(R.styleable.ValueBar_circleTextColor, Color.BLACK);
-        baseColor = ta.getColor(R.styleable.ValueBar_baseColor, Color.BLACK);
-        fillColor = ta.getColor(R.styleable.ValueBar_fillColor, Color.BLACK);
-        labelText = ta.getString(R.styleable.ValueBar_labelText);
-        ta.recycle();
-
-        labelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        labelPaint.setTextSize(labelTextSize);
-        labelPaint.setColor(labelTextColor);
-        labelPaint.setTextAlign(Paint.Align.LEFT);
-        labelPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-
-        maxValuePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        maxValuePaint.setTextSize(maxValueTextSize);
-        maxValuePaint.setColor(currentValueTextColor);
-        maxValuePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        maxValuePaint.setTextAlign(Paint.Align.RIGHT);
-
-        barBasePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        barBasePaint.setColor(baseColor);
-
-        barFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        barFillPaint.setColor(fillColor);
-
-        circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        circlePaint.setColor(fillColor);
-
-        currentValuePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        currentValuePaint.setTextSize(circleTextSize);
-        currentValuePaint.setColor(circleTextColor);
-        currentValuePaint.setTextAlign(Paint.Align.CENTER);
-        */
     }
 
     public void addAlphaView(View hostView) {
@@ -259,9 +260,16 @@ public class CustomAnswerPercent extends View {
 //        }
     }
 
+    public void setFriendAnswerViewSize(int size) {
+        this.mFriendAnswerViewSize = size;
+    }
+
+    @DebugLog
     public void showResult() throws Exception {
 
         ButtonClick = true;
+        isFinishAnimBarA = false;
+        isFinishAnimBarB = false;
 
         if (mAlphaView == null) {
             Log.e(TAG, "alphaView is null");
@@ -379,49 +387,6 @@ public class CustomAnswerPercent extends View {
         }
     }
 
-    private void drawFriendAnswerFalse() {
-
-        RelativeLayout relativeLayout = (RelativeLayout) getParent();
-
-        Observable.from(mListFriendsAnswer)
-                .filter(modelFriend -> modelFriend.getOption().equals("b"))
-                .take(FRIEND_COUNT)
-                .toList()
-                .filter(modelFriends -> modelFriends.size() > 0)
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(list -> {
-                    Logger.i("List Count : " + list.size());
-                    int index = 0;
-                    for (ModelFriend modelFriend : list) {
-
-                        ImageView imageView1 = new ImageView(mContext);
-
-                        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_START);
-                        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                        layoutParams.leftMargin = 30 - (index % 2 == 0 ? 10 : -10);
-                        layoutParams.bottomMargin = index * 50;
-                        imageView1.setLayoutParams(layoutParams);
-                        relativeLayout.addView(imageView1);
-
-                        Logger.i("Friend Answer False, Name: " + modelFriend.getName());
-                        Picasso.with(mContext)
-                                .load(modelFriend.getProfileImage())
-                                .transform(new PicassoCircleTransform())
-                                .resize(100, 100)
-                                .centerCrop()
-                                .into(imageView1);
-
-                        index++;
-                    }
-                    drawAnotherIcon(index, ANOTHER_ICON_POSITION.LEFT);
-                }, error -> {
-                    Logger.e(error, "HATA");
-                    error.printStackTrace();
-                });
-    }
-
     private void drawBarB(Canvas canvas) {
 
         //float center = getWidth() / 2;
@@ -460,10 +425,62 @@ public class CustomAnswerPercent extends View {
             if (mListFriendsAnswer != null && mListFriendsAnswer.size() > 0) {
                 drawFriendAnswerTrue();
             }
+            //isFinishAnimBarB = false;
         }
     }
 
+    @DebugLog
+    private void drawFriendAnswerFalse() {
+
+        RelativeLayout relativeLayout = (RelativeLayout) getParent();
+
+        Observable.from(mListFriendsAnswer)
+                .filter(modelFriend -> modelFriend.getOption().equals("b"))
+                .take(FRIEND_COUNT)
+                .toList()
+                .filter(modelFriends -> modelFriends.size() > 0)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(list -> {
+                    Logger.i("List Count : " + list.size());
+                    int index = 0;
+                    for (ModelFriend modelFriend : list) {
+
+                        Logger.i("ModelFriend: " + modelFriend.getName());
+                        //stateBundle.putString("STATE_FRIEND_NAME", modelFriend.getName());
+
+                        ImageView imageView1 = new ImageView(relativeLayout.getContext());
+
+                        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_START);
+                        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                        layoutParams.leftMargin = 30 - (index % 2 == 0 ? 10 : -10);
+                        layoutParams.bottomMargin = index * mFriendAnswerViewSize / 2;
+
+                        imageView1.setLayoutParams(layoutParams);
+
+                        relativeLayout.addView(imageView1);
+
+                        Logger.i("Friend Answer False, Name: " + modelFriend.getName());
+                        Picasso.with(relativeLayout.getContext())
+                                .load(modelFriend.getProfileImage())
+                                .transform(new PicassoCircleTransform())
+                                .resize(mFriendAnswerViewSize, mFriendAnswerViewSize)
+                                .centerCrop()
+                                .into(imageView1);
+
+                        index++;
+                    }
+                    drawAnotherIcon(index, ANOTHER_ICON_POSITION.LEFT);
+                }, error -> {
+                    Logger.e(error, "HATA");
+                    error.printStackTrace();
+                });
+    }
+
+    @DebugLog
     private void drawFriendAnswerTrue() {
+
         RelativeLayout relativeLayout = (RelativeLayout) getParent();
 
         Observable.from(mListFriendsAnswer)
@@ -477,21 +494,24 @@ public class CustomAnswerPercent extends View {
                     int index = 0;
                     for (ModelFriend modelFriend : pairs) {
 
-                        ImageView imageView1 = new ImageView(mContext);
+                        ImageView imageView1 = new ImageView(relativeLayout.getContext());
+                        imageView1.setId(new Random().nextInt());
 
                         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
                         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                         layoutParams.rightMargin = 30 - (index % 2 == 0 ? 10 : -10);
-                        layoutParams.bottomMargin = index * 50;
+                        layoutParams.bottomMargin = index * mFriendAnswerViewSize / 2;
+
                         imageView1.setLayoutParams(layoutParams);
+
                         relativeLayout.addView(imageView1);
 
                         Logger.i("Friend Answer True, Name: " + modelFriend.getName());
-                        Picasso.with(mContext)
+                        Picasso.with(relativeLayout.getContext())
                                 .load(modelFriend.getProfileImage())
                                 .transform(new PicassoCircleTransform())
-                                .resize(100, 100)
+                                .resize(mFriendAnswerViewSize, mFriendAnswerViewSize)
                                 .centerCrop()
                                 .into(imageView1);
 
@@ -504,8 +524,11 @@ public class CustomAnswerPercent extends View {
                 });
     }
 
+    @DebugLog
     private void drawAnotherIcon(int index, ANOTHER_ICON_POSITION position) {
+
         RelativeLayout relativeLayout = (RelativeLayout) getParent();
+
         ImageView imageView = new ImageView(mContext);
 
         imageView.setOnClickListener(v -> {
@@ -531,7 +554,7 @@ public class CustomAnswerPercent extends View {
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         layoutParams.rightMargin = position == ANOTHER_ICON_POSITION.RIGHT ? 30 : 0;
         layoutParams.leftMargin = position == ANOTHER_ICON_POSITION.LEFT ? 30 : 0;
-        layoutParams.bottomMargin = index * 50;
+        layoutParams.bottomMargin = index * mFriendAnswerViewSize / 2;
 
         imageView.setLayoutParams(layoutParams);
 
@@ -539,7 +562,7 @@ public class CustomAnswerPercent extends View {
 
         Picasso.with(mContext)
                 .load(R.drawable.ic_add_circle_indigo_300_48dp)
-                .resize(100, 100)
+                .resize(mFriendAnswerViewSize, mFriendAnswerViewSize)
                 .into(imageView);
     }
 

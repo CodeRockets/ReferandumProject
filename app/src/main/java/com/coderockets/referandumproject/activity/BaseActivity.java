@@ -1,92 +1,139 @@
 package com.coderockets.referandumproject.activity;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
+
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.aykuttasil.androidbasichelperlib.UiHelper;
+import com.coderockets.referandumproject.db.DbManager;
+import com.coderockets.referandumproject.helper.SuperHelper;
+import com.coderockets.referandumproject.model.Event.ResetEvent;
+import com.coderockets.referandumproject.model.Event.UpdateLoginEvent;
+import com.coderockets.referandumproject.rest.ApiManager;
+import com.coderockets.referandumproject.rest.RestModel.UserRequest;
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.Profile;
+import com.facebook.ProfileTracker;
+import com.joanzapata.iconify.IconDrawable;
+import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+import com.orhanobut.logger.Logger;
+
+import org.greenrobot.eventbus.EventBus;
 
 import hugo.weaving.DebugLog;
-import jp.wasabeef.blurry.Blurry;
+import rx.Subscription;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Created by aykutasil on 2.06.2016.
  */
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
+    AccessTokenTracker mAccessTokenTracker;
+    ProfileTracker mProfileTracker;
+
+    abstract void updateUi();
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setAccesTokenTracker();
+        setProfileTracker();
+    }
+
+    @DebugLog
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @DebugLog
-    public void makeBlur(Context context, ViewGroup viewGroup) {
-        //Blurry.delete(viewGroup);
-        Blurry.with(context)
-                .radius(25)
-                .sampling(2)
-                .color(Color.argb(66, 255, 255, 0))
-                .async()
-                .animate(500)
-                .onto(viewGroup);
+    public void setAccesTokenTracker() {
+
+        mAccessTokenTracker = new AccessTokenTracker() {
+            @DebugLog
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+
+                AccessToken.setCurrentAccessToken(currentAccessToken);
+
+                EventBus.getDefault().postSticky(new ResetEvent());
+
+                if (currentAccessToken != null) {
+                    saveUser(currentAccessToken.getToken());
+                } else {
+                    DbManager.deleteModelUser();
+                    updateUi();
+                }
+            }
+        };
+
+        mAccessTokenTracker.startTracking();
+    }
+
+    public void setProfileTracker() {
+
+        mProfileTracker = new ProfileTracker() {
+            @DebugLog
+            @Override
+            protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+                Profile.setCurrentProfile(currentProfile);
+            }
+        };
+
+        mProfileTracker.startTracking();
     }
 
     @DebugLog
-    public void makeBlur(Context context, View view, ImageView into) {
-        runOnUiThread(() -> Blurry.with(context)
-                .async()
-                .radius(25)
-                .sampling(2)
-                .capture(view)
-                .into(into));
+    public void saveUser(String token) {
 
-    }
+        MaterialDialog materialDialog = new MaterialDialog.Builder(this)
+                .cancelable(false)
+                .icon(new IconDrawable(this, FontAwesomeIcons.fa_angle_right).actionBarSize().colorRes(com.aykuttasil.androidbasichelperlib.R.color.accent))
+                .content("Lütfen Bekleyiniz..")
+                .progress(true, 0)
+                .show();
 
+        UserRequest userRequest = new UserRequest();
+        userRequest.setToken(token);
 
-    /*
-    @DebugLog
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Logger.i(userRequest.getToken());
+        //Logger.i(SuperHelper.getDeviceId(BaseActivity.this));
+        //Logger.i("User save request: " + new Gson().toJson(userRequest));
 
-
-        switch (requestCode) {
-            case 123: {
-
-                boolean allPermissionGranted = true;
-                for (int a = 0; a < permissions.length; a++) {
-                    if (grantResults[a] == PackageManager.PERMISSION_GRANTED) {
-                        allPermissionGranted = true;
-                    } else {
-                        allPermissionGranted = false;
-                        break;
-                    }
-                }
-                if (!allPermissionGranted) {
-                    final MaterialDialog dialog = UiHelper.UiDialog.newInstance(this, 1).getOKDialog("Reaktif Uygulama İzinleri", "Tüm izinleri vermeniz gerekmektedir !", null);
-                    dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                            setResult(Const.ACTIVITY_RESULT_CODE_SIGNUP_ERROR);
-                            finish();
-                        }
-                    });
-                    dialog.show();
-                }
-                break;
-            }
-            default: {
-                setResult(Const.ACTIVITY_RESULT_CODE_SIGNUP_ERROR);
-                finish();
-                //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-            }
+        try {
+            Subscription subscription = ApiManager.getInstance(this).SaveUser(userRequest)
+                    .subscribe(response -> {
+                                Logger.i(response.getData().getName());
+                                response.getData().save();
+                                EventBus.getDefault().postSticky(new UpdateLoginEvent());
+                                updateUi();
+                            }, error -> {
+                                materialDialog.dismiss();
+                                SuperHelper.CrashlyticsLog(error);
+                                UiHelper.UiDialog.newInstance(this).getOKDialog("HATA", error.getMessage(), null).show();
+                            },
+                            materialDialog::dismiss
+                    );
+            //mListSubscription.add(subscription);
+        } catch (Exception e) {
+            SuperHelper.CrashlyticsLog(e);
+            materialDialog.dismiss();
+            e.printStackTrace();
+            //UiHelper.UiSnackBar.showSimpleSnackBar(getView(), e.getMessage(), Snackbar.LENGTH_INDEFINITE);
         }
 
+    }
 
-    }  */
+    @DebugLog
+    @Override
+    protected void onDestroy() {
+        mAccessTokenTracker.stopTracking();
+        mProfileTracker.stopTracking();
+
+        super.onDestroy();
+    }
 }

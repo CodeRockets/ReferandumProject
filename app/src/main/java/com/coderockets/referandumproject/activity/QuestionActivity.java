@@ -84,6 +84,7 @@ public class QuestionActivity extends BaseActivity {
     private String mFilePath = null;
     //PhotoViewAttacher photoViewAttacher;
 
+
     @DebugLog
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -97,7 +98,7 @@ public class QuestionActivity extends BaseActivity {
         setToolbar();
         setFab();
         setReactiveEditText();
-        updateUI();
+        setRandomImage();
         //photoViewAttacher = new PhotoViewAttacher(mImageView_SoruImage);
         //photoViewAttacher.setAllowParentInterceptOnEdge(true);
         //photoViewAttacher.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -166,8 +167,9 @@ public class QuestionActivity extends BaseActivity {
         });
     }
 
-    private void updateUI() {
-        setRandomImage();
+    @Override
+    public void updateUi() {
+
     }
 
     @DebugLog

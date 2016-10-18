@@ -38,16 +38,19 @@
                 android:text="Auto Resized Text, max 1 line Merhaba Merhaba Merhabaaaaa"
                 android:textSize="100sp" />
 
-
-            <com.coderockets.referandumproject.util.CustomAnswerPercent
-                android:id="@+id/MyCustomAnswerPercent"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                custom:barAColor="@color/color7"
-                custom:barBColor="@color/colorPrimary" />
+                android:layout_height="match_parent">
 
+                <com.coderockets.referandumproject.util.CustomAnswerPercent
+                    android:id="@+id/MyCustomAnswerPercent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    custom:barAColor="@color/color7"
+                    custom:barBColor="@color/colorPrimary" />
+            </RelativeLayout>
         </com.google.android.flexbox.FlexboxLayout>
 
     </RelativeLayout>

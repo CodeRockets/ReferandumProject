@@ -13,20 +13,17 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.MainActivity;
-import com.coderockets.referandumproject.app.Const;
 import com.coderockets.referandumproject.db.DbManager;
 import com.coderockets.referandumproject.helper.SuperHelper;
-import com.coderockets.referandumproject.model.Event.SaveUserEvent;
+import com.coderockets.referandumproject.model.Event.ResetEvent;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
 import com.coderockets.referandumproject.model.ModelTempQuestionAnswer;
 import com.coderockets.referandumproject.model.ModelUser;
 import com.coderockets.referandumproject.rest.ApiManager;
 import com.coderockets.referandumproject.rest.RestModel.AnswerRequest;
-import com.coderockets.referandumproject.rest.RestModel.UserRequest;
 import com.coderockets.referandumproject.util.CustomAnswerPercent;
 import com.coderockets.referandumproject.util.CustomButton;
 import com.coderockets.referandumproject.util.adapter.CustomSorularAdapter;
-import com.facebook.AccessToken;
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 import com.tbruyelle.rxpermissions.RxPermissions;
@@ -104,7 +101,6 @@ public class ReferandumFragment extends BaseFragment {
             @DebugLog
             @Override
             public void onPageSelected(int position) {
-                //setQuestionFragment();
                 mActivity.updateProfileIcon(mActivity.mToolbar.getMenu().getItem(0));
                 checkTempAnsweredAndShowResult(position);
 
@@ -129,27 +125,16 @@ public class ReferandumFragment extends BaseFragment {
     }
 
     private void setSorular() {
-        //
-        mRxPermission.request(Const.PERMISSIONS_GENERAL)
-                .subscribe(success -> {
-                    if (success) {
-                        Logger.i("mSorularAdapter.getCount(): " + mSorularAdapter.getCount());
-                        if (mSorularAdapter.getCount() == 0) {
-                            addQuestionsToAdapter(20);
-                        }
-                    } else {
-                        UiHelper.UiSnackBar.showSimpleSnackBar(getView(), "Tüm izinleri vermelisiniz.", Snackbar.LENGTH_INDEFINITE);
-                    }
-                }, error -> {
-                    UiHelper.UiSnackBar.showSimpleSnackBar(getView(), error.getMessage(), Snackbar.LENGTH_INDEFINITE);
-                    SuperHelper.CrashlyticsLog(error);
-                });
-
+        if (mSorularAdapter.getCount() == 0) {
+            addQuestionsToAdapter(20);
+        }
     }
 
     @Click(R.id.ButtonTrue)
     public void ButtonTrueClick() {
+
         if (mSorularAdapter.getCount() == 0) return;
+
         try {
             ModelQuestionInformation modelQuestionInformation = getCurrentQuestionFragment().getQuestion();
             if (!checkAnswered(modelQuestionInformation)) {
@@ -165,7 +150,9 @@ public class ReferandumFragment extends BaseFragment {
 
     @Click(R.id.ButtonFalse)
     public void ButtonFalseClick() {
+
         if (mSorularAdapter.getCount() == 0) return;
+
         try {
             ModelQuestionInformation modelQuestionInformation = getCurrentQuestionFragment().getQuestion();
             if (!checkAnswered(modelQuestionInformation)) {
@@ -193,8 +180,8 @@ public class ReferandumFragment extends BaseFragment {
         // Eğer modControl hashtable ında 10 ve katlarında bir kayıt yoksa 10 soru çekilir.
         // Bu kontrolün amacı 11. soruda iken 10. soruya dönüldüğünde tekrar soru yüklenmesini engellemek için.
         if (modControl.get(mViewPagerSorular.getCurrentItem()) == null) {
-            Logger.i("ViewPagerSorular.getCurrentItem(): " + mViewPagerSorular.getCurrentItem());
-            Logger.i("SorularAdapter.getCount(): " + mSorularAdapter.getCount());
+            //Logger.i("ViewPagerSorular.getCurrentItem(): " + mViewPagerSorular.getCurrentItem());
+            //Logger.i("SorularAdapter.getCount(): " + mSorularAdapter.getCount());
             if ((mViewPagerSorular.getCurrentItem() > mSorularAdapter.getCount() - 10
                     && mViewPagerSorular.getCurrentItem() != 0)
                     || mViewPagerSorular.getCurrentItem() + 1 == mSorularAdapter.getCount())
@@ -328,7 +315,7 @@ public class ReferandumFragment extends BaseFragment {
 
     @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
-    public void onEvent(SaveUserEvent event) {
+    public void onEvent(ResetEvent event) {
         mSorularAdapter.removeAdapterItems();
         tempAnswer.clear();
         modControl.clear();

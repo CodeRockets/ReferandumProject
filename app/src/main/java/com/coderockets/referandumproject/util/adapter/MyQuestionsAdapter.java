@@ -1,6 +1,5 @@
 package com.coderockets.referandumproject.util.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,11 +21,9 @@ import java.util.List;
 public class MyQuestionsAdapter extends RecyclerView.Adapter<MyQuestionsAdapter.ViewHolder> {
 
     List<ModelQuestionInformation> mList;
-    static Context mContext;
 
-    public MyQuestionsAdapter(Context context, List<ModelQuestionInformation> list) {
+    public MyQuestionsAdapter(List<ModelQuestionInformation> list) {
         mList = list;
-        mContext = context;
     }
 
     @Override
@@ -37,7 +34,8 @@ public class MyQuestionsAdapter extends RecyclerView.Adapter<MyQuestionsAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Logger.i(mList.get(position).getQuestionText());
+        // Recyclerview ın recycle olmasını engelleyerek abidik gubidik bir şekilde itemların birbirine karışmasını engeller
+        holder.setIsRecyclable(false);
         holder.bind(mList.get(position));
     }
 
@@ -58,50 +56,41 @@ public class MyQuestionsAdapter extends RecyclerView.Adapter<MyQuestionsAdapter.
 
     class ViewHolder extends RecyclerView.ViewHolder {
         ModelQuestionInformation mMqi;
-        AutoFitTextView TextViewSoru;
-        ImageView ImageViewSoruImage;
-        CustomAnswerPercent customAnswerPercent;
+        AutoFitTextView mTextViewSoru;
+        ImageView mImageViewSoruImage;
+        CustomAnswerPercent mCustomAnswerPercent;
 
         ViewHolder(View itemView) {
             super(itemView);
-            TextViewSoru = (AutoFitTextView) itemView.findViewById(R.id.TextViewSoru);
-            ImageViewSoruImage = (ImageView) itemView.findViewById(R.id.ImageViewSoruImage);
-            customAnswerPercent = (CustomAnswerPercent) itemView.findViewById(R.id.MyCustomAnswerPercent);
+            mTextViewSoru = (AutoFitTextView) itemView.findViewById(R.id.TextViewSoru);
+            mImageViewSoruImage = (ImageView) itemView.findViewById(R.id.ImageViewSoruImage);
+            mCustomAnswerPercent = (CustomAnswerPercent) itemView.findViewById(R.id.MyCustomAnswerPercent);
         }
 
         void bind(ModelQuestionInformation mqi) {
-            Logger.i(mqi.getQuestionText());
-            Logger.i(mqi.getQuestionImage());
 
             mMqi = mqi;
-            TextViewSoru.setText(mqi.getQuestionText());
-            Picasso.with(mContext).load(mqi.getQuestionImage()).into(ImageViewSoruImage);
-            showCustomAnswerPercent();
+            mTextViewSoru.setText(mqi.getQuestionText());
 
-            //Glide.with(imageView.getContext()).load(new File("")).into(imageView);
-            //Picasso.with(imageView.getContext()).load(new File(imageUrl)).into(imageView);
+            Picasso.with(mImageViewSoruImage.getContext())
+                    .load(mqi.getQuestionImage())
+                    .into(mImageViewSoruImage);
+
+            showCustomAnswerPercent();
         }
 
 
         private void showCustomAnswerPercent() {
             try {
-                View alphaView = ImageViewSoruImage;
-                //CustomAnswerPercent customAnswerPercent = (CustomAnswerPercent) qf.getView().findViewById(R.id.customAnswerPercent);
-                customAnswerPercent.addAlphaView(alphaView);
-                customAnswerPercent.setAValue(mMqi.getOption_B_Count());
-                customAnswerPercent.setBValue(mMqi.getOption_A_Count());
-
-                // FIXME: 29.09.2016 cevap veren arkadaşların bilgisi user/question/fetch route undan geliyor.
-                // FIXME: 29.09.2016 Biz burda user/question route undan bilgileri çekiyoruz
-                //Logger.i(this.getClass().getSimpleName() + mMqi.getModelFriends());
-                //customAnswerPercent.setFriendAnswer(mMqi.getModelFriends());
-
-                customAnswerPercent.showResult();
+                mCustomAnswerPercent.addAlphaView(mImageViewSoruImage);
+                mCustomAnswerPercent.setAValue(mMqi.getOption_B_Count());
+                mCustomAnswerPercent.setBValue(mMqi.getOption_A_Count());
+                mCustomAnswerPercent.setFriendAnswer(mMqi.getModelFriends());
+                mCustomAnswerPercent.setFriendAnswerViewSize(50);
+                mCustomAnswerPercent.showResult();
             } catch (Exception e) {
-                Logger.e("HATA: " + e);
+                Logger.e(e, "HATA");
             }
         }
     }
-
-
 }

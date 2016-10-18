@@ -6,6 +6,7 @@ import android.support.multidex.MultiDex;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
+import com.aykuttasil.androidbasichelperlib.PrefsHelper;
 import com.coderockets.referandumproject.BuildConfig;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
@@ -21,18 +22,15 @@ import com.orhanobut.logger.Logger;
 
 import org.androidannotations.annotations.EApplication;
 
-import java.util.concurrent.Callable;
+import java.util.UUID;
 
 import hugo.weaving.DebugLog;
 import io.fabric.sdk.android.Fabric;
-import rx.Observable;
-import rx.functions.Action1;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * Created by aykutasil on 2.06.2016.
  */
-@EApplication
 public class ReferandumApp extends Application {
 
     @Override
@@ -44,6 +42,13 @@ public class ReferandumApp extends Application {
 
     @DebugLog
     private void initReferandum() {
+
+        if (PrefsHelper.readPrefString(this, Const.PREFS_KEY_REFERANDUM_UUID) == null) {
+            String uuid = UUID.randomUUID().toString();
+            Logger.i("UUID: " + uuid);
+            PrefsHelper.writePrefString(this, Const.PREFS_KEY_REFERANDUM_UUID, uuid);
+        }
+
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 //.setDefaultFontPath("fonts/ShadowsIntoLight.ttf")
                 .setFontAttrId(R.attr.fontPath)

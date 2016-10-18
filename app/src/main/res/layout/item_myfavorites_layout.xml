@@ -1,6 +1,7 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardView_my_favorites_item"
     android:layout_width="match_parent"
     android:layout_height="150dp"
     android:layout_margin="3dp"
@@ -36,19 +37,24 @@
                 android:gravity="center"
                 android:maxLines="5"
                 android:padding="5dp"
-                android:text="Auto Resized Text, max 1 line Merhaba Merhaba Merhabaaaaa"
+                android:text="Auto Resized Text"
                 android:textSize="100sp" />
 
 
-            <com.coderockets.referandumproject.util.CustomAnswerPercent
-                android:id="@+id/MyCustomAnswerPercent"
+            <RelativeLayout
+                android:id="@+id/relativeLayout_MyCustomAnswerPercent"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                custom:barAColor="@color/color7"
-                custom:barBColor="@color/colorPrimary" />
+                android:layout_height="match_parent">
 
+                <com.coderockets.referandumproject.util.CustomAnswerPercent
+                    android:id="@+id/MyCustomAnswerPercent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    custom:barAColor="@color/color7"
+                    custom:barBColor="@color/colorPrimary" />
+            </RelativeLayout>
         </com.google.android.flexbox.FlexboxLayout>
 
 
@@ -58,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
-            android:src="@drawable/ic_favorite_red_900_36dp"
+            android:src="@drawable/ic_grade_red_900_48dp"
             app:backgroundTint="@color/accentColor"
             app:fabSize="mini"
             app:useCompatPadding="true" />
