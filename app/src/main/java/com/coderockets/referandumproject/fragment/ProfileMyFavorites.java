@@ -52,7 +52,7 @@ public class ProfileMyFavorites extends BaseProfile {
     @DebugLog
     @AfterViews
     public void ProfileMyFavoritesInit() {
-        if (mList.size() == 0) {
+        if (mMyFavoritesAdapter.getItemCount() == 0) {
             getUserFavorites();
         }
         setAdapter();
@@ -83,7 +83,7 @@ public class ProfileMyFavorites extends BaseProfile {
     private void convertResponseToUiView(List<ModelQuestionInformation> rows) {
 
         for (ModelQuestionInformation mqi : rows) {
-            mMyFavoritesAdapter.addUserQuestion(mqi);
+            mMyFavoritesAdapter.addItem(mqi);
         }
 
     }

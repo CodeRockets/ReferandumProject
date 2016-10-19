@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class MyQuestionsAdapter extends RecyclerView.Adapter<MyQuestionsAdapter.ViewHolder> {
 
-    List<ModelQuestionInformation> mList;
+    private List<ModelQuestionInformation> mList;
 
     public MyQuestionsAdapter(List<ModelQuestionInformation> list) {
         mList = list;
@@ -51,7 +51,8 @@ public class MyQuestionsAdapter extends RecyclerView.Adapter<MyQuestionsAdapter.
 
     private void removeItem(int position) {
         mList.remove(position);
-        notifyItemRemoved(position);
+        notifyDataSetChanged();
+        //notifyItemRemoved(position);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

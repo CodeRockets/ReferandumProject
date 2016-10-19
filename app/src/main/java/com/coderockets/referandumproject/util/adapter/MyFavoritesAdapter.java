@@ -32,7 +32,7 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
     private List<ModelQuestionInformation> mList;
 
     public MyFavoritesAdapter(List<ModelQuestionInformation> list) {
-        mList = list;
+        this.mList = list;
     }
 
     @Override
@@ -53,14 +53,17 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
         return mList.size();
     }
 
-    public void addUserQuestion(ModelQuestionInformation mqi) {
+    public void addItem(ModelQuestionInformation mqi) {
         mList.add(mqi);
+        //notifyItemInserted(mList.size());
         notifyDataSetChanged();
     }
 
     private void removeItem(int position) {
         mList.remove(position);
-        notifyItemRemoved(position);
+        // FIXME: 19.10.2016 -> holder.setIsRecyclable(false); olduğu için düzgün çalışmıyor
+        //notifyItemRemoved(position);
+        notifyDataSetChanged();
     }
 
     @DebugLog
