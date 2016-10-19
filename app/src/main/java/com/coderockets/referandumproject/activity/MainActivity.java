@@ -148,45 +148,6 @@ public class MainActivity extends BaseActivity {
         updateProfileIcon(mToolbar.getMenu().getItem(0));
     }
 
-    @DebugLog
-    public void updateProfileIcon(MenuItem menuItem) {
-        ModelUser modelUser = DbManager.getModelUser();
-        if (modelUser != null) {
-
-            WeakReference<MenuItem> itemWeakReference = new WeakReference<>(menuItem);
-            Target target = new Target() {
-
-                @Override
-                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                    MenuItem menuItem = itemWeakReference.get();
-
-                    if (menuItem != null) {
-                        Drawable drawable = new BitmapDrawable(getResources(), bitmap);
-                        drawable.setBounds(0, 0, 100, 100);
-                        menuItem.setIcon(drawable);
-                    }
-                }
-
-                @Override
-                public void onBitmapFailed(Drawable errorDrawable) {
-
-                }
-
-                @Override
-                public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                }
-            };
-            Picasso.with(this)
-                    .load(modelUser.getProfileImageUrl())
-                    .transform(new PicassoCircleTransform())
-                    .into(target);
-
-        } else {
-            menuItem.setIcon(R.drawable.ic_account_circle_pink_900_48dp);
-        }
-    }
-
     @Override
     protected void onPause() {
         EventBus.getDefault().unregister(this);

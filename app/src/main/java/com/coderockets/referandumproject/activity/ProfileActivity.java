@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +15,11 @@ import android.widget.LinearLayout;
 
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.db.DbManager;
-import com.coderockets.referandumproject.fragment.ProfileMe_;
 import com.coderockets.referandumproject.fragment.ProfileMyFavorites_;
 import com.coderockets.referandumproject.fragment.ProfileMyQuestions_;
 import com.coderockets.referandumproject.helper.SuperHelper;
+import com.coderockets.referandumproject.model.Event.UpdateLoginEvent;
+import com.coderockets.referandumproject.model.ModelUser;
 import com.coderockets.referandumproject.util.adapter.MyFragmentPagerAdapter;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -29,6 +31,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,7 +116,15 @@ public class ProfileActivity extends BaseActivity {
             showMainContent();
             setupViewPager(mProfileViewPager);
             mTabs.setupWithViewPager(mProfileViewPager);
+            setUi();
         }
+    }
+
+    @DebugLog
+    private void setUi() {
+        ModelUser modelUser = DbManager.getModelUser();
+        mToolbar.setTitle(modelUser.getName());
+        supportInvalidateOptionsMenu();
     }
 
     @UiThread
@@ -130,7 +141,7 @@ public class ProfileActivity extends BaseActivity {
     private void setupViewPager(ViewPager viewPager) {
 
         MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(ProfileMe_.builder().build(), "Profil");
+        //adapter.addFragment(ProfileMe_.builder().build(), "Profil");
         adapter.addFragment(ProfileMyQuestions_.builder().build(), "Sorularım");
         adapter.addFragment(ProfileMyFavorites_.builder().build(), "Favorilerim");
         viewPager.setAdapter(adapter);
@@ -157,12 +168,27 @@ public class ProfileActivity extends BaseActivity {
         mProfileMainLayout.setVisibility(View.GONE);
     }
 
+    @DebugLog
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_profil_menu, menu);
+        updateProfileIcon(menu.findItem(R.id.menuProfil));
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @DebugLog
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
+            case android.R.id.home: {
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
+            }
+            case R.id.menuCikisYap: {
+                mLoginButton.performClick();
+                EventBus.getDefault().postSticky(new UpdateLoginEvent());
+                break;
+            }
         }
         return super.onOptionsItemSelected(item);
     }

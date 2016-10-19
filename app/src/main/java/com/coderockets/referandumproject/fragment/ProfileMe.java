@@ -76,7 +76,7 @@ public class ProfileMe extends BaseProfile implements AppBarLayout.OnOffsetChang
         this.mContext = getActivity();
         this.mActivity = (ProfileActivity) getActivity();
         setProfile();
-        mProfileMeAppBarLayout.addOnOffsetChangedListener(this);
+        //mProfileMeAppBarLayout.addOnOffsetChangedListener(this);
         //setGestureImage();
     }
 

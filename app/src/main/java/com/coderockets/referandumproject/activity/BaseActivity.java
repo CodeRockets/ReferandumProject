@@ -1,18 +1,25 @@
 package com.coderockets.referandumproject.activity;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.aykuttasil.androidbasichelperlib.UiHelper;
+import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.db.DbManager;
 import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.model.Event.ResetEvent;
 import com.coderockets.referandumproject.model.Event.UpdateLoginEvent;
+import com.coderockets.referandumproject.model.ModelUser;
 import com.coderockets.referandumproject.rest.ApiManager;
 import com.coderockets.referandumproject.rest.RestModel.UserRequest;
+import com.coderockets.referandumproject.util.PicassoCircleTransform;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.Profile;
@@ -20,8 +27,12 @@ import com.facebook.ProfileTracker;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.orhanobut.logger.Logger;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.lang.ref.WeakReference;
 
 import hugo.weaving.DebugLog;
 import rx.Subscription;
@@ -126,6 +137,45 @@ public abstract class BaseActivity extends AppCompatActivity {
             //UiHelper.UiSnackBar.showSimpleSnackBar(getView(), e.getMessage(), Snackbar.LENGTH_INDEFINITE);
         }
 
+    }
+
+    @DebugLog
+    public void updateProfileIcon(MenuItem menuItem) {
+        ModelUser modelUser = DbManager.getModelUser();
+        if (modelUser != null) {
+
+            WeakReference<MenuItem> itemWeakReference = new WeakReference<>(menuItem);
+            Target target = new Target() {
+
+                @Override
+                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    MenuItem menuItem = itemWeakReference.get();
+
+                    if (menuItem != null) {
+                        Drawable drawable = new BitmapDrawable(getResources(), bitmap);
+                        drawable.setBounds(0, 0, 100, 100);
+                        menuItem.setIcon(drawable);
+                    }
+                }
+
+                @Override
+                public void onBitmapFailed(Drawable errorDrawable) {
+
+                }
+
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                }
+            };
+            Picasso.with(this)
+                    .load(modelUser.getProfileImageUrl())
+                    .transform(new PicassoCircleTransform())
+                    .into(target);
+
+        } else {
+            menuItem.setIcon(R.drawable.ic_account_circle_pink_900_48dp);
+        }
     }
 
     @DebugLog
