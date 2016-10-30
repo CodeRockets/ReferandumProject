@@ -1,5 +1,6 @@
 package com.coderockets.referandumproject.util.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,9 +25,11 @@ import java.util.List;
 public class MyQuestionsAdapter extends RecyclerView.Adapter<MyQuestionsAdapter.ViewHolder> {
 
     private List<ModelQuestionInformation> mList;
+    private Context mContext;
 
-    public MyQuestionsAdapter(List<ModelQuestionInformation> list) {
-        mList = list;
+    public MyQuestionsAdapter(Context context, List<ModelQuestionInformation> list) {
+        this.mList = list;
+        this.mContext = context;
     }
 
     @Override
@@ -100,6 +103,7 @@ public class MyQuestionsAdapter extends RecyclerView.Adapter<MyQuestionsAdapter.
                 mPercentBarView.setRightBarValue(mMqi.getOption_A_Count());
                 mPercentBarView.setImages(mlist);
                 mPercentBarView.setImagesListItemSize(50);
+                mPercentBarView.setImagesListTitle(mContext.getResources().getString(R.string.title_dialog_percentbar_list));
                 mPercentBarView.showResult();
             } catch (Exception e) {
                 Logger.e(e, "HATA");

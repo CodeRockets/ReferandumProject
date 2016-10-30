@@ -241,6 +241,7 @@ public class ReferandumFragment extends BaseFragment {
             percentBarView.setLeftBarValue(qf.getQuestion().getOption_B_Count());
             percentBarView.setRightBarValue(qf.getQuestion().getOption_A_Count());
             percentBarView.setImages(mlist);
+            percentBarView.setImagesListTitle(mContext.getResources().getString(R.string.title_dialog_percentbar_list));
             percentBarView.showResult();
         } catch (Exception e) {
             Logger.e("HATA: " + e);

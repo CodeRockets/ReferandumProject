@@ -51,7 +51,7 @@ public class ProfileMyQuestions extends BaseProfile {
         this.mContext = getActivity();
         this.mActivity = (ProfileActivity) getActivity();
         mList = new ArrayList<>();
-        mMyQuestionsAdapter = new MyQuestionsAdapter(mList);
+        mMyQuestionsAdapter = new MyQuestionsAdapter(mContext, mList);
         mListSubscription = new ArrayList<>();
     }
 

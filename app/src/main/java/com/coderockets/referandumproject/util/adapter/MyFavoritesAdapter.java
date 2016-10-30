@@ -1,5 +1,6 @@
 package com.coderockets.referandumproject.util.adapter;
 
+import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -33,9 +34,11 @@ import rx.schedulers.Schedulers;
 public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.ViewHolder> {
 
     private List<ModelQuestionInformation> mList;
+    private Context mContext;
 
-    public MyFavoritesAdapter(List<ModelQuestionInformation> list) {
+    public MyFavoritesAdapter(Context context, List<ModelQuestionInformation> list) {
         this.mList = list;
+        this.mContext = context;
     }
 
     @Override
@@ -132,6 +135,7 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
                 mPercentBar.setRightBarValue(mMqi.getOption_A_Count());
                 mPercentBar.setImages(mlist);
                 mPercentBar.setImagesListItemSize(50);
+                mPercentBar.setImagesListTitle(mContext.getResources().getString(R.string.title_dialog_percentbar_list));
                 mPercentBar.showResult();
             } catch (Exception e) {
                 SuperHelper.CrashlyticsLog(e);

@@ -3,4 +3,6 @@
     <string name="facebook_app_id">1590249051267349</string>
     <string name="fb_login_protocol_scheme">fb1590249051267349</string>
     <string name="title_activity_login">Sign in</string>
+
+    <string name="title_dialog_percentbar_list">Arkadaşlarınız</string>
 </resources>
