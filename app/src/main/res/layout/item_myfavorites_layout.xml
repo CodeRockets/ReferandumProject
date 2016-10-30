@@ -1,16 +1,15 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardView_my_favorites_item"
     android:layout_width="match_parent"
     android:layout_height="150dp"
     android:layout_margin="3dp"
     android:orientation="vertical"
-    custom:cardBackgroundColor="@color/primary_light"
-    custom:cardCornerRadius="10dp"
-    custom:cardElevation="5dp"
-    custom:contentPadding="5dp"
-    custom:layout_minHeight="150dp">
+    app:cardBackgroundColor="@color/primary_light"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="5dp"
+    app:contentPadding="5dp"
+    app:layout_minHeight="150dp">
 
 
     <RelativeLayout
@@ -46,14 +45,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <com.coderockets.referandumproject.util.CustomAnswerPercent
-                    android:id="@+id/MyCustomAnswerPercent"
+                <com.aykuttasil.percentbar.PercentBarView
+                    android:id="@+id/MyPercentBar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
-                    custom:barAColor="@color/color7"
-                    custom:barBColor="@color/colorPrimary" />
+                    app:barLeftColor="@color/color7"
+                    app:barRightColor="@color/colorPrimary" />
+
             </RelativeLayout>
         </com.google.android.flexbox.FlexboxLayout>
 

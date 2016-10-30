@@ -42,14 +42,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <com.coderockets.referandumproject.util.CustomAnswerPercent
-                    android:id="@+id/MyCustomAnswerPercent"
+                <com.aykuttasil.percentbar.PercentBarView
+                    android:id="@+id/MyPercentBar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
-                    custom:barAColor="@color/color7"
-                    custom:barBColor="@color/colorPrimary" />
+                    custom:barLeftColor="@color/color7"
+                    custom:barRightColor="@color/colorPrimary" />
+
             </RelativeLayout>
         </com.google.android.flexbox.FlexboxLayout>
 

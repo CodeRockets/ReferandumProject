@@ -11,17 +11,19 @@ import android.view.View;
 import com.ToxicBakery.viewpager.transforms.BackgroundToForegroundTransformer;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.aykuttasil.androidbasichelperlib.UiHelper;
+import com.aykuttasil.percentbar.PercentBarView;
+import com.aykuttasil.percentbar.models.BarImageModel;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.MainActivity;
 import com.coderockets.referandumproject.db.DbManager;
 import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.model.Event.ResetEvent;
+import com.coderockets.referandumproject.model.ModelFriend;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
 import com.coderockets.referandumproject.model.ModelTempQuestionAnswer;
 import com.coderockets.referandumproject.model.ModelUser;
 import com.coderockets.referandumproject.rest.ApiManager;
 import com.coderockets.referandumproject.rest.RestModel.AnswerRequest;
-import com.coderockets.referandumproject.util.CustomAnswerPercent;
 import com.coderockets.referandumproject.util.CustomButton;
 import com.coderockets.referandumproject.util.adapter.CustomSorularAdapter;
 import com.google.gson.Gson;
@@ -224,15 +226,22 @@ public class ReferandumFragment extends BaseFragment {
 
     private void showCustomAnswerPercent(QuestionFragment qf) {
         try {
+            List<BarImageModel> mlist = new ArrayList<>();
+            for (ModelFriend friend : qf.getQuestion().getModelFriends()) {
+                BarImageModel barImageModel = new BarImageModel();
+                barImageModel.setValue(friend.getOption().equals("a") ? PercentBarView.BarField.RIGHT : PercentBarView.BarField.LEFT);
+                barImageModel.setBarText(friend.getName());
+                barImageModel.setImageUrl(friend.getProfileImage());
+                mlist.add(barImageModel);
+            }
+
             View alphaView = qf.getView().findViewById(R.id.SoruText);
-            CustomAnswerPercent customAnswerPercent = (CustomAnswerPercent) qf.getView().findViewById(R.id.MyCustomAnswerPercent);
-            customAnswerPercent.addAlphaView(alphaView);
-            customAnswerPercent.addActivity(mActivity);
-            customAnswerPercent.addFragment(this);
-            customAnswerPercent.setAValue(qf.getQuestion().getOption_B_Count());
-            customAnswerPercent.setBValue(qf.getQuestion().getOption_A_Count());
-            customAnswerPercent.setFriendAnswer(qf.getQuestion().getModelFriends());
-            customAnswerPercent.showResult();
+            PercentBarView percentBarView = (PercentBarView) qf.getView().findViewById(R.id.MyPercentBar);
+            percentBarView.addAlphaView(alphaView);
+            percentBarView.setLeftBarValue(qf.getQuestion().getOption_B_Count());
+            percentBarView.setRightBarValue(qf.getQuestion().getOption_A_Count());
+            percentBarView.setImages(mlist);
+            percentBarView.showResult();
         } catch (Exception e) {
             Logger.e("HATA: " + e);
         }

@@ -139,7 +139,8 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:4.+'
     //compile 'com.github.florent37:glidepalette:1.0.6'
     // Google Glide ve Palette kütüphanelerinin birlikte kullanılmasını sağlar
-    compile 'com.aykuttasil:androidbasichelper:1.0.8'
+    //compile 'com.aykuttasil:androidbasichelper:1.0.8'
+    compile 'com.aykuttasil:percentbar:3.0.3'
 
     compile 'com.google.android:flexbox:0.2.1' // Google FlexboxLayout kullanımı için
     compile 'com.github.slmyldz:AndroidRandom:1.0' // Her türden random veriler üretilmesini sağlar

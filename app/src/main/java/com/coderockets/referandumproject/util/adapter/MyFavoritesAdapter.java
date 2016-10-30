@@ -7,16 +7,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.aykuttasil.percentbar.PercentBarView;
+import com.aykuttasil.percentbar.models.BarImageModel;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.helper.SuperHelper;
+import com.coderockets.referandumproject.model.ModelFriend;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
 import com.coderockets.referandumproject.rest.ApiManager;
 import com.coderockets.referandumproject.rest.RestModel.FavoriteRequest;
 import com.coderockets.referandumproject.util.AutoFitTextView;
-import com.coderockets.referandumproject.util.CustomAnswerPercent;
 import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import hugo.weaving.DebugLog;
@@ -45,7 +48,7 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
     @Override
     public void onBindViewHolder(MyFavoritesAdapter.ViewHolder holder, int position) {
         holder.setIsRecyclable(false);
-        holder.bind(mList.get(position), position);
+        holder.bind(mList.get(position));
     }
 
     @Override
@@ -72,18 +75,18 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
         AutoFitTextView mTextViewSoru;
         ImageView mImageViewSoruImage;
         FloatingActionButton mFabFavorite;
-        CustomAnswerPercent mCustomAnswerPercent;
+        PercentBarView mPercentBar;
 
         ViewHolder(View itemView) {
             super(itemView);
             mTextViewSoru = (AutoFitTextView) itemView.findViewById(R.id.TextViewSoru);
             mImageViewSoruImage = (ImageView) itemView.findViewById(R.id.ImageViewSoruImage);
-            mCustomAnswerPercent = (CustomAnswerPercent) itemView.findViewById(R.id.MyCustomAnswerPercent);
+            mPercentBar = (PercentBarView) itemView.findViewById(R.id.MyPercentBar);
             mFabFavorite = (FloatingActionButton) itemView.findViewById(R.id.FabFavorite);
         }
 
         @DebugLog
-        void bind(ModelQuestionInformation mqi, int position) {
+        void bind(ModelQuestionInformation mqi) {
             mMqi = mqi;
             mTextViewSoru.setText(mqi.getQuestionText());
             mFabFavorite.setOnClickListener(v -> {
@@ -109,18 +112,27 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
                     .load(mqi.getQuestionImage())
                     .into(mImageViewSoruImage);
 
-            showCustomAnswerPercent();
+            showResultPercentBar();
         }
 
         @DebugLog
-        private void showCustomAnswerPercent() {
+        private void showResultPercentBar() {
             try {
-                mCustomAnswerPercent.addAlphaView(mImageViewSoruImage);
-                mCustomAnswerPercent.setAValue(mMqi.getOption_B_Count());
-                mCustomAnswerPercent.setBValue(mMqi.getOption_A_Count());
-                mCustomAnswerPercent.setFriendAnswer(mMqi.getModelFriends());
-                mCustomAnswerPercent.setFriendAnswerViewSize(50);
-                mCustomAnswerPercent.showResult();
+
+                List<BarImageModel> mlist = new ArrayList<>();
+                for (ModelFriend friend : mMqi.getModelFriends()) {
+                    BarImageModel barImageModel = new BarImageModel();
+                    barImageModel.setValue(friend.getOption().equals("a") ? PercentBarView.BarField.RIGHT : PercentBarView.BarField.LEFT);
+                    barImageModel.setBarText(friend.getName());
+                    barImageModel.setImageUrl(friend.getProfileImage());
+                    mlist.add(barImageModel);
+                }
+                mPercentBar.addAlphaView(mImageViewSoruImage);
+                mPercentBar.setLeftBarValue(mMqi.getOption_B_Count());
+                mPercentBar.setRightBarValue(mMqi.getOption_A_Count());
+                mPercentBar.setImages(mlist);
+                mPercentBar.setImagesListItemSize(50);
+                mPercentBar.showResult();
             } catch (Exception e) {
                 SuperHelper.CrashlyticsLog(e);
                 Logger.e(e, "HATA");

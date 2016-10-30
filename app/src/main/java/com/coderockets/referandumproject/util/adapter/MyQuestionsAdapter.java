@@ -6,13 +6,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.aykuttasil.percentbar.PercentBarView;
+import com.aykuttasil.percentbar.models.BarImageModel;
 import com.coderockets.referandumproject.R;
+import com.coderockets.referandumproject.model.ModelFriend;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
 import com.coderockets.referandumproject.util.AutoFitTextView;
-import com.coderockets.referandumproject.util.CustomAnswerPercent;
 import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -59,13 +62,13 @@ public class MyQuestionsAdapter extends RecyclerView.Adapter<MyQuestionsAdapter.
         ModelQuestionInformation mMqi;
         AutoFitTextView mTextViewSoru;
         ImageView mImageViewSoruImage;
-        CustomAnswerPercent mCustomAnswerPercent;
+        PercentBarView mPercentBarView;
 
         ViewHolder(View itemView) {
             super(itemView);
             mTextViewSoru = (AutoFitTextView) itemView.findViewById(R.id.TextViewSoru);
             mImageViewSoruImage = (ImageView) itemView.findViewById(R.id.ImageViewSoruImage);
-            mCustomAnswerPercent = (CustomAnswerPercent) itemView.findViewById(R.id.MyCustomAnswerPercent);
+            mPercentBarView = (PercentBarView) itemView.findViewById(R.id.MyPercentBar);
         }
 
         void bind(ModelQuestionInformation mqi) {
@@ -83,12 +86,21 @@ public class MyQuestionsAdapter extends RecyclerView.Adapter<MyQuestionsAdapter.
 
         private void showCustomAnswerPercent() {
             try {
-                mCustomAnswerPercent.addAlphaView(mImageViewSoruImage);
-                mCustomAnswerPercent.setAValue(mMqi.getOption_B_Count());
-                mCustomAnswerPercent.setBValue(mMqi.getOption_A_Count());
-                mCustomAnswerPercent.setFriendAnswer(mMqi.getModelFriends());
-                mCustomAnswerPercent.setFriendAnswerViewSize(50);
-                mCustomAnswerPercent.showResult();
+                List<BarImageModel> mlist = new ArrayList<>();
+                for (ModelFriend friend : mMqi.getModelFriends()) {
+                    BarImageModel barImageModel = new BarImageModel();
+                    barImageModel.setValue(friend.getOption().equals("a") ? PercentBarView.BarField.RIGHT : PercentBarView.BarField.LEFT);
+                    barImageModel.setBarText(friend.getName());
+                    barImageModel.setImageUrl(friend.getProfileImage());
+                    mlist.add(barImageModel);
+                }
+
+                mPercentBarView.addAlphaView(mImageViewSoruImage);
+                mPercentBarView.setLeftBarValue(mMqi.getOption_B_Count());
+                mPercentBarView.setRightBarValue(mMqi.getOption_A_Count());
+                mPercentBarView.setImages(mlist);
+                mPercentBarView.setImagesListItemSize(50);
+                mPercentBarView.showResult();
             } catch (Exception e) {
                 Logger.e(e, "HATA");
             }

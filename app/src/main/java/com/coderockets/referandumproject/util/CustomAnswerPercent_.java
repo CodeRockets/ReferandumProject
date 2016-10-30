@@ -39,9 +39,9 @@ import rx.android.schedulers.AndroidSchedulers;
 /**
  * Created by aykutasil on 18.08.2016.
  */
-public class CustomAnswerPercent extends View {
+public class CustomAnswerPercent_ extends View {
 
-    private static final String TAG = CustomAnswerPercent.class.getSimpleName();
+    private static final String TAG = CustomAnswerPercent_.class.getSimpleName();
     Context mContext;
     Activity mActivity;
     Fragment mFragment;
@@ -132,7 +132,7 @@ public class CustomAnswerPercent extends View {
 //    }
 
     @DebugLog
-    public CustomAnswerPercent(Context context, AttributeSet attrs) {
+    public CustomAnswerPercent_(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
@@ -534,7 +534,7 @@ public class CustomAnswerPercent extends View {
         imageView.setOnClickListener(v -> {
 
             List<ModelFriend> answerTrueFriendList = new ArrayList<>();
-            rx.Observable.from(mListFriendsAnswer)
+            Observable.from(mListFriendsAnswer)
                     .filter(modelFriend -> modelFriend.getOption().equals(position == ANOTHER_ICON_POSITION.LEFT ? "b" : "a"))
                     .subscribe(answerTrueFriendList::add).unsubscribe();
 
@@ -596,7 +596,7 @@ public class CustomAnswerPercent extends View {
         if (getParent() instanceof RelativeLayout) {
             //Logger.i("Parent is RelativeLayout");
         } else {
-            Log.i(CustomAnswerPercent.class.getSimpleName(), "Parent is not RelativeLayout !");
+            Log.i(CustomAnswerPercent_.class.getSimpleName(), "Parent is not RelativeLayout !");
             return;
         }
 
@@ -681,7 +681,7 @@ public class CustomAnswerPercent extends View {
         //size += labelPaint.getFontSpacing();
         //float maxValueTextSpacing = maxValuePaint.getFontSpacing();
         //size += Math.max(maxValueTextSpacing, Math.max(barHeight, circleRadius * 2));
-        size += CustomAnswerPercent.this.getRootView().getMeasuredHeight();
+        size += CustomAnswerPercent_.this.getRootView().getMeasuredHeight();
         return resolveSizeAndState(size, measureSpec, 0);
     }
 
