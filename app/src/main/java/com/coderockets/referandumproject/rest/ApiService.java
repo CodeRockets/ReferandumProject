@@ -5,6 +5,7 @@ import com.coderockets.referandumproject.rest.RestModel.AnswerResponse;
 import com.coderockets.referandumproject.rest.RestModel.FavoriteRequest;
 import com.coderockets.referandumproject.rest.RestModel.FavoriteResponse;
 import com.coderockets.referandumproject.rest.RestModel.ImageUploadResponse;
+import com.coderockets.referandumproject.rest.RestModel.QuestionDeleteResponse;
 import com.coderockets.referandumproject.rest.RestModel.ReportAbuseRequest;
 import com.coderockets.referandumproject.rest.RestModel.ReportAbuseResponse;
 import com.coderockets.referandumproject.rest.RestModel.SoruGetirBaseResponse;
@@ -25,6 +26,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PartMap;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -92,6 +94,12 @@ public interface ApiService {
                                           @Header("x-voter-version") String version,
                                           @Header("x-voter-installation") String installation,
                                           @Body FavoriteRequest request);
+
+    @POST("v1/question/delete/{id}")
+    Observable<QuestionDeleteResponse> QuestionDelete(@Header("x-voter-client-id") String clientId,
+                                                      @Header("x-voter-version") String version,
+                                                      @Header("x-voter-installation") String installation,
+                                                      @Path(value = "id") String questionId);
 
 
     //@Multipart

@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.aykuttasil.androidbasichelperlib.UiHelper;
@@ -14,6 +15,7 @@ import com.coderockets.referandumproject.activity.ProfileActivity;
 import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
 import com.coderockets.referandumproject.rest.ApiManager;
+import com.coderockets.referandumproject.util.SimpleItemTouchHelperCallback;
 import com.coderockets.referandumproject.util.adapter.MyQuestionsAdapter;
 import com.orhanobut.logger.Logger;
 
@@ -43,6 +45,7 @@ public class ProfileMyQuestions extends BaseProfile {
     MyQuestionsAdapter mMyQuestionsAdapter;
     List<ModelQuestionInformation> mList;
     List<Subscription> mListSubscription;
+    //ItemTouchHelper mItemTouchHelper;
 
     @DebugLog
     @Override
@@ -65,8 +68,16 @@ public class ProfileMyQuestions extends BaseProfile {
     }
 
     private void setAdapter() {
+        mRecyclerViewMyQuestions.setHasFixedSize(true);
         mRecyclerViewMyQuestions.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         mRecyclerViewMyQuestions.setAdapter(mMyQuestionsAdapter);
+        initSwipeControl();
+    }
+
+    private void initSwipeControl() {
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mContext, mMyQuestionsAdapter);
+        ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(mRecyclerViewMyQuestions);
     }
 
     private void getUserQuestions() {
@@ -81,9 +92,7 @@ public class ProfileMyQuestions extends BaseProfile {
                     return Observable.just(lst);
                 })
                 .subscribe(
-                        success -> {
-                            convertResponseToUiView(success);
-                        },
+                        this::convertResponseToUiView,
                         error -> {
                             progressDialog.dismiss();
                             SuperHelper.CrashlyticsLog(error);
@@ -112,4 +121,5 @@ public class ProfileMyQuestions extends BaseProfile {
         }
         super.onDestroy();
     }
+
 }

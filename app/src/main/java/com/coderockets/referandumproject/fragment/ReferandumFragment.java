@@ -227,12 +227,14 @@ public class ReferandumFragment extends BaseFragment {
     private void showCustomAnswerPercent(QuestionFragment qf) {
         try {
             List<BarImageModel> mlist = new ArrayList<>();
-            for (ModelFriend friend : qf.getQuestion().getModelFriends()) {
-                BarImageModel barImageModel = new BarImageModel();
-                barImageModel.setValue(friend.getOption().equals("a") ? PercentBarView.BarField.RIGHT : PercentBarView.BarField.LEFT);
-                barImageModel.setBarText(friend.getName());
-                barImageModel.setImageUrl(friend.getProfileImage());
-                mlist.add(barImageModel);
+            if (qf.getQuestion().getModelFriends() != null) {
+                for (ModelFriend friend : qf.getQuestion().getModelFriends()) {
+                    BarImageModel barImageModel = new BarImageModel();
+                    barImageModel.setValue(friend.getOption().equals("a") ? PercentBarView.BarField.RIGHT : PercentBarView.BarField.LEFT);
+                    barImageModel.setBarText(friend.getName());
+                    barImageModel.setImageUrl(friend.getProfileImage());
+                    mlist.add(barImageModel);
+                }
             }
 
             View alphaView = qf.getView().findViewById(R.id.SoruText);
@@ -244,7 +246,8 @@ public class ReferandumFragment extends BaseFragment {
             percentBarView.setImagesListTitle(mContext.getResources().getString(R.string.title_dialog_percentbar_list));
             percentBarView.showResult();
         } catch (Exception e) {
-            Logger.e("HATA: " + e);
+            Logger.e(e, "HATA");
+            SuperHelper.CrashlyticsLog(e);
         }
     }
 

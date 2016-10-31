@@ -13,6 +13,7 @@ import com.coderockets.referandumproject.rest.RestModel.AnswerResponse;
 import com.coderockets.referandumproject.rest.RestModel.FavoriteRequest;
 import com.coderockets.referandumproject.rest.RestModel.FavoriteResponse;
 import com.coderockets.referandumproject.rest.RestModel.ImageUploadResponse;
+import com.coderockets.referandumproject.rest.RestModel.QuestionDeleteResponse;
 import com.coderockets.referandumproject.rest.RestModel.ReportAbuseRequest;
 import com.coderockets.referandumproject.rest.RestModel.ReportAbuseResponse;
 import com.coderockets.referandumproject.rest.RestModel.SoruGetirBaseResponse;
@@ -21,8 +22,6 @@ import com.coderockets.referandumproject.rest.RestModel.SoruSorResponse;
 import com.coderockets.referandumproject.rest.RestModel.UserQuestionsResponse;
 import com.coderockets.referandumproject.rest.RestModel.UserRequest;
 import com.coderockets.referandumproject.rest.RestModel.UserResponse;
-import com.orhanobut.logger.Logger;
-import com.slmyldz.random.Randoms;
 
 import java.util.Map;
 
@@ -63,7 +62,7 @@ public class ApiManager {
                 .SoruSor(
                         Const.CLIENT_ID,
                         Const.REFERANDUM_VERSION,
-                        PrefsHelper.readPrefString(mContext,Const.PREFS_KEY_REFERANDUM_UUID),
+                        PrefsHelper.readPrefString(mContext, Const.PREFS_KEY_REFERANDUM_UUID),
                         soruSorRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -76,7 +75,7 @@ public class ApiManager {
                 .Answer(
                         Const.CLIENT_ID,
                         Const.REFERANDUM_VERSION,
-                        PrefsHelper.readPrefString(mContext,Const.PREFS_KEY_REFERANDUM_UUID),
+                        PrefsHelper.readPrefString(mContext, Const.PREFS_KEY_REFERANDUM_UUID),
                         answerRequest
                 )
                 .subscribeOn(Schedulers.io())
@@ -90,7 +89,7 @@ public class ApiManager {
                 .SoruGetir(
                         Const.CLIENT_ID,
                         Const.REFERANDUM_VERSION,
-                        PrefsHelper.readPrefString(mContext,Const.PREFS_KEY_REFERANDUM_UUID),
+                        PrefsHelper.readPrefString(mContext, Const.PREFS_KEY_REFERANDUM_UUID),
                         String.valueOf(count),
                         SuperHelper.checkUser() ? DbManager.getModelUser().getUserId() : "",
                         BuildConfig.DEBUG ? "1" : "0"
@@ -106,7 +105,7 @@ public class ApiManager {
                 .User(
                         Const.CLIENT_ID,
                         Const.REFERANDUM_VERSION,
-                        PrefsHelper.readPrefString(mContext,Const.PREFS_KEY_REFERANDUM_UUID),
+                        PrefsHelper.readPrefString(mContext, Const.PREFS_KEY_REFERANDUM_UUID),
                         userRequest
                 )
                 .observeOn(AndroidSchedulers.mainThread())
@@ -120,7 +119,7 @@ public class ApiManager {
                 .ImageUpload(
                         Const.CLIENT_ID,
                         Const.REFERANDUM_VERSION,
-                        PrefsHelper.readPrefString(mContext,Const.PREFS_KEY_REFERANDUM_UUID),
+                        PrefsHelper.readPrefString(mContext, Const.PREFS_KEY_REFERANDUM_UUID),
                         map
                 )
                 .subscribeOn(Schedulers.io())
@@ -137,7 +136,7 @@ public class ApiManager {
                 .UserQuestions(
                         Const.CLIENT_ID,
                         Const.REFERANDUM_VERSION,
-                        PrefsHelper.readPrefString(mContext,Const.PREFS_KEY_REFERANDUM_UUID),
+                        PrefsHelper.readPrefString(mContext, Const.PREFS_KEY_REFERANDUM_UUID),
                         0,
                         limit,
                         modelUser.getUserId()
@@ -153,7 +152,7 @@ public class ApiManager {
                 .Favorite(
                         Const.CLIENT_ID,
                         Const.REFERANDUM_VERSION,
-                        PrefsHelper.readPrefString(mContext,Const.PREFS_KEY_REFERANDUM_UUID),
+                        PrefsHelper.readPrefString(mContext, Const.PREFS_KEY_REFERANDUM_UUID),
                         request
                 )
                 .subscribeOn(Schedulers.io())
@@ -167,8 +166,22 @@ public class ApiManager {
                 .ReportAbuse(
                         Const.CLIENT_ID,
                         Const.REFERANDUM_VERSION,
-                        PrefsHelper.readPrefString(mContext,Const.PREFS_KEY_REFERANDUM_UUID),
+                        PrefsHelper.readPrefString(mContext, Const.PREFS_KEY_REFERANDUM_UUID),
                         request
+                )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @DebugLog
+    public Observable<QuestionDeleteResponse> QuestionDelete(String questionId) {
+
+        return RestClient.getInstance().getApiService()
+                .QuestionDelete(
+                        Const.CLIENT_ID,
+                        Const.REFERANDUM_VERSION,
+                        PrefsHelper.readPrefString(mContext, Const.PREFS_KEY_REFERANDUM_UUID),
+                        questionId
                 )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
