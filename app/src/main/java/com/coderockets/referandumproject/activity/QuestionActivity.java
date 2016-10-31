@@ -239,6 +239,7 @@ public class QuestionActivity extends BaseActivity {
 
                 ApiManager.getInstance(this).SoruSor(soruSorRequest)
                         .subscribe(response -> {
+                            materialDialog.dismiss();
                             mFilePath = null;
                             mEditText_SoruText.setText("");
                             EventBus.getDefault().postSticky(response.getData());

@@ -1,28 +1,36 @@
 package com.coderockets.referandumproject.util.adapter;
 
 import android.content.Context;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.aykuttasil.percentbar.PercentBarView;
 import com.aykuttasil.percentbar.models.BarImageModel;
 import com.coderockets.referandumproject.R;
+import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.model.ModelFriend;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
+import com.coderockets.referandumproject.rest.ApiManager;
 import com.coderockets.referandumproject.util.AutoFitTextView;
+import com.coderockets.referandumproject.util.ItemTouchHelperAdapter;
+import com.coderockets.referandumproject.util.ItemTouchHelperViewHolder;
 import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import hugo.weaving.DebugLog;
+
 /**
  * Created by aykutasil on 7.09.2016.
  */
-public class MyQuestionsAdapter extends RecyclerView.Adapter<MyQuestionsAdapter.ViewHolder> {
+public class MyQuestionsAdapter extends RecyclerView.Adapter<MyQuestionsAdapter.ViewHolder> implements ItemTouchHelperAdapter {
 
     private List<ModelQuestionInformation> mList;
     private Context mContext;
@@ -61,7 +69,29 @@ public class MyQuestionsAdapter extends RecyclerView.Adapter<MyQuestionsAdapter.
         //notifyItemRemoved(position);
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        return false;
+    }
+
+    @DebugLog
+    @Override
+    public void onItemDismiss(int position) {
+
+
+        ApiManager.getInstance(mContext).QuestionDelete(mList.get(position).getSoruId())
+                .subscribe(response -> {
+                    //UiHelper.UiToast.showSimpleToast(mContext, "Sorunuz Silindi", Toast.LENGTH_LONG);
+                }, error -> {
+                    SuperHelper.CrashlyticsLog(error);
+                    Logger.e(error, "HATA");
+                });
+
+        mList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
         ModelQuestionInformation mMqi;
         AutoFitTextView mTextViewSoru;
         ImageView mImageViewSoruImage;
@@ -108,6 +138,23 @@ public class MyQuestionsAdapter extends RecyclerView.Adapter<MyQuestionsAdapter.
             } catch (Exception e) {
                 Logger.e(e, "HATA");
             }
+        }
+
+        @DebugLog
+        @Override
+        public void onItemSelected() {
+            //itemView.setBackgroundColor(Color.LTGRAY);
+        }
+
+        @DebugLog
+        @Override
+        public void onItemClear() {
+            //itemView.setBackgroundColor(Color.BLUE);
+        }
+
+        @Override
+        public void onDismissed() {
+            UiHelper.UiSnackBar.showSimpleSnackBar(itemView, "Sorunuz Silindi", Snackbar.LENGTH_SHORT);
         }
     }
 }
