@@ -78,7 +78,6 @@ public class MyQuestionsAdapter extends RecyclerView.Adapter<MyQuestionsAdapter.
     @Override
     public void onItemDismiss(int position) {
 
-
         ApiManager.getInstance(mContext).QuestionDelete(mList.get(position).getSoruId())
                 .subscribe(response -> {
                     //UiHelper.UiToast.showSimpleToast(mContext, "Sorunuz Silindi", Toast.LENGTH_LONG);
