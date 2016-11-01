@@ -24,6 +24,7 @@ import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
+import com.facebook.login.LoginManager;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.orhanobut.logger.Logger;
@@ -33,6 +34,8 @@ import com.squareup.picasso.Target;
 import org.greenrobot.eventbus.EventBus;
 
 import java.lang.ref.WeakReference;
+import java.util.Arrays;
+import java.util.Set;
 
 import hugo.weaving.DebugLog;
 import rx.Subscription;
@@ -74,7 +77,13 @@ public abstract class BaseActivity extends AppCompatActivity {
                 EventBus.getDefault().postSticky(new ResetEvent());
 
                 if (currentAccessToken != null) {
-                    saveUser(currentAccessToken.getToken());
+                    Set<String> deniedPermissions = currentAccessToken.getDeclinedPermissions();
+
+                    if (deniedPermissions.contains("user_friends")) {
+                        LoginManager.getInstance().logInWithReadPermissions(BaseActivity.this, Arrays.asList("user_friends"));
+                    } else {
+                        saveUser(currentAccessToken.getToken());
+                    }
                 } else {
                     DbManager.deleteModelUser();
                     updateUi();

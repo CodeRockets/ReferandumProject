@@ -21,7 +21,6 @@ import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.model.Event.UpdateLoginEvent;
 import com.coderockets.referandumproject.model.ModelUser;
 import com.coderockets.referandumproject.util.adapter.MyFragmentPagerAdapter;
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.login.LoginManager;
 import com.facebook.login.widget.LoginButton;
@@ -104,9 +103,9 @@ public class ProfileActivity extends BaseActivity {
 
         // Kullanıcı Login değilse
         if (!SuperHelper.checkUser()) {
-            if (DbManager.getModelUser() == null && AccessToken.getCurrentAccessToken() != null) {
-                LoginManager.getInstance().logOut();
-            }
+            //if (DbManager.getModelUser() == null && AccessToken.getCurrentAccessToken() != null) {
+            LoginManager.getInstance().logOut();
+            //}
             hideMainContent();
             showLoginContent();
             makeBlur(ProfileActivity.this, mImageViewLoginBackground, mImageViewLoginBackground);
