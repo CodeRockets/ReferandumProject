@@ -67,8 +67,8 @@
                     android:id="@+id/MyPercentBar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
                     custom:barLeftColor="@color/color7"
                     custom:barRightColor="@color/colorPrimary" />
 
@@ -85,6 +85,30 @@
                 app:backgroundTint="@color/accentColor"
                 app:fabSize="mini"
                 app:useCompatPadding="true" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/Fab_PreviousQuestion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignTop="@+id/ProfilePicture"
+                android:clickable="true"
+                app:backgroundTint="@color/white"
+                app:fabSize="mini"
+                app:srcCompat="@android:drawable/ic_media_rew"
+                app:useCompatPadding="true" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/Fab_NextQuestion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/Fab_PreviousQuestion"
+                android:clickable="true"
+                app:backgroundTint="@color/white"
+                app:useCompatPadding="true"
+                custom:fabSize="mini"
+                custom:srcCompat="@android:drawable/ic_media_ff" />
 
 
             <!--<com.coderockets.referandumproject.util.AutoResizeTextView-->

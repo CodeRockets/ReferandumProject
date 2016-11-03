@@ -60,6 +60,12 @@ public class QuestionFragment extends Fragment {
 
     @ViewById(R.id.SoruText)
     AutoFitTextView mSoruText;
+
+    @ViewById(R.id.Fab_PreviousQuestion)
+    FloatingActionButton mFab_PreviousQuestion;
+
+    @ViewById(R.id.Fab_NextQuestion)
+    FloatingActionButton mFab_NextQuestion;
     //
     private Context mContext;
     private MainActivity mActivity;
@@ -74,7 +80,6 @@ public class QuestionFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             mIsFavorite = savedInstanceState.getBoolean(FAVORITE_KEY, false);
-            Logger.i("mIsFavorite: " + mIsFavorite);
         }
         mListSubscription = new ArrayList<>();
     }
@@ -96,7 +101,11 @@ public class QuestionFragment extends Fragment {
         changeFavoriteFabColor();
         setFavoriteFab();
         registerForContextMenu(mSoruText);
-        //PhotoViewAttacher photoViewAttacher = new PhotoViewAttacher(mImageView_SoruImage);
+    }
+
+    @DebugLog
+    public void setPreviousNextButtonUi() {
+        mFab_PreviousQuestion.setVisibility(View.INVISIBLE);
     }
 
     @DebugLog
@@ -201,6 +210,18 @@ public class QuestionFragment extends Fragment {
                 });
 
         mListSubscription.add(subscription);
+    }
+
+    @DebugLog
+    @Click(R.id.Fab_PreviousQuestion)
+    public void Fab_PreviousQuestionClick() {
+        ((ReferandumFragment) getParentFragment()).skipPreviousQuestion(0);
+    }
+
+    @DebugLog
+    @Click(R.id.Fab_NextQuestion)
+    public void Fab_NextQuestionClick() {
+        ((ReferandumFragment) getParentFragment()).skipNextQuestion(0);
     }
 
     @DebugLog

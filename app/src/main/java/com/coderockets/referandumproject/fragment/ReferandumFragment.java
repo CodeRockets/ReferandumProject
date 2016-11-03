@@ -8,7 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-import com.ToxicBakery.viewpager.transforms.BackgroundToForegroundTransformer;
+import com.ToxicBakery.viewpager.transforms.FlipHorizontalTransformer;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.aykuttasil.percentbar.PercentBarView;
@@ -67,6 +67,8 @@ public class ReferandumFragment extends BaseFragment {
     Hashtable<String, ModelTempQuestionAnswer> tempAnswer = new Hashtable<>();
     List<Subscription> mListSubscription;
 
+    private final long SKIP_QUESTION_ANIM_DURATION = 2000;
+
     @DebugLog
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,6 +96,8 @@ public class ReferandumFragment extends BaseFragment {
     private void setViewPager() {
 
         mSorularAdapter = new CustomSorularAdapter(getChildFragmentManager());
+        mViewPagerSorular.setAdapter(mSorularAdapter);
+        mViewPagerSorular.setPageTransformer(true, new FlipHorizontalTransformer());
         mViewPagerSorular.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -106,13 +110,16 @@ public class ReferandumFragment extends BaseFragment {
                 mActivity.updateProfileIcon(mActivity.mToolbar.getMenu().getItem(0));
                 checkTempAnsweredAndShowResult(position);
 
+                if (position == 0) {
+                    getCurrentQuestionFragment().setPreviousNextButtonUi();
+                }
+
                 if (position > 0) {
                     ModelQuestionInformation modelQuestionInformation = getQuestionFragment(position - 1).getQuestion();
                     if (!checkAnswered(modelQuestionInformation)) {
                         //answerAndTempQuestionControl.put(modelQuestionInformation.getSoruId(), true);
                         sendQuestionAnswer("atla", "s", modelQuestionInformation);
                     }
-
                 }
                 ControlTempQuestion();
             }
@@ -122,8 +129,6 @@ public class ReferandumFragment extends BaseFragment {
 
             }
         });
-        mViewPagerSorular.setAdapter(mSorularAdapter);
-        mViewPagerSorular.setPageTransformer(true, new BackgroundToForegroundTransformer());
     }
 
     private void setSorular() {
@@ -143,9 +148,10 @@ public class ReferandumFragment extends BaseFragment {
                 answerAndTempQuestionControl.put(modelQuestionInformation.getSoruId(), true);
                 showAnswerResult("evet");
                 sendQuestionAnswer("evet", "a", getCurrentQuestionFragment().getQuestion());
-                skipNextQuestion();
+                skipNextQuestion(SKIP_QUESTION_ANIM_DURATION);
             }
         } catch (Exception e) {
+            Logger.e(e, "HATA");
             e.printStackTrace();
         }
     }
@@ -161,7 +167,7 @@ public class ReferandumFragment extends BaseFragment {
                 answerAndTempQuestionControl.put(modelQuestionInformation.getSoruId(), true);
                 showAnswerResult("hayir");
                 sendQuestionAnswer("hayir", "b", modelQuestionInformation);
-                skipNextQuestion();
+                skipNextQuestion(SKIP_QUESTION_ANIM_DURATION);
             }
         } catch (Exception error) {
             error.printStackTrace();
@@ -169,12 +175,21 @@ public class ReferandumFragment extends BaseFragment {
         }
     }
 
-    private void skipNextQuestion() {
+    public void skipPreviousQuestion(long delayed) {
+        Handler handler = new Handler();
+
+        // En son soruda değilse
+        if (mViewPagerSorular.getCurrentItem() != 0) {
+            handler.postDelayed(() -> mViewPagerSorular.setCurrentItem(mViewPagerSorular.getCurrentItem() - 1, true), delayed);
+        }
+    }
+
+    public void skipNextQuestion(long delayed) {
         Handler handler = new Handler();
 
         // En son soruda değilse
         if (mViewPagerSorular.getCurrentItem() != mSorularAdapter.getCount()) {
-            handler.postDelayed(() -> mViewPagerSorular.setCurrentItem(mViewPagerSorular.getCurrentItem() + 1, true), 2000);
+            handler.postDelayed(() -> mViewPagerSorular.setCurrentItem(mViewPagerSorular.getCurrentItem() + 1, true), delayed);
         }
     }
 
@@ -278,6 +293,9 @@ public class ReferandumFragment extends BaseFragment {
                                     if (answerAndTempQuestionControl.get(mqi.getSoruId()) == null) {
                                         mSorularAdapter.addFragment(QuestionFragment_.builder().build(), mqi);
                                         answerAndTempQuestionControl.put(mqi.getSoruId(), false);
+                                        if (mSorularAdapter.getCount() == 1) {
+                                            getCurrentQuestionFragment().setPreviousNextButtonUi();
+                                        }
                                     }
                                 }
                             }, error -> {
