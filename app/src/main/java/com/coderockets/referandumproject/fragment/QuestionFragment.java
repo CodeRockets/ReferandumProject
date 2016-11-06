@@ -1,14 +1,19 @@
 package com.coderockets.referandumproject.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +29,14 @@ import com.coderockets.referandumproject.rest.ApiManager;
 import com.coderockets.referandumproject.rest.RestModel.FavoriteRequest;
 import com.coderockets.referandumproject.rest.RestModel.ReportAbuseRequest;
 import com.coderockets.referandumproject.util.AutoFitTextView;
+import com.facebook.AccessToken;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
 import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -37,6 +50,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -61,11 +75,20 @@ public class QuestionFragment extends Fragment {
     @ViewById(R.id.SoruText)
     AutoFitTextView mSoruText;
 
+    @ViewById(R.id.Appbarlayout)
+    AppBarLayout mAppbarlayout;
+
+    @ViewById(R.id.Toolbar_Share)
+    Toolbar mToolbar_Share;
+
     @ViewById(R.id.Fab_PreviousQuestion)
     FloatingActionButton mFab_PreviousQuestion;
 
     @ViewById(R.id.Fab_NextQuestion)
     FloatingActionButton mFab_NextQuestion;
+
+    @ViewById(R.id.SoruLayout)
+    CardView mSoruLayout;
     //
     private Context mContext;
     private MainActivity mActivity;
@@ -73,6 +96,7 @@ public class QuestionFragment extends Fragment {
     private final String FAVORITE_KEY = "Favorite";
     private boolean mIsFavorite = false;
     List<Subscription> mListSubscription;
+    LoginManager mLoginManager;
 
     @DebugLog
     @Override
@@ -82,6 +106,7 @@ public class QuestionFragment extends Fragment {
             mIsFavorite = savedInstanceState.getBoolean(FAVORITE_KEY, false);
         }
         mListSubscription = new ArrayList<>();
+        mLoginManager = LoginManager.getInstance();
     }
 
     @Override
@@ -96,16 +121,80 @@ public class QuestionFragment extends Fragment {
         this.mContext = getActivity();
         this.mActivity = (MainActivity) getActivity();
         //
+        mAppbarlayout.setExpanded(false);
         mqi = getArguments().getParcelable(ModelQuestionInformation.class.getSimpleName());
         setSoru(mqi);
         changeFavoriteFabColor();
         setFavoriteFab();
         registerForContextMenu(mSoruText);
+        setShareToolbar();
+        setFacebookShare();
     }
 
+    private void setShareToolbar() {
+
+        mToolbar_Share.inflateMenu(R.menu.question_share_menu);
+
+        mToolbar_Share.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.menuFacebook: {
+                    mAppbarlayout.setExpanded(false, true);
+                    shareQuestion();
+                    break;
+                }
+            }
+            return false;
+        });
+    }
+
+    private void setFacebookShare() {
+
+        mLoginManager.registerCallback(mActivity.mCallbackManager, new FacebookCallback<LoginResult>() {
+            @DebugLog
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                //shareQuestionToFacebook();
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @DebugLog
+            @Override
+            public void onError(FacebookException error) {
+                error.printStackTrace();
+                UiHelper.UiSnackBar.showSimpleSnackBar(getView(), error.toString(), Snackbar.LENGTH_LONG);
+                SuperHelper.CrashlyticsLog(error);
+            }
+        });
+    }
+
+    @org.androidannotations.annotations.UiThread(delay = 1000)
     @DebugLog
-    public void setPreviousNextButtonUi() {
-        mFab_PreviousQuestion.setVisibility(View.INVISIBLE);
+    public void shareQuestionToFacebook() {
+
+        View drawingView = mSoruLayout.getRootView().findViewById(R.id.ParentLayout);
+        drawingView.buildDrawingCache(true);
+        Bitmap bitmap = drawingView.getDrawingCache(true).copy(Bitmap.Config.ARGB_8888, false);
+        drawingView.destroyDrawingCache();
+
+        SharePhoto sharePhoto = new SharePhoto.Builder()
+                .setBitmap(bitmap)
+                .setCaption("Referandum Sonuçları")
+                .build();
+
+        SharePhotoContent sharePhotoContent = new SharePhotoContent.Builder()
+                .addPhoto(sharePhoto)
+                .build();
+
+        if (ShareDialog.canShow(SharePhotoContent.class)) {
+            ShareDialog.show(this, sharePhotoContent);
+            Logger.i("shareQuestion is success");
+        } else {
+            Logger.i("shareQuestion is fatal");
+        }
     }
 
     @DebugLog
@@ -210,18 +299,41 @@ public class QuestionFragment extends Fragment {
                 });
 
         mListSubscription.add(subscription);
+
+        mAppbarlayout.setExpanded(true, true);
     }
 
     @DebugLog
     @Click(R.id.Fab_PreviousQuestion)
     public void Fab_PreviousQuestionClick() {
-        ((ReferandumFragment) getParentFragment()).skipPreviousQuestion(0);
+        UiHelper.UiSnackBar.showSimpleSnackBar(getView(), "Fab_PreviousQuestion", Snackbar.LENGTH_LONG);
+        //((ReferandumFragment) getParentFragment()).skipPreviousQuestion(0);
     }
 
     @DebugLog
     @Click(R.id.Fab_NextQuestion)
     public void Fab_NextQuestionClick() {
-        ((ReferandumFragment) getParentFragment()).skipNextQuestion(0);
+
+        UiHelper.UiSnackBar.showSimpleSnackBar(getView(), mqi.getQuestionText(), Snackbar.LENGTH_LONG);
+        //((ReferandumFragment) getParentFragment()).skipNextQuestion(0);
+    }
+
+    @DebugLog
+    private void shareQuestion() {
+        /*
+
+        ShareLinkContent shareLinkContent = new ShareLinkContent.Builder()
+                .setContentTitle("Merhaba")
+                .setContentDescription("hehe")
+                .setImageUrl(Uri.parse("http://www.pngall.com/wp-content/uploads/2016/07/Car-Free-PNG-Image.png"))
+                .build();
+        */
+
+        if (!AccessToken.getCurrentAccessToken().getPermissions().contains("publish_actions")) {
+            LoginManager.getInstance().logInWithPublishPermissions(QuestionFragment.this, Collections.singletonList("publish_actions"));
+        } else {
+            shareQuestionToFacebook();
+        }
     }
 
     @DebugLog
@@ -274,6 +386,19 @@ public class QuestionFragment extends Fragment {
             }
         }
         return super.onContextItemSelected(item);
+    }
+
+    @DebugLog
+    public void setPreviousNextButtonUi() {
+        mFab_PreviousQuestion.setVisibility(View.INVISIBLE);
+    }
+
+
+    @DebugLog
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mActivity.mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @DebugLog

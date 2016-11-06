@@ -1,6 +1,7 @@
 package com.coderockets.referandumproject.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -22,9 +23,11 @@ import com.coderockets.referandumproject.rest.RestModel.UserRequest;
 import com.coderockets.referandumproject.util.PicassoCircleTransform;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
+import com.facebook.CallbackManager;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
+import com.facebook.share.widget.ShareDialog;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.orhanobut.logger.Logger;
@@ -48,6 +51,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     AccessTokenTracker mAccessTokenTracker;
     ProfileTracker mProfileTracker;
+    public CallbackManager mCallbackManager;;
 
     abstract void updateUi();
 
@@ -56,6 +60,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setAccesTokenTracker();
         setProfileTracker();
+        mCallbackManager = CallbackManager.Factory.create();
     }
 
     @DebugLog
@@ -189,10 +194,17 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @DebugLog
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+
+    @DebugLog
+    @Override
     protected void onDestroy() {
         mAccessTokenTracker.stopTracking();
         mProfileTracker.stopTracking();
-
         super.onDestroy();
     }
 }

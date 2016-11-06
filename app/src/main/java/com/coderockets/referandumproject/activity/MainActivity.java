@@ -71,34 +71,6 @@ public class MainActivity extends BaseActivity {
         getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.mipmap.ic_launcher));
     }
 
-    @Override
-    public void updateUi() {
-
-    }
-
-    /*
-    @DebugLog
-    private void setupViewPager(ViewPager viewPager) {
-        MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(AskQuestionFragment_.builder().build(), "Soru Sor");
-        adapter.addFragment(ReferandumFragment_.builder().build(), "Referandum");
-        adapter.addFragment(ProfileFragment_.builder().build(), "Profil");
-
-        viewPager.setAdapter(adapter);
-
-    }
-
-    @DebugLog
-    private void setTabLayout() {
-        mTabLayout.setupWithViewPager(mViewPager);
-        mTabLayout.getTabAt(0).setIcon(R.drawable.ic_receipt_black_24dp);
-        mTabLayout.getTabAt(1).setIcon(R.drawable.ic_thumb_up_black_24dp);
-        mTabLayout.getTabAt(2).setIcon(R.drawable.ic_perm_identity_black_24dp);
-
-
-    }
-    */
-
     @DebugLog
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -146,6 +118,11 @@ public class MainActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onEvent(UpdateLoginEvent loginEvent) {
         updateProfileIcon(mToolbar.getMenu().getItem(0));
+    }
+
+    @Override
+    public void updateUi() {
+
     }
 
     @Override

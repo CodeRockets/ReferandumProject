@@ -6,7 +6,27 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/Appbarlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/Toolbar_Share"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:elevation="2dp"
+            app:layout_scrollFlags="scroll|snap"
+            app:logo="@drawable/ic_share"
+            app:subtitle="Arkadaşlarınla Paylaş"
+            app:title="Paylaş"
+            app:titleMarginStart="30dp"
+            app:titleTextColor="@color/colorPrimary" />
+    </android.support.design.widget.AppBarLayout>
+
     <android.support.v7.widget.CardView
+        android:id="@+id/SoruLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:cardBackgroundColor="@color/white"
@@ -26,7 +46,7 @@
                 android:adjustViewBounds="true"
                 android:cropToPadding="false"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ok" />
+                android:src="@drawable/ic_launcher" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/ProfilePicture"
@@ -62,13 +82,12 @@
                     android:paddingRight="10dp"
                     android:textSize="110sp" />
 
-
                 <com.aykuttasil.percentbar.PercentBarView
                     android:id="@+id/MyPercentBar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
                     android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
                     custom:barLeftColor="@color/color7"
                     custom:barRightColor="@color/colorPrimary" />
 
@@ -90,25 +109,23 @@
                 android:id="@+id/Fab_PreviousQuestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/SoruImage"
                 android:layout_alignParentStart="true"
-                android:layout_alignTop="@+id/ProfilePicture"
-                android:clickable="true"
-                app:backgroundTint="@color/white"
-                app:fabSize="mini"
-                app:srcCompat="@android:drawable/ic_media_rew"
-                app:useCompatPadding="true" />
+                android:layout_marginStart="10dp"
+                android:src="@android:drawable/ic_media_rew"
+                app:backgroundTint="@color/aluminum"
+                app:fabSize="mini" />
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/Fab_NextQuestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/SoruImage"
                 android:layout_alignParentEnd="true"
-                android:layout_alignTop="@+id/Fab_PreviousQuestion"
-                android:clickable="true"
+                android:layout_marginEnd="10dp"
+                android:src="@android:drawable/ic_media_ff"
                 app:backgroundTint="@color/white"
-                app:useCompatPadding="true"
-                custom:fabSize="mini"
-                custom:srcCompat="@android:drawable/ic_media_ff" />
+                app:fabSize="mini" />
 
 
             <!--<com.coderockets.referandumproject.util.AutoResizeTextView-->
@@ -124,28 +141,9 @@
 
         </RelativeLayout>
 
-
-        <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Aykut Asil" />-->
-
-
-        <!--<RelativeLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
-
-        <!--<com.mikhaellopez.circularimageview.CircularImageView-->
-        <!--android:layout_width="70dp"-->
-        <!--android:layout_height="70dp"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:layout_marginTop="102dp"-->
-        <!--android:src="@drawable/ok" />-->
-
-        <!--</RelativeLayout>-->
-
     </android.support.v7.widget.CardView>
+
+
 </android.support.design.widget.CoordinatorLayout>
 
 

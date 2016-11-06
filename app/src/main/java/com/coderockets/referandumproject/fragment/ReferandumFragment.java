@@ -175,6 +175,7 @@ public class ReferandumFragment extends BaseFragment {
         }
     }
 
+    @DebugLog
     public void skipPreviousQuestion(long delayed) {
         Handler handler = new Handler();
 
@@ -184,6 +185,7 @@ public class ReferandumFragment extends BaseFragment {
         }
     }
 
+    @DebugLog
     public void skipNextQuestion(long delayed) {
         Handler handler = new Handler();
 

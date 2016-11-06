@@ -69,14 +69,12 @@ public class ProfileActivity extends BaseActivity {
     @ViewById(R.id.ProfileViewPager)
     ViewPager mProfileViewPager;
     //
-    CallbackManager mCallbackManager;
     RxPermissions mRxPermissions;
     List<Subscription> mListSubscription;
 
     @DebugLog
     @AfterViews
     public void ProfileActivityInit() {
-        mCallbackManager = CallbackManager.Factory.create();
         mRxPermissions = RxPermissions.getInstance(this);
         mListSubscription = new ArrayList<>();
         //
@@ -95,6 +93,10 @@ public class ProfileActivity extends BaseActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
 
         //getSupportActionBar().setHomeAsUpIndicator(new IconDrawable(this, FontAwesomeIcons.fa_home).actionBarSize().getCurrent());
+    }
+
+    private void setLoginButton() {
+        mLoginButton.setReadPermissions("public_profile", "email", "user_friends");
     }
 
     @DebugLog
@@ -147,10 +149,6 @@ public class ProfileActivity extends BaseActivity {
 
     }
 
-    private void setLoginButton() {
-        mLoginButton.setReadPermissions("public_profile", "email", "user_friends");
-    }
-
     private void showLoginContent() {
         mProfileLoginLayout.setVisibility(View.VISIBLE);
     }
@@ -178,6 +176,7 @@ public class ProfileActivity extends BaseActivity {
     @DebugLog
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        //
         switch (item.getItemId()) {
             case android.R.id.home: {
                 NavUtils.navigateUpFromSameTask(this);
@@ -192,12 +191,6 @@ public class ProfileActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @DebugLog
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        mCallbackManager.onActivityResult(requestCode, resultCode, data);
-    }
 
     @Override
     protected void onDestroy() {
