@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.MainActivity;
+import com.coderockets.referandumproject.activity.ProfileActivity_;
 import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.model.Event.UpdateLoginEvent;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
@@ -137,7 +138,13 @@ public class QuestionFragment extends Fragment {
             switch (item.getItemId()) {
                 case R.id.menuFacebook: {
                     hideShareButton();
-                    shareQuestion();
+                    if (SuperHelper.checkUser()) {
+                        shareQuestion();
+                    } else {
+                        Intent activityIntent = new Intent(mContext, ProfileActivity_.class);
+                        activityIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(activityIntent);
+                    }
                     break;
                 }
             }

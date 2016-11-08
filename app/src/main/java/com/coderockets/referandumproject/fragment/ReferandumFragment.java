@@ -9,7 +9,6 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.ToxicBakery.viewpager.transforms.BackgroundToForegroundTransformer;
-import com.ToxicBakery.viewpager.transforms.FlipHorizontalTransformer;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.aykuttasil.percentbar.PercentBarView;
@@ -265,6 +264,7 @@ public class ReferandumFragment extends BaseFragment {
             percentBarView.showResult();
 
             mSorularAdapter.getRegisteredFragment(mViewPagerSorular.getCurrentItem()).showShareButton();
+
 
         } catch (Exception e) {
             Logger.e(e, "HATA");
