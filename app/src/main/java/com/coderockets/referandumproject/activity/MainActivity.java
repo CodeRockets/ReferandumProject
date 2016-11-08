@@ -2,22 +2,14 @@ package com.coderockets.referandumproject.activity;
 
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.coderockets.referandumproject.R;
-import com.coderockets.referandumproject.db.DbManager;
 import com.coderockets.referandumproject.fragment.ReferandumFragment_;
 import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.model.Event.UpdateLoginEvent;
-import com.coderockets.referandumproject.model.ModelUser;
-import com.coderockets.referandumproject.util.PicassoCircleTransform;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -25,8 +17,6 @@ import org.androidannotations.annotations.ViewById;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.lang.ref.WeakReference;
 
 import hugo.weaving.DebugLog;
 

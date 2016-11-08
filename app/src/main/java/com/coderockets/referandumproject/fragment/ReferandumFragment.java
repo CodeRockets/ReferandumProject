@@ -178,7 +178,6 @@ public class ReferandumFragment extends BaseFragment {
     @DebugLog
     public void skipPreviousQuestion(long delayed) {
         Handler handler = new Handler();
-
         // En son soruda değilse
         if (mViewPagerSorular.getCurrentItem() != 0) {
             handler.postDelayed(() -> mViewPagerSorular.setCurrentItem(mViewPagerSorular.getCurrentItem() - 1, true), delayed);
@@ -188,7 +187,6 @@ public class ReferandumFragment extends BaseFragment {
     @DebugLog
     public void skipNextQuestion(long delayed) {
         Handler handler = new Handler();
-
         // En son soruda değilse
         if (mViewPagerSorular.getCurrentItem() != mSorularAdapter.getCount()) {
             handler.postDelayed(() -> mViewPagerSorular.setCurrentItem(mViewPagerSorular.getCurrentItem() + 1, true), delayed);

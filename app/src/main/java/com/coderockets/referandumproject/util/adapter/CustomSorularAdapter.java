@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.SparseArray;
 import android.view.ViewGroup;
 
 import com.coderockets.referandumproject.fragment.QuestionFragment;
@@ -18,7 +19,8 @@ import hugo.weaving.DebugLog;
  * Created by aykutasil on 18.08.2016.
  */
 public class CustomSorularAdapter extends FragmentStatePagerAdapter {
-
+    // Sparse array to keep track of registered fragments in memory
+    private SparseArray<QuestionFragment> registeredFragments = new SparseArray<QuestionFragment>();
     private final List<QuestionFragment> mFragmentList = new ArrayList<>();
     private final List<ModelQuestionInformation> mSoruList = new ArrayList<>();
     private boolean flagRemoveAllItems = false;
@@ -41,9 +43,19 @@ public class CustomSorularAdapter extends FragmentStatePagerAdapter {
         return questionFragment;
     }
 
+    /*
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         return super.instantiateItem(container, position);
+    }
+    */
+
+    // Register the fragment when the item is instantiated
+    @Override
+    public Object instantiateItem(ViewGroup container, int position) {
+        QuestionFragment fragment = (QuestionFragment) super.instantiateItem(container, position);
+        registeredFragments.put(position, fragment);
+        return fragment;
     }
 
     @Override
@@ -73,6 +85,18 @@ public class CustomSorularAdapter extends FragmentStatePagerAdapter {
         } else {
             return POSITION_UNCHANGED;
         }
+    }
+
+    // Unregister when the item is inactive
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        registeredFragments.remove(position);
+        super.destroyItem(container, position, object);
+    }
+
+    // Returns the fragment for the position (if instantiated)
+    public QuestionFragment getRegisteredFragment(int position) {
+        return registeredFragments.get(position);
     }
 
 }

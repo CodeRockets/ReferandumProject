@@ -49,13 +49,12 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import hugo.weaving.DebugLog;
 import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by aykutasil on 18.08.2016.
@@ -84,9 +83,6 @@ public class QuestionFragment extends Fragment {
     @ViewById(R.id.Fab_PreviousQuestion)
     FloatingActionButton mFab_PreviousQuestion;
 
-    @ViewById(R.id.Fab_NextQuestion)
-    FloatingActionButton mFab_NextQuestion;
-
     @ViewById(R.id.SoruLayout)
     CardView mSoruLayout;
     //
@@ -95,8 +91,9 @@ public class QuestionFragment extends Fragment {
     private ModelQuestionInformation mqi;
     private final String FAVORITE_KEY = "Favorite";
     private boolean mIsFavorite = false;
-    List<Subscription> mListSubscription;
     LoginManager mLoginManager;
+    CompositeSubscription mCompositeSubscriptions;
+    ReferandumFragment mReferandumFragment;
 
     @DebugLog
     @Override
@@ -105,8 +102,9 @@ public class QuestionFragment extends Fragment {
         if (savedInstanceState != null) {
             mIsFavorite = savedInstanceState.getBoolean(FAVORITE_KEY, false);
         }
-        mListSubscription = new ArrayList<>();
         mLoginManager = LoginManager.getInstance();
+        mCompositeSubscriptions = new CompositeSubscription();
+        mReferandumFragment = (ReferandumFragment) getParentFragment();
     }
 
     @Override
@@ -169,32 +167,6 @@ public class QuestionFragment extends Fragment {
                 SuperHelper.CrashlyticsLog(error);
             }
         });
-    }
-
-    @org.androidannotations.annotations.UiThread(delay = 1000)
-    @DebugLog
-    public void shareQuestionToFacebook() {
-
-        View drawingView = mSoruLayout.getRootView().findViewById(R.id.ParentLayout);
-        drawingView.buildDrawingCache(true);
-        Bitmap bitmap = drawingView.getDrawingCache(true).copy(Bitmap.Config.ARGB_8888, false);
-        drawingView.destroyDrawingCache();
-
-        SharePhoto sharePhoto = new SharePhoto.Builder()
-                .setBitmap(bitmap)
-                .setCaption("Referandum Sonuçları")
-                .build();
-
-        SharePhotoContent sharePhotoContent = new SharePhotoContent.Builder()
-                .addPhoto(sharePhoto)
-                .build();
-
-        if (ShareDialog.canShow(SharePhotoContent.class)) {
-            ShareDialog.show(this, sharePhotoContent);
-            Logger.i("shareQuestion is success");
-        } else {
-            Logger.i("shareQuestion is fatal");
-        }
     }
 
     @DebugLog
@@ -297,31 +269,20 @@ public class QuestionFragment extends Fragment {
                     error.printStackTrace();
                     SuperHelper.CrashlyticsLog(error);
                 });
-
-        mListSubscription.add(subscription);
-
+        mCompositeSubscriptions.add(subscription);
         mAppbarlayout.setExpanded(true, true);
     }
+
 
     @DebugLog
     @Click(R.id.Fab_PreviousQuestion)
     public void Fab_PreviousQuestionClick() {
-        UiHelper.UiSnackBar.showSimpleSnackBar(getView(), "Fab_PreviousQuestion", Snackbar.LENGTH_LONG);
-        //((ReferandumFragment) getParentFragment()).skipPreviousQuestion(0);
-    }
-
-    @DebugLog
-    @Click(R.id.Fab_NextQuestion)
-    public void Fab_NextQuestionClick() {
-
-        UiHelper.UiSnackBar.showSimpleSnackBar(getView(), mqi.getQuestionText(), Snackbar.LENGTH_LONG);
-        //((ReferandumFragment) getParentFragment()).skipNextQuestion(0);
+        mReferandumFragment.skipPreviousQuestion(0);
     }
 
     @DebugLog
     private void shareQuestion() {
         /*
-
         ShareLinkContent shareLinkContent = new ShareLinkContent.Builder()
                 .setContentTitle("Merhaba")
                 .setContentDescription("hehe")
@@ -333,6 +294,32 @@ public class QuestionFragment extends Fragment {
             LoginManager.getInstance().logInWithPublishPermissions(QuestionFragment.this, Collections.singletonList("publish_actions"));
         } else {
             shareQuestionToFacebook();
+        }
+    }
+
+    @org.androidannotations.annotations.UiThread(delay = 1000)
+    @DebugLog
+    public void shareQuestionToFacebook() {
+
+        View drawingView = mSoruLayout.getRootView().findViewById(R.id.ParentLayout);
+        drawingView.buildDrawingCache(true);
+        Bitmap bitmap = drawingView.getDrawingCache(true).copy(Bitmap.Config.ARGB_8888, false);
+        drawingView.destroyDrawingCache();
+
+        SharePhoto sharePhoto = new SharePhoto.Builder()
+                .setBitmap(bitmap)
+                .setCaption("Referandum Sonuçları")
+                .build();
+
+        SharePhotoContent sharePhotoContent = new SharePhotoContent.Builder()
+                .addPhoto(sharePhoto)
+                .build();
+
+        if (ShareDialog.canShow(SharePhotoContent.class)) {
+            ShareDialog.show(this, sharePhotoContent);
+            Logger.i("shareQuestion is success");
+        } else {
+            Logger.i("shareQuestion is fatal");
         }
     }
 
@@ -379,7 +366,7 @@ public class QuestionFragment extends Fragment {
                                 UiHelper.UiSnackBar.showSimpleSnackBar(getView(), error.getMessage(), Snackbar.LENGTH_LONG);
                             });
 
-                    mListSubscription.add(subscription);
+                    mCompositeSubscriptions.add(subscription);
 
                     return true;
                 }
@@ -390,7 +377,8 @@ public class QuestionFragment extends Fragment {
 
     @DebugLog
     public void setPreviousNextButtonUi() {
-        mFab_PreviousQuestion.setVisibility(View.INVISIBLE);
+        mReferandumFragment.mSorularAdapter.getRegisteredFragment(mReferandumFragment.mViewPagerSorular.getCurrentItem())
+                .getView().findViewById(R.id.Fab_PreviousQuestion).setVisibility(View.INVISIBLE);
     }
 
 
@@ -411,10 +399,8 @@ public class QuestionFragment extends Fragment {
     @DebugLog
     @Override
     public void onDestroy() {
-        for (Subscription subscription : mListSubscription) {
-            if (!subscription.isUnsubscribed()) {
-                subscription.unsubscribe();
-            }
+        if (mCompositeSubscriptions.hasSubscriptions()) {
+            mCompositeSubscriptions.clear();
         }
         super.onDestroy();
     }

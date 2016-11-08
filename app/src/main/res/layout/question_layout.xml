@@ -112,32 +112,21 @@
                 android:layout_alignBottom="@+id/SoruImage"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="10dp"
+                android:layout_marginBottom="-15dp"
                 android:src="@android:drawable/ic_media_rew"
-                app:backgroundTint="@color/aluminum"
-                app:fabSize="mini" />
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/Fab_NextQuestion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/SoruImage"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"
-                android:src="@android:drawable/ic_media_ff"
                 app:backgroundTint="@color/white"
                 app:fabSize="mini" />
 
-
-            <!--<com.coderockets.referandumproject.util.AutoResizeTextView-->
-            <!--android:id="@+id/TextViewSoru"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:gravity="center"-->
-            <!--android:maxHeight="100dp"-->
-            <!--android:text="Merhaba Aykut Asil Merhaba Aykut Asil Merhaba Aykut Asil Merhaba Aykut Asil Merhaba Aykut Asil Merhaba Aykut Asil Merhaba Aykut Asil Merhaba Aykut Asil"-->
-            <!--android:textSize="30sp" />-->
-
+            <!--<android.support.design.widget.FloatingActionButton-->
+            <!--android:id="@+id/Fab_NextQuestion"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignBottom="@+id/SoruImage"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_marginEnd="10dp"-->
+            <!--android:src="@android:drawable/ic_media_ff"-->
+            <!--app:backgroundTint="@color/white"-->
+            <!--app:fabSize="mini" />-->
 
         </RelativeLayout>
 
