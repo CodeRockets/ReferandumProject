@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.aykuttasil.percentbar.PercentBarView;
 import com.aykuttasil.percentbar.models.BarImageModel;
@@ -48,7 +50,7 @@ public class MyQuestionsAdapter extends RecyclerView.Adapter<MyQuestionsAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        // Recyclerview ın recycle olmasını engelleyerek abidik gubidik bir şekilde itemların birbirine karışmasını engeller
+        // Recyclerview ın recycle olmasını engelleyerek abidik gubidik bir şekilde item ların birbirine karışmasını engeller
         holder.setIsRecyclable(false);
         holder.bind(mList.get(position));
     }

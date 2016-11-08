@@ -1,13 +1,13 @@
 package com.coderockets.referandumproject.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -21,7 +21,6 @@ import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.model.Event.UpdateLoginEvent;
 import com.coderockets.referandumproject.model.ModelUser;
 import com.coderockets.referandumproject.util.adapter.MyFragmentPagerAdapter;
-import com.facebook.CallbackManager;
 import com.facebook.login.LoginManager;
 import com.facebook.login.widget.LoginButton;
 import com.tbruyelle.rxpermissions.RxPermissions;
@@ -146,7 +145,6 @@ public class ProfileActivity extends BaseActivity {
         adapter.addFragment(ProfileMyQuestions_.builder().build(), "Sorularım");
         adapter.addFragment(ProfileMyFavorites_.builder().build(), "Favorilerim");
         viewPager.setAdapter(adapter);
-
     }
 
     private void showLoginContent() {

@@ -12,8 +12,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.coderockets.referandumproject.R;
-import com.coderockets.referandumproject.rest.ApiManager;
 
 import hugo.weaving.DebugLog;
 
@@ -28,12 +30,14 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
     private Paint p = new Paint();
     private final ItemTouchHelperAdapter mAdapter;
     private Context mContext;
+    private RecyclerView mRecyclerView;
     private float mDx;
 
 
-    public SimpleItemTouchHelperCallback(Context context, ItemTouchHelperAdapter adapter) {
-        mAdapter = adapter;
+    public SimpleItemTouchHelperCallback(Context context, ItemTouchHelperAdapter adapter, RecyclerView recyclerView) {
+        this.mAdapter = adapter;
         this.mContext = context;
+        this.mRecyclerView = recyclerView;
     }
 
     @DebugLog
@@ -79,28 +83,23 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
     @DebugLog
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int i) {
-        mAdapter.onItemDismiss(viewHolder.getAdapterPosition());
+        /*mAdapter.onItemDismiss(viewHolder.getAdapterPosition());
         ItemTouchHelperViewHolder itemViewHolder = (ItemTouchHelperViewHolder) viewHolder;
-        itemViewHolder.onDismissed();
-        /*
-        // Notify the adapter of the dismissal
-        MaterialDialog dialog = UiHelper.UiDialog.newInstance(mContext).getOKCancelDialog("Uyarı", "Sorunuz silenecek.\nDevam etmek istiyor musunuz ?", null);
+        itemViewHolder.onDismissed();*/
+
+        MaterialDialog dialog = UiHelper.UiDialog.newInstance(mContext).getOKCancelDialog("Uyarı", "Sorunuz silinecek.\nDevam etmek istiyor musunuz ?", null);
         dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(view -> {
             dialog.dismiss();
-            Logger.i("viewHolder.getAdapterPosition(): " + viewHolder.getAdapterPosition());
             mAdapter.onItemDismiss(viewHolder.getAdapterPosition());
+            ItemTouchHelperViewHolder itemViewHolder = (ItemTouchHelperViewHolder) viewHolder;
+            itemViewHolder.onDismissed();
         });
         dialog.getActionButton(DialogAction.NEGATIVE).setOnClickListener(view -> {
             dialog.dismiss();
-            // Workaround to reset swiped out views
-            //itemTouchHelper.attachToRecyclerView(null);
-            //itemTouchHelper.attachToRecyclerView(recyclerView);
-            viewHolder.itemView.setAlpha(1f);
-            viewHolder.itemView.setTranslationX(mDx * 0.5f);
-
+            mRecyclerView.setAdapter(mRecyclerView.getAdapter());
         });
         dialog.show();
-        */
+
     }
 
     @DebugLog

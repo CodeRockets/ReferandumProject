@@ -30,6 +30,7 @@ import java.util.List;
 import hugo.weaving.DebugLog;
 import rx.Observable;
 import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by aykutasil on 2.09.2016.
@@ -44,7 +45,8 @@ public class ProfileMyQuestions extends BaseProfile {
     ProfileActivity mActivity;
     MyQuestionsAdapter mMyQuestionsAdapter;
     List<ModelQuestionInformation> mList;
-    List<Subscription> mListSubscription;
+    CompositeSubscription mCompositeSubscriptions;
+    //List<Subscription> mListSubscription;
     //ItemTouchHelper mItemTouchHelper;
 
     @DebugLog
@@ -55,7 +57,7 @@ public class ProfileMyQuestions extends BaseProfile {
         this.mActivity = (ProfileActivity) getActivity();
         mList = new ArrayList<>();
         mMyQuestionsAdapter = new MyQuestionsAdapter(mContext, mList);
-        mListSubscription = new ArrayList<>();
+        mCompositeSubscriptions = new CompositeSubscription();
     }
 
     @DebugLog
@@ -75,7 +77,7 @@ public class ProfileMyQuestions extends BaseProfile {
     }
 
     private void initSwipeControl() {
-        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mContext, mMyQuestionsAdapter);
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mContext, mMyQuestionsAdapter,mRecyclerViewMyQuestions);
         ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(callback);
         mItemTouchHelper.attachToRecyclerView(mRecyclerViewMyQuestions);
     }
@@ -101,7 +103,7 @@ public class ProfileMyQuestions extends BaseProfile {
                         },
                         progressDialog::dismiss);
 
-        mListSubscription.add(subscription);
+        mCompositeSubscriptions.add(subscription);
     }
 
     @DebugLog
@@ -114,10 +116,8 @@ public class ProfileMyQuestions extends BaseProfile {
 
     @Override
     public void onDestroy() {
-        for (Subscription subscription : mListSubscription) {
-            if (!subscription.isUnsubscribed()) {
-                subscription.unsubscribe();
-            }
+        if (mCompositeSubscriptions.hasSubscriptions()) {
+            mCompositeSubscriptions.clear();
         }
         super.onDestroy();
     }
