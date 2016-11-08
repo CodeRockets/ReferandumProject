@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
+import com.ToxicBakery.viewpager.transforms.BackgroundToForegroundTransformer;
 import com.ToxicBakery.viewpager.transforms.FlipHorizontalTransformer;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.aykuttasil.androidbasichelperlib.UiHelper;
@@ -97,7 +98,9 @@ public class ReferandumFragment extends BaseFragment {
 
         mSorularAdapter = new CustomSorularAdapter(getChildFragmentManager());
         mViewPagerSorular.setAdapter(mSorularAdapter);
-        mViewPagerSorular.setPageTransformer(true, new FlipHorizontalTransformer());
+        //mViewPagerSorular.setPageTransformer(true, new FlipHorizontalTransformer());
+
+        mViewPagerSorular.setPageTransformer(true, new BackgroundToForegroundTransformer());
         mViewPagerSorular.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -260,6 +263,9 @@ public class ReferandumFragment extends BaseFragment {
             percentBarView.setImages(mlist);
             percentBarView.setImagesListTitle(mContext.getResources().getString(R.string.title_dialog_percentbar_list));
             percentBarView.showResult();
+
+            mSorularAdapter.getRegisteredFragment(mViewPagerSorular.getCurrentItem()).showShareButton();
+
         } catch (Exception e) {
             Logger.e(e, "HATA");
             SuperHelper.CrashlyticsLog(e);

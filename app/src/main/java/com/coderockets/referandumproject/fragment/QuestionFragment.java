@@ -136,7 +136,7 @@ public class QuestionFragment extends Fragment {
         mToolbar_Share.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.menuFacebook: {
-                    mAppbarlayout.setExpanded(false, true);
+                    hideShareButton();
                     shareQuestion();
                     break;
                 }
@@ -270,7 +270,6 @@ public class QuestionFragment extends Fragment {
                     SuperHelper.CrashlyticsLog(error);
                 });
         mCompositeSubscriptions.add(subscription);
-        mAppbarlayout.setExpanded(true, true);
     }
 
 
@@ -321,6 +320,14 @@ public class QuestionFragment extends Fragment {
         } else {
             Logger.i("shareQuestion is fatal");
         }
+    }
+
+    public void showShareButton() {
+        mAppbarlayout.setExpanded(true, true);
+    }
+
+    public void hideShareButton() {
+        mAppbarlayout.setExpanded(false, true);
     }
 
     @DebugLog
