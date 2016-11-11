@@ -31,8 +31,6 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
     private final ItemTouchHelperAdapter mAdapter;
     private Context mContext;
     private RecyclerView mRecyclerView;
-    private float mDx;
-
 
     public SimpleItemTouchHelperCallback(Context context, ItemTouchHelperAdapter adapter, RecyclerView recyclerView) {
         this.mAdapter = adapter;
@@ -110,8 +108,6 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
             Bitmap icon;
             View itemView = viewHolder.itemView;
 
-            //this.mDx = dX;
-            //Logger.i("dX:" + dX);
             final float alpha = ALPHA_FULL - Math.abs(dX) / (float) viewHolder.itemView.getWidth();
             float height = (float) itemView.getBottom() - (float) itemView.getTop();
             float width = height / 3;

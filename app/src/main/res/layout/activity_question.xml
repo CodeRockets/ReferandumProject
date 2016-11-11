@@ -44,18 +44,18 @@
                     android:layout_height="150dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/loading" />
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/question_bg" />
 
-                <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/FabRefreshImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/ImageView_SoruImage"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginRight="10dp"
-                    app:fabSize="mini" />
+                <!--<android.support.design.widget.FloatingActionButton-->
+                <!--android:id="@+id/FabRefreshImage"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignBottom="@+id/ImageView_SoruImage"-->
+                <!--android:layout_alignParentEnd="true"-->
+                <!--android:layout_marginBottom="10dp"-->
+                <!--android:layout_marginRight="10dp"-->
+                <!--app:fabSize="mini" />-->
             </RelativeLayout>
 
             <com.coderockets.referandumproject.util.AutoFitTextView

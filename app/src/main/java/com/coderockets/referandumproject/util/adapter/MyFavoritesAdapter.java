@@ -111,9 +111,11 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
                         });
             });
 
-            Picasso.with(mImageViewSoruImage.getContext())
-                    .load(mqi.getQuestionImage())
-                    .into(mImageViewSoruImage);
+            if (!mqi.getQuestionImage().contains("loremflickr")) {
+                Picasso.with(mImageViewSoruImage.getContext())
+                        .load(mqi.getQuestionImage())
+                        .into(mImageViewSoruImage);
+            }
 
             showResultPercentBar();
         }

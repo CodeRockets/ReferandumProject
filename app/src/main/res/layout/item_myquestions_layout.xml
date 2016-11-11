@@ -20,7 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
-            android:src="@mipmap/ic_launcher" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/question_bg" />
 
         <com.google.android.flexbox.FlexboxLayout
             android:layout_width="match_parent"

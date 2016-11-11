@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.aykuttasil.percentbar.PercentBarView;
 import com.aykuttasil.percentbar.models.BarImageModel;
@@ -110,9 +108,11 @@ public class MyQuestionsAdapter extends RecyclerView.Adapter<MyQuestionsAdapter.
             mMqi = mqi;
             mTextViewSoru.setText(mqi.getQuestionText());
 
-            Picasso.with(mImageViewSoruImage.getContext())
-                    .load(mqi.getQuestionImage())
-                    .into(mImageViewSoruImage);
+            if (!mqi.getQuestionImage().contains("loremflickr")) {
+                Picasso.with(mImageViewSoruImage.getContext())
+                        .load(mqi.getQuestionImage())
+                        .into(mImageViewSoruImage);
+            }
 
             showCustomAnswerPercent();
         }

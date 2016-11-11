@@ -213,31 +213,32 @@ public class QuestionFragment extends Fragment {
 
     private void setSoru(ModelQuestionInformation mqi) {
 
-        mImageView_SoruImage.setScaleType(ImageView.ScaleType.CENTER);
-
+        //
         Uri soruImageUri = Uri.parse(mqi.getQuestionImage());
 
-        if (mqi.getQuestionImage().contains("loremflickr")) {
-            Picasso.with(mContext).invalidate(soruImageUri);
-        }
+        if (!mqi.getQuestionImage().contains("loremflickr")) {
 
-        Picasso.with(mContext)
-                .load(soruImageUri)
-                .placeholder(R.drawable.loading)
-                .into(mImageView_SoruImage, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                        if (mImageView_SoruImage != null) {
-                            mImageView_SoruImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            mImageView_SoruImage.setScaleType(ImageView.ScaleType.CENTER);
+
+            //Picasso.with(mContext).invalidate(soruImageUri);
+
+            Picasso.with(mContext)
+                    .load(soruImageUri)
+                    .placeholder(R.drawable.loading)
+                    .into(mImageView_SoruImage, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            if (mImageView_SoruImage != null) {
+                                mImageView_SoruImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onError() {
+                        @Override
+                        public void onError() {
 
-                    }
-                });
-
+                        }
+                    });
+        }
 
         Uri profileImageUri = Uri.parse(mqi.getAskerProfileImg());
         Picasso.with(mContext)
@@ -278,7 +279,6 @@ public class QuestionFragment extends Fragment {
                 });
         mCompositeSubscriptions.add(subscription);
     }
-
 
     @DebugLog
     @Click(R.id.Fab_PreviousQuestion)
@@ -394,7 +394,6 @@ public class QuestionFragment extends Fragment {
         mReferandumFragment.mSorularAdapter.getRegisteredFragment(mReferandumFragment.mViewPagerSorular.getCurrentItem())
                 .getView().findViewById(R.id.Fab_PreviousQuestion).setVisibility(View.INVISIBLE);
     }
-
 
     @DebugLog
     @Override

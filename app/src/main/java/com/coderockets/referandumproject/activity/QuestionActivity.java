@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.internal.NavigationMenu;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
@@ -28,8 +27,6 @@ import com.fuck_boilerplate.rx_paparazzo.RxPaparazzo;
 import com.fuck_boilerplate.rx_paparazzo.entities.Options;
 import com.fuck_boilerplate.rx_paparazzo.entities.Size;
 import com.jakewharton.rxbinding.widget.RxTextView;
-import com.joanzapata.iconify.IconDrawable;
-import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.MemoryPolicy;
@@ -68,8 +65,8 @@ public class QuestionActivity extends BaseActivity {
     @ViewById(R.id.AskQuestionMainLayout)
     ViewGroup mAskQuestionMainLayout;
 
-    @ViewById(R.id.FabRefreshImage)
-    FloatingActionButton mFabRefreshImage;
+    //@ViewById(R.id.FabRefreshImage)
+    //FloatingActionButton mFabRefreshImage;
 
     @ViewById(R.id.FabUploadImage)
     FabSpeedDial mFabUploadImage;
@@ -98,7 +95,7 @@ public class QuestionActivity extends BaseActivity {
         setToolbar();
         setFab();
         setReactiveEditText();
-        setRandomImage();
+        //setRandomImage();
         //photoViewAttacher = new PhotoViewAttacher(mImageView_SoruImage);
         //photoViewAttacher.setAllowParentInterceptOnEdge(true);
         //photoViewAttacher.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -136,7 +133,10 @@ public class QuestionActivity extends BaseActivity {
     }
 
     private void setFab() {
-        mFabRefreshImage.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_refresh).sizeDp(150).color(R.color.color4).getCurrent());
+
+
+        /*mFabRefreshImage.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_refresh)
+                .sizeDp(150).color(R.color.color4).getCurrent());*/
 
         mFabUploadImage.setMenuListener(new FabSpeedDial.MenuListener() {
             @Override
@@ -172,6 +172,7 @@ public class QuestionActivity extends BaseActivity {
 
     }
 
+    /*
     @DebugLog
     @Click(R.id.FabRefreshImage)
     public void FabRefreshImageClick() {
@@ -200,7 +201,7 @@ public class QuestionActivity extends BaseActivity {
                     }
                 });
     }
-
+    */
     @DebugLog
     @Click(R.id.Button_SoruGonder)
     public void Button_SoruGonderClick() {
