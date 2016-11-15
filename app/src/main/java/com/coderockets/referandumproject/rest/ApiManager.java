@@ -13,6 +13,7 @@ import com.coderockets.referandumproject.rest.RestModel.AnswerResponse;
 import com.coderockets.referandumproject.rest.RestModel.FavoriteRequest;
 import com.coderockets.referandumproject.rest.RestModel.FavoriteResponse;
 import com.coderockets.referandumproject.rest.RestModel.ImageUploadResponse;
+import com.coderockets.referandumproject.rest.RestModel.ImgurImageResponse;
 import com.coderockets.referandumproject.rest.RestModel.QuestionDeleteResponse;
 import com.coderockets.referandumproject.rest.RestModel.ReportAbuseRequest;
 import com.coderockets.referandumproject.rest.RestModel.ReportAbuseResponse;
@@ -26,6 +27,7 @@ import com.coderockets.referandumproject.rest.RestModel.UserResponse;
 import java.util.Map;
 
 import hugo.weaving.DebugLog;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -185,5 +187,22 @@ public class ApiManager {
                 )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @DebugLog
+    public Observable<ImgurImageResponse> ImgurImageUpload(String title, String desc, String albumId, String username, RequestBody image) {
+
+        return RestClient.getInstance().getApiService()
+                .ImgurPostImage(
+                        "Client-ID " + Const.IMGUR_CLIENT_ID,
+                        title,
+                        desc,
+                        null,
+                        username,
+                        image
+                )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
     }
 }

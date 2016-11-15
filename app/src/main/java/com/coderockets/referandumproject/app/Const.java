@@ -23,5 +23,8 @@ public class Const {
     public static final String REFERANDUM_TASK_TYPE = "TaskType";
     public static final String PREFS_KEY_REFERANDUM_UUID = "ReferandumUUID";
 
+    public static final String IMGUR_CLIENT_ID = "5b37683c8864f6a";
+    public static final String IMGUR_CLIENT_SECRET = "6ce99211c17ccf2b58cbcd0d35e23ec8caac3a2a";
+
 
 }

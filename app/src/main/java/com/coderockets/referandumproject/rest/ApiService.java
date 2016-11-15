@@ -5,6 +5,7 @@ import com.coderockets.referandumproject.rest.RestModel.AnswerResponse;
 import com.coderockets.referandumproject.rest.RestModel.FavoriteRequest;
 import com.coderockets.referandumproject.rest.RestModel.FavoriteResponse;
 import com.coderockets.referandumproject.rest.RestModel.ImageUploadResponse;
+import com.coderockets.referandumproject.rest.RestModel.ImgurImageResponse;
 import com.coderockets.referandumproject.rest.RestModel.QuestionDeleteResponse;
 import com.coderockets.referandumproject.rest.RestModel.ReportAbuseRequest;
 import com.coderockets.referandumproject.rest.RestModel.ReportAbuseResponse;
@@ -25,6 +26,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -101,6 +103,15 @@ public interface ApiService {
                                                       @Header("x-voter-installation") String installation,
                                                       @Path(value = "id") String questionId);
 
+    @Multipart
+    @POST("https://api.imgur.com/3/image")
+    Observable<ImgurImageResponse> ImgurPostImage(
+            @Header("Authorization") String auth,
+            @Query("title") String title,
+            @Query("description") String description,
+            @Query("album") String albumId,
+            @Query("account_url") String username,
+            @Part("file\"; filename=\"referandum.png\" ") RequestBody image);
 
     //@Multipart
     //@POST("api/belge")

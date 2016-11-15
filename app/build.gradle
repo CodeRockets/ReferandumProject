@@ -22,12 +22,12 @@ apt {
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "24.0.3"
+    compileSdkVersion project.sdk
+    buildToolsVersion project.buildTools
 
     defaultConfig {
         applicationId "com.coderockets.referandumproject"
-        targetSdkVersion 25
+        targetSdkVersion project.sdk
         versionCode 14
         versionName "1.0.13"
         multiDexEnabled true
@@ -53,7 +53,7 @@ android {
             buildConfigField('String', 'VOTER_VERSION', '"1"')
         }
         prod {
-            minSdkVersion 17
+            minSdkVersion project.minSdk
             buildConfigField('String', 'BACKEND_URL', '"http://cr-vote.herokuapp.com/"')
             buildConfigField('String', 'VOTER_VERSION', '"1"')
         }
@@ -79,6 +79,23 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/rxjava.properties'
+        exclude 'lib/armeabi-v7a/libiconv.so'
+        exclude 'lib/armeabi-v7a/libzbarjni.so'
+    }
+
     sourceSets {
         main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] }
         debug {
@@ -87,8 +104,6 @@ android {
     }
 }
 dependencies {
-    def PlayVersion = '9.8.0';
-    def SupportVersion = '25.0.0';
 
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
@@ -102,23 +117,23 @@ dependencies {
     //releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
     //testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
 
-    compile "com.android.support:appcompat-v7:$SupportVersion"
-    compile "com.android.support:design:$SupportVersion"
-    compile "com.android.support:cardview-v7:$SupportVersion"
-    compile "com.android.support:recyclerview-v7:$SupportVersion"
+    compile "com.android.support:appcompat-v7:$project.supportVersion"
+    compile "com.android.support:design:$project.supportVersion"
+    compile "com.android.support:cardview-v7:$project.supportVersion"
+    compile "com.android.support:recyclerview-v7:$project.supportVersion"
 
     compile 'com.android.support:multidex:1.0.1'
     //compile 'com.google.android.gms:play-services-identity:9.2.0'
 
 
-    compile "com.google.firebase:firebase-core:$PlayVersion"
-    compile "com.google.firebase:firebase-messaging:$PlayVersion"
-    compile "com.google.firebase:firebase-database:$PlayVersion"
-    compile "com.google.firebase:firebase-config:$PlayVersion"
-    compile "com.google.firebase:firebase-auth:$PlayVersion"
-    compile "com.google.firebase:firebase-crash:$PlayVersion"
-    compile "com.google.android.gms:play-services-gcm:$PlayVersion"
-    compile "com.google.android.gms:play-services-location:$PlayVersion"
+    compile "com.google.firebase:firebase-core:$project.playVersion"
+    compile "com.google.firebase:firebase-messaging:$project.playVersion"
+    compile "com.google.firebase:firebase-database:$project.playVersion"
+    compile "com.google.firebase:firebase-config:$project.playVersion"
+    compile "com.google.firebase:firebase-auth:$project.playVersion"
+    compile "com.google.firebase:firebase-crash:$project.playVersion"
+    compile "com.google.android.gms:play-services-gcm:$project.playVersion"
+    compile "com.google.android.gms:play-services-location:$project.playVersion"
 
     compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
         transitive = true;
@@ -141,6 +156,7 @@ dependencies {
     // Google Glide ve Palette kütüphanelerinin birlikte kullanılmasını sağlar
     //compile 'com.aykuttasil:androidbasichelper:1.0.8'
     compile 'com.aykuttasil:percentbar:3.0.3'
+    compile 'com.aykuttasil:imageupload:0.0.4'
 
     compile 'com.google.android:flexbox:0.2.1' // Google FlexboxLayout kullanımı için
     compile 'com.github.slmyldz:AndroidRandom:1.0' // Her türden random veriler üretilmesini sağlar

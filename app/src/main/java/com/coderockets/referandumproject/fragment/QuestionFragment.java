@@ -19,7 +19,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.aykuttasil.androidbasichelperlib.UiHelper;
+import com.aykuttasil.imageupload.ImageUpload;
+import com.aykuttasil.imageupload.rest.models.ImgurUploadResponse;
+import com.aykuttasil.imageupload.seed.Imgur;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.MainActivity;
 import com.coderockets.referandumproject.activity.ProfileActivity_;
@@ -35,8 +39,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.share.model.SharePhoto;
-import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Callback;
@@ -45,6 +48,7 @@ import com.squareup.picasso.Picasso;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -213,7 +217,6 @@ public class QuestionFragment extends Fragment {
 
     private void setSoru(ModelQuestionInformation mqi) {
 
-        //
         Uri soruImageUri = Uri.parse(mqi.getQuestionImage());
 
         if (!mqi.getQuestionImage().contains("loremflickr")) {
@@ -288,45 +291,72 @@ public class QuestionFragment extends Fragment {
 
     @DebugLog
     private void shareQuestion() {
-        /*
-        ShareLinkContent shareLinkContent = new ShareLinkContent.Builder()
-                .setContentTitle("Merhaba")
-                .setContentDescription("hehe")
-                .setImageUrl(Uri.parse("http://www.pngall.com/wp-content/uploads/2016/07/Car-Free-PNG-Image.png"))
-                .build();
-        */
 
         if (!AccessToken.getCurrentAccessToken().getPermissions().contains("publish_actions")) {
             LoginManager.getInstance().logInWithPublishPermissions(QuestionFragment.this, Collections.singletonList("publish_actions"));
         } else {
             shareQuestionToFacebook();
         }
+
     }
 
-    @org.androidannotations.annotations.UiThread(delay = 1000)
+    @UiThread(delay = 1000)
     @DebugLog
     public void shareQuestionToFacebook() {
+
+
+         /*
+        ApiManager.getInstance(this).ImgurImageUpload("Baslik", "descsssssss", null, null, image)
+                .subscribe(success -> {
+                    Logger.i(success.toString());
+
+                    ShareLinkContent shareLinkContent = new ShareLinkContent.Builder()
+                            .setContentTitle("Merhaba")
+                            .setContentDescription("hehe")
+                            .setImageUrl(Uri.parse(success.data.link))
+                            .build();
+
+                    ShareDialog.show(this, shareLinkContent);
+
+                }, error -> {
+                    Logger.e(error, "HATA");
+                });
+        */
 
         View drawingView = mSoruLayout.getRootView().findViewById(R.id.ParentLayout);
         drawingView.buildDrawingCache(true);
         Bitmap bitmap = drawingView.getDrawingCache(true).copy(Bitmap.Config.ARGB_8888, false);
         drawingView.destroyDrawingCache();
 
-        SharePhoto sharePhoto = new SharePhoto.Builder()
-                .setBitmap(bitmap)
-                .setCaption("Referandum Sonuçları")
-                .build();
 
-        SharePhotoContent sharePhotoContent = new SharePhotoContent.Builder()
-                .addPhoto(sharePhoto)
-                .build();
+        MaterialDialog dialog = UiHelper.UiDialog.newInstance(mContext).getProgressDialog("Lütfen bekleyiniz", null);
+        dialog.show();
 
-        if (ShareDialog.canShow(SharePhotoContent.class)) {
-            ShareDialog.show(this, sharePhotoContent);
-            Logger.i("shareQuestion is success");
-        } else {
-            Logger.i("shareQuestion is fatal");
-        }
+        ImageUpload.create(new Imgur(mContext), new ImgurUploadResponse())
+                .upload(bitmap, "merhabaaa")
+                .subscribe(success -> {
+                    dialog.dismiss();
+                    Logger.i(success.getData().getLink());
+
+                    ShareLinkContent shareLinkContent = new ShareLinkContent.Builder()
+                            .setContentTitle(mqi.getQuestionText())
+                            .setContentDescription("Sende uygulamayı yükleyerek Referandum'a katılabilirsin.")
+                            .setContentUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.coderockets.referandumproject"))
+                            .setImageUrl(Uri.parse(success.getData().getLink()))
+                            .setQuote(mqi.getQuestionText())
+                            .build();
+
+                    if (ShareDialog.canShow(ShareLinkContent.class)) {
+                        ShareDialog.show(this, shareLinkContent);
+                        Logger.i("shareQuestion is success");
+                    } else {
+                        Logger.i("shareQuestion is fatal");
+                    }
+
+                }, error -> {
+                    dialog.dismiss();
+                    error.printStackTrace();
+                });
     }
 
     public void showShareButton() {
@@ -417,4 +447,5 @@ public class QuestionFragment extends Fragment {
         }
         super.onDestroy();
     }
+
 }
