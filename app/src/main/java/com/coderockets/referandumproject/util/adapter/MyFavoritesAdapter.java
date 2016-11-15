@@ -66,10 +66,14 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
     }
 
     private void removeItem(int position) {
-        mList.remove(position);
-        // FIXME: 19.10.2016 -> holder.setIsRecyclable(false); olduğu için düzgün çalışmıyor
-        //notifyItemRemoved(position);
-        notifyDataSetChanged();
+        try {
+            mList.remove(position);
+            // FIXME: 19.10.2016 -> holder.setIsRecyclable(false); olduğu için düzgün çalışmıyor
+            //notifyItemRemoved(position);
+            notifyDataSetChanged();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @DebugLog

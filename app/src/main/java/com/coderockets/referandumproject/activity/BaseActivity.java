@@ -24,10 +24,12 @@ import com.coderockets.referandumproject.util.PicassoCircleTransform;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
-import com.facebook.share.widget.ShareDialog;
+import com.facebook.login.LoginResult;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.orhanobut.logger.Logger;
@@ -51,7 +53,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     AccessTokenTracker mAccessTokenTracker;
     ProfileTracker mProfileTracker;
-    public CallbackManager mCallbackManager;;
+    public CallbackManager mCallbackManager;
 
     abstract void updateUi();
 
@@ -61,6 +63,27 @@ public abstract class BaseActivity extends AppCompatActivity {
         setAccesTokenTracker();
         setProfileTracker();
         mCallbackManager = CallbackManager.Factory.create();
+
+        LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @DebugLog
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Logger.i("AccessToken: " + loginResult.getAccessToken());
+                Logger.i("registerCallback: onSuccess()");
+            }
+
+            @DebugLog
+            @Override
+            public void onCancel() {
+                Logger.i("registerCallback: onCancel()");
+            }
+
+            @DebugLog
+            @Override
+            public void onError(FacebookException error) {
+                Logger.e(error, "HATA");
+            }
+        });
     }
 
     @DebugLog
@@ -79,6 +102,16 @@ public abstract class BaseActivity extends AppCompatActivity {
 
                 AccessToken.setCurrentAccessToken(currentAccessToken);
 
+                if (currentAccessToken != null) {
+
+                    for (String prms : AccessToken.getCurrentAccessToken().getPermissions()) {
+                        Logger.i("Facebook Permission Access Token: " + prms);
+                    }
+                    for (String prms : currentAccessToken.getPermissions()) {
+                        Logger.i("Facebook Permission Current: " + prms);
+                    }
+                }
+
                 EventBus.getDefault().postSticky(new ResetEvent());
 
                 if (currentAccessToken != null) {
@@ -86,6 +119,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
                     if (deniedPermissions.contains("user_friends")) {
                         LoginManager.getInstance().logInWithReadPermissions(BaseActivity.this, Arrays.asList("user_friends"));
+
+                    } else if (!currentAccessToken.getPermissions().contains("publish_actions")) { // Facebook da yayın yapmak için izin istiyoruz
+                        LoginManager.getInstance().logInWithPublishPermissions(BaseActivity.this, Arrays.asList("publish_actions"));
                     } else {
                         saveUser(currentAccessToken.getToken());
                     }
@@ -126,8 +162,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         userRequest.setToken(token);
 
         Logger.i(userRequest.getToken());
-        //Logger.i(SuperHelper.getDeviceId(BaseActivity.this));
-        //Logger.i("User save request: " + new Gson().toJson(userRequest));
 
         try {
             Subscription subscription = ApiManager.getInstance(this).SaveUser(userRequest)
@@ -143,12 +177,11 @@ public abstract class BaseActivity extends AppCompatActivity {
                             },
                             materialDialog::dismiss
                     );
-            //mListSubscription.add(subscription);
+
         } catch (Exception e) {
             SuperHelper.CrashlyticsLog(e);
             materialDialog.dismiss();
             e.printStackTrace();
-            //UiHelper.UiSnackBar.showSimpleSnackBar(getView(), e.getMessage(), Snackbar.LENGTH_INDEFINITE);
         }
 
     }

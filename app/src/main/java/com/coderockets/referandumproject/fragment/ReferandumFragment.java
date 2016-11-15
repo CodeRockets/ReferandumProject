@@ -295,13 +295,20 @@ public class ReferandumFragment extends BaseFragment {
                             response -> {
                                 for (ModelQuestionInformation mqi : response.getData().getRows()) {
                                     //Logger.i(mqi.getQuestionText());
-                                    // Soru daha önce eklenip eklenmediği kontrol ediliyor
-                                    if (answerAndTempQuestionControl.get(mqi.getSoruId()) == null) {
-                                        mSorularAdapter.addFragment(QuestionFragment_.builder().build(), mqi);
-                                        answerAndTempQuestionControl.put(mqi.getSoruId(), false);
-                                        if (mSorularAdapter.getCount() == 1) {
-                                            getCurrentQuestionFragment().setPreviousNextButtonUi();
+                                    try {
+                                        // Soru daha önce eklenip eklenmediği kontrol ediliyor
+                                        if (answerAndTempQuestionControl.get(mqi.getSoruId()) == null) {
+
+                                            mSorularAdapter.addFragment(QuestionFragment_.builder().build(), mqi);
+
+                                            answerAndTempQuestionControl.put(mqi.getSoruId(), false);
+
+                                            if (mSorularAdapter.getCount() == 1) {
+                                                getCurrentQuestionFragment().setPreviousNextButtonUi();
+                                            }
                                         }
+                                    } catch (Exception e) {
+                                        Logger.e(e, "HATA");
                                     }
                                 }
                             }, error -> {

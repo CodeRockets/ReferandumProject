@@ -54,8 +54,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.Collections;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 import hugo.weaving.DebugLog;
 import rx.Subscription;
@@ -292,8 +290,14 @@ public class QuestionFragment extends Fragment {
     @DebugLog
     private void shareQuestion() {
 
+        for (String prms : AccessToken.getCurrentAccessToken().getPermissions()) {
+            Logger.i("Facebook Permission: " + prms);
+        }
+
         if (!AccessToken.getCurrentAccessToken().getPermissions().contains("publish_actions")) {
-            LoginManager.getInstance().logInWithPublishPermissions(QuestionFragment.this, Collections.singletonList("publish_actions"));
+            Logger.i("Facebook publish_actions permission is denied.");
+            //LoginManager.getInstance().logInWithPublishPermissions(QuestionFragment.this, Collections.singletonList("publish_actions"));
+            //LoginManager.getInstance().logInWithPublishPermissions(mActivity, Collections.singletonList("publish_actions"));
         } else {
             shareQuestionToFacebook();
         }
@@ -333,9 +337,11 @@ public class QuestionFragment extends Fragment {
         dialog.show();
 
         ImageUpload.create(new Imgur(mContext), new ImgurUploadResponse())
-                .upload(bitmap, "merhabaaa")
+                .upload(bitmap, "Referandum")
                 .subscribe(success -> {
+
                     dialog.dismiss();
+
                     Logger.i(success.getData().getLink());
 
                     ShareLinkContent shareLinkContent = new ShareLinkContent.Builder()
