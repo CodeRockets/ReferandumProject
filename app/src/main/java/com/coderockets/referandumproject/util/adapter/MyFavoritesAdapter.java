@@ -115,7 +115,7 @@ public class MyFavoritesAdapter extends RecyclerView.Adapter<MyFavoritesAdapter.
                         });
             });
 
-            if (!mqi.getQuestionImage().contains("loremflickr") || !mqi.getQuestionImage().equals("") || mqi.getQuestionImage() != null) {
+            if (!mqi.getQuestionImage().contains("loremflickr") && !mqi.getQuestionImage().equals("") && mqi.getQuestionImage() != null) {
                 Picasso.with(mImageViewSoruImage.getContext())
                         .load(mqi.getQuestionImage())
                         .into(mImageViewSoruImage);

@@ -119,7 +119,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
                     if (deniedPermissions.contains("user_friends")) {
                         LoginManager.getInstance().logInWithReadPermissions(BaseActivity.this, Arrays.asList("user_friends"));
-
                     } else if (!currentAccessToken.getPermissions().contains("publish_actions")) { // Facebook da yayın yapmak için izin istiyoruz
                         LoginManager.getInstance().logInWithPublishPermissions(BaseActivity.this, Arrays.asList("publish_actions"));
                     } else {

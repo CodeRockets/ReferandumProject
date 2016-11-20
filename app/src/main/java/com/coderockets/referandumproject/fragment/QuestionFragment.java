@@ -217,7 +217,7 @@ public class QuestionFragment extends Fragment {
 
         Uri soruImageUri = Uri.parse(mqi.getQuestionImage());
 
-        if (!mqi.getQuestionImage().contains("loremflickr") || !mqi.getQuestionImage().equals("") || mqi.getQuestionImage() != null) {
+        if (!mqi.getQuestionImage().contains("loremflickr") && !mqi.getQuestionImage().equals("") && mqi.getQuestionImage() != null) {
 
             mImageView_SoruImage.setScaleType(ImageView.ScaleType.CENTER);
 

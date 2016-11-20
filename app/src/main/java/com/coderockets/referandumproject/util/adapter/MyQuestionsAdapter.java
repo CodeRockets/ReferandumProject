@@ -108,7 +108,7 @@ public class MyQuestionsAdapter extends RecyclerView.Adapter<MyQuestionsAdapter.
             mMqi = mqi;
             mTextViewSoru.setText(mqi.getQuestionText());
 
-            if (!mqi.getQuestionImage().contains("loremflickr") || !mqi.getQuestionImage().equals("") || mqi.getQuestionImage() != null) {
+            if (!mqi.getQuestionImage().contains("loremflickr") && !mqi.getQuestionImage().equals("") && mqi.getQuestionImage() != null) {
                 Picasso.with(mImageViewSoruImage.getContext())
                         .load(mqi.getQuestionImage())
                         .into(mImageViewSoruImage);
