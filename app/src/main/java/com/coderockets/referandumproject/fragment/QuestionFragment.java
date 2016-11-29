@@ -54,6 +54,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.Collections;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import hugo.weaving.DebugLog;
 import rx.Subscription;
@@ -297,7 +299,7 @@ public class QuestionFragment extends Fragment {
         if (!AccessToken.getCurrentAccessToken().getPermissions().contains("publish_actions")) {
             Logger.i("Facebook publish_actions permission is denied.");
             //LoginManager.getInstance().logInWithPublishPermissions(QuestionFragment.this, Collections.singletonList("publish_actions"));
-            //LoginManager.getInstance().logInWithPublishPermissions(mActivity, Collections.singletonList("publish_actions"));
+            LoginManager.getInstance().logInWithPublishPermissions(mActivity, Collections.singletonList("publish_actions"));
         } else {
             shareQuestionToFacebook();
         }
@@ -308,6 +310,21 @@ public class QuestionFragment extends Fragment {
     @DebugLog
     public void shareQuestionToFacebook() {
 
+        // Facebook app den linke tıklanıldığında bir intent yollar
+        // Bu intent i uygulamamızda yakalayabilir, gerekli akışı sağlayabiliriz
+        /*
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            FacebookSdk.sdkInitialize(this);
+            ...
+            Uri targetUrl =
+              AppLinks.getTargetUrlFromInboundIntent(this, getIntent());
+            if (targetUrl != null) {
+                Log.i("Activity", "App Link Target URL: " + targetUrl.toString());
+            }
+        }
+         */
 
          /*
         ApiManager.getInstance(this).ImgurImageUpload("Baslik", "descsssssss", null, null, image)

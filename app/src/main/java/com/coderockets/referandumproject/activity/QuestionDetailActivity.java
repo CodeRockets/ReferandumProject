@@ -6,9 +6,6 @@ package com.coderockets.referandumproject.activity;
 
 public class QuestionDetailActivity extends BaseActivity {
 
-
-
-
     @Override
     void updateUi() {
 
