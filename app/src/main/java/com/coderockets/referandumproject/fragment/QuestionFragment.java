@@ -9,12 +9,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -41,9 +43,13 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
+import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.transitionseverywhere.Slide;
+import com.transitionseverywhere.Transition;
+import com.transitionseverywhere.TransitionManager;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -90,6 +96,9 @@ public class QuestionFragment extends Fragment {
 
     @ViewById(R.id.SoruLayout)
     CardView mSoruLayout;
+
+    @ViewById(R.id.QuestionFragmentMainContainer)
+    CoordinatorLayout mQuestionFragmentMainContainer;
     //
     private Context mContext;
     private MainActivity mActivity;
@@ -141,7 +150,9 @@ public class QuestionFragment extends Fragment {
         mToolbar_Share.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.menuFacebook: {
+
                     hideShareButton();
+
                     if (SuperHelper.checkUser()) {
                         shareQuestion();
                     } else {
@@ -163,17 +174,18 @@ public class QuestionFragment extends Fragment {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 //shareQuestionToFacebook();
+                Logger.i(new Gson().toJson(loginResult));
             }
 
             @Override
             public void onCancel() {
-
+                Logger.i("Cancel Facebook Share");
             }
 
             @DebugLog
             @Override
             public void onError(FacebookException error) {
-                error.printStackTrace();
+                Logger.e(error, "HATA");
                 UiHelper.UiSnackBar.showSimpleSnackBar(getView(), error.toString(), Snackbar.LENGTH_LONG);
                 SuperHelper.CrashlyticsLog(error);
             }
@@ -244,6 +256,7 @@ public class QuestionFragment extends Fragment {
         }
 
         Uri profileImageUri = Uri.parse(mqi.getAskerProfileImg());
+
         Picasso.with(mContext)
                 .load(profileImageUri)
                 .placeholder(R.drawable.loading)
@@ -251,9 +264,11 @@ public class QuestionFragment extends Fragment {
         //mProfilePicture.setImageDrawable(new IconDrawable(mContext, FontAwesomeIcons.fa_github).sizeDp(150).getCurrent());
 
         String soruText = mqi.getQuestionText();
+
         if (soruText.length() > 0) {
             //soruText = soruText.substring(0, 1).toUpperCase() + soruText.substring(1).toLowerCase();
         }
+
         mSoruText.setText(soruText.toLowerCase());
     }
 
@@ -289,6 +304,23 @@ public class QuestionFragment extends Fragment {
         mReferandumFragment.skipPreviousQuestion(0);
     }
 
+    public boolean visible = true;
+
+    @DebugLog
+    @Click(R.id.ProfilePicture)
+    public void ProfilePictureClick() {
+
+        Transition transitionSlide = new Slide(Gravity.END);
+        transitionSlide.setDuration(1000);
+
+        TransitionManager.beginDelayedTransition(mQuestionFragmentMainContainer, transitionSlide);
+
+        //TransitionManager.endTransitions(mQuestionFragmentMainContainer);
+
+        visible = !visible;
+        mSoruText.setVisibility(visible ? View.GONE : View.VISIBLE);
+    }
+
     @DebugLog
     private void shareQuestion() {
 
@@ -297,9 +329,13 @@ public class QuestionFragment extends Fragment {
         }
 
         if (!AccessToken.getCurrentAccessToken().getPermissions().contains("publish_actions")) {
+
             Logger.i("Facebook publish_actions permission is denied.");
-            //LoginManager.getInstance().logInWithPublishPermissions(QuestionFragment.this, Collections.singletonList("publish_actions"));
-            LoginManager.getInstance().logInWithPublishPermissions(mActivity, Collections.singletonList("publish_actions"));
+
+            shareQuestionToFacebook();
+
+            //LoginManager.getInstance().logInWithPublishPermissions(mActivity, Collections.singletonList("publish_actions"));
+
         } else {
             shareQuestionToFacebook();
         }

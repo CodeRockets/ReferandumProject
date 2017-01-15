@@ -2,6 +2,7 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/QuestionFragmentMainContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
@@ -40,11 +41,11 @@
             android:orientation="vertical">
 
             <ImageView
-                android:contentDescription="Referandum Question Image"
                 android:id="@+id/SoruImage"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:adjustViewBounds="true"
+                android:contentDescription="Referandum Question Image"
                 android:cropToPadding="false"
                 android:scaleType="centerCrop"
                 android:src="@drawable/question_bg" />
