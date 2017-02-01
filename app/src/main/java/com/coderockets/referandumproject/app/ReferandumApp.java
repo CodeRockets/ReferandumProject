@@ -3,6 +3,7 @@ package com.coderockets.referandumproject.app;
 import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
@@ -20,8 +21,6 @@ import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 
-import org.androidannotations.annotations.EApplication;
-
 import java.util.UUID;
 
 import hugo.weaving.DebugLog;
@@ -31,7 +30,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 /**
  * Created by aykutasil on 2.06.2016.
  */
-public class ReferandumApp extends Application {
+public class ReferandumApp extends MultiDexApplication {
 
     @Override
     public void onCreate() {
@@ -50,44 +49,34 @@ public class ReferandumApp extends Application {
         }
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                //.setDefaultFontPath("fonts/ShadowsIntoLight.ttf")
                 .setFontAttrId(R.attr.fontPath)
                 .build());
 
         Fabric.with(this, new Crashlytics());
+
         Iconify.with(new FontAwesomeModule());
 
-        Logger.init("ReferandumLogger")                // default PRETTYLOGGER or use just init()
-                .methodCount(3)                      // default 2
-                .logLevel(BuildConfig.DEBUG ? LogLevel.FULL : LogLevel.NONE)        // default LogLevel.FULL
-                .methodOffset(0);                    // default 0
-        //.hideThreadInfo()                          // default shown
-        //.logAdapter(new AndroidLogAdapter());      //default AndroidLogAdapter
+        Logger.init("ReferandumLogger")
+                .methodCount(3)
+                .logLevel(BuildConfig.DEBUG ? LogLevel.FULL : LogLevel.NONE)
+                .methodOffset(0);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
+
         AppEventsLogger.activateApp(this);
 
         RxPaparazzo.register(this);
-        //LeakCanary.install(this);
 
     }
 
     @DebugLog
     private void initActiveAndroid() {
+
         ActiveAndroid.initialize(new Configuration.Builder(getApplicationContext())
                 .addModelClass(ModelUser.class)
                 .addModelClass(ModelQuestionInformation.class)
                 .create());
+
     }
 
-
-    @Override
-    protected void attachBaseContext(Context base) {
-        try {
-            super.attachBaseContext(base);
-            MultiDex.install(this);
-        } catch (RuntimeException ignored) {
-            // Multidex support doesn't play well with Robolectric yet
-        }
-    }
 }

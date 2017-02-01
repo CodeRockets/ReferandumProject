@@ -68,6 +68,7 @@
                 android:maxLines="5"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
+                android:text="sdsd"
                 android:textSize="110sp"
                 app:layout_flexBasisPercent="50%" />
 

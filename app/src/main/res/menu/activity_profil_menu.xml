@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menuTanitimSayfasi"
+        android:icon="@drawable/ic_account_circle_pink_900_48dp"
+        android:orderInCategory="100"
+        android:title="Tanıtım Sayfası"
+        app:showAsAction="never" />
+
     <item
         android:id="@+id/menuCikisYap"
         android:icon="@drawable/ic_account_circle_pink_900_48dp"

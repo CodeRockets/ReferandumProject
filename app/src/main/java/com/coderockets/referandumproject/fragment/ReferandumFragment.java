@@ -100,6 +100,7 @@ public class ReferandumFragment extends BaseFragment {
         //mViewPagerSorular.setPageTransformer(true, new FlipHorizontalTransformer());
 
         mViewPagerSorular.setPageTransformer(true, new BackgroundToForegroundTransformer());
+
         mViewPagerSorular.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

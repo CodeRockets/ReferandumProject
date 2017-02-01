@@ -24,11 +24,11 @@ import android.widget.ImageView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.aykuttasil.imageupload.ImageUpload;
-import com.aykuttasil.imageupload.rest.models.ImgurUploadResponse;
 import com.aykuttasil.imageupload.seed.Imgur;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.MainActivity;
 import com.coderockets.referandumproject.activity.ProfileActivity_;
+import com.coderockets.referandumproject.app.Const;
 import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.model.Event.UpdateLoginEvent;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
@@ -59,8 +59,6 @@ import org.androidannotations.annotations.ViewById;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.Collections;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import hugo.weaving.DebugLog;
@@ -140,7 +138,7 @@ public class QuestionFragment extends Fragment {
         setFavoriteFab();
         registerForContextMenu(mSoruText);
         setShareToolbar();
-        setFacebookShare();
+        //setFacebookShare();
     }
 
     private void setShareToolbar() {
@@ -389,7 +387,7 @@ public class QuestionFragment extends Fragment {
         MaterialDialog dialog = UiHelper.UiDialog.newInstance(mContext).getProgressDialog("Lütfen bekleyiniz", null);
         dialog.show();
 
-        ImageUpload.create(new Imgur(mContext), new ImgurUploadResponse())
+        ImageUpload.create(Imgur.getInstance(mContext, Const.IMGUR_CLIENT_ID), Imgur.resp())
                 .upload(bitmap, "Referandum")
                 .subscribe(success -> {
 
@@ -418,10 +416,12 @@ public class QuestionFragment extends Fragment {
                 });
     }
 
+    @DebugLog
     public void showShareButton() {
         mAppbarlayout.setExpanded(true, true);
     }
 
+    @DebugLog
     public void hideShareButton() {
         mAppbarlayout.setExpanded(false, true);
     }

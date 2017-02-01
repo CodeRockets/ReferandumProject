@@ -1,12 +1,18 @@
 package com.coderockets.referandumproject.helper;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.coderockets.referandumproject.R;
+import com.coderockets.referandumproject.activity.IntroActivity;
 import com.coderockets.referandumproject.db.DbManager;
 import com.coderockets.referandumproject.model.ModelUser;
 import com.coderockets.referandumproject.rest.ApiManager;
@@ -24,7 +30,12 @@ import org.androidannotations.annotations.UiThread;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 
+import co.mobiwise.materialintro.animation.MaterialIntroListener;
+import co.mobiwise.materialintro.shape.Focus;
+import co.mobiwise.materialintro.shape.FocusGravity;
+import co.mobiwise.materialintro.view.MaterialIntroView;
 import hugo.weaving.DebugLog;
 import jp.wasabeef.blurry.Blurry;
 
@@ -182,6 +193,70 @@ public class SuperHelper extends com.aykuttasil.androidbasichelperlib.SuperHelpe
         }
 
         Crashlytics.logException(e);
+    }
+
+
+    @DebugLog
+    public static boolean checkShowedIntro(Context context, boolean retry) {
+
+
+        //Thread t = new Thread(() -> {
+
+        SharedPreferences getPrefs = PreferenceManager
+                .getDefaultSharedPreferences(context);
+
+        boolean isFirstStart = getPrefs.getBoolean("firstStart", true);
+
+        if (retry || !SuperHelper.checkUser()) {
+            isFirstStart = true;
+        }
+
+        if (isFirstStart) {
+
+            Intent i = new Intent(context, IntroActivity.class);
+            context.startActivity(i);
+
+            SharedPreferences.Editor e = getPrefs.edit();
+            e.putBoolean("firstStart", false);
+            e.apply();
+        }
+
+        return isFirstStart;
+        //});
+
+        //t.start();
+    }
+
+
+    @DebugLog
+    public static void showIntro(Activity activity, View view, MaterialIntroListener listener, String id, String text, Focus focusType) {
+
+        WeakReference<View> weakReference = new WeakReference<>(view);
+
+        new Handler().postDelayed(() -> {
+
+            try {
+                if (weakReference.get() != null) {
+
+                    new MaterialIntroView.Builder(activity)
+                            .enableDotAnimation(true)
+                            .setFocusGravity(FocusGravity.CENTER)
+                            .setFocusType(focusType)
+                            .setDelayMillis(10)
+                            .enableFadeAnimation(true)
+                            .performClick(true)
+                            .setInfoText(text)
+                            .setTarget(view)
+                            .setUsageId(id)
+                            .dismissOnTouch(true)
+                            .setListener(listener)
+                            .show();
+                }
+            } catch (Exception e) {
+                Logger.e(e, "HATA");
+            }
+        }, 1000);
+
     }
 
 }

@@ -1,6 +1,5 @@
 package com.coderockets.referandumproject.activity;
 
-
 import android.content.Intent;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -31,20 +30,35 @@ public class MainActivity extends BaseActivity {
     @DebugLog
     @AfterViews
     public void MainActivityInit() {
-        setToolbar();
-        setFragment();
-        SuperHelper.sendFacebookToken(this);
+
+        if (SuperHelper.checkUser()) {
+
+            setToolbar();
+
+            setFragment();
+
+            SuperHelper.sendFacebookToken(this);
+
+        } else {
+            Intent i = new Intent(MainActivity.this, IntroActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+        }
+
     }
 
     @DebugLog
     @Override
     protected void onResume() {
         super.onResume();
+
         EventBus.getDefault().register(this);
+
     }
 
     @DebugLog
     private void setFragment() {
+
         SuperHelper.ReplaceFragmentBeginTransaction(
                 this,
                 ReferandumFragment_.builder().build(),
@@ -107,7 +121,9 @@ public class MainActivity extends BaseActivity {
     @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onEvent(UpdateLoginEvent loginEvent) {
-        updateProfileIcon(mToolbar.getMenu().getItem(0));
+        if (mToolbar != null && mToolbar.getMenu().size() > 0) {
+            updateProfileIcon(mToolbar.getMenu().getItem(0));
+        }
     }
 
     @Override
@@ -115,10 +131,16 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    @DebugLog
     @Override
     protected void onPause() {
         EventBus.getDefault().unregister(this);
         super.onPause();
     }
 
+    @DebugLog
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

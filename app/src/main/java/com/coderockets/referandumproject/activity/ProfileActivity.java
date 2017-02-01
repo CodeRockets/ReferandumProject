@@ -1,13 +1,13 @@
 package com.coderockets.referandumproject.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -80,6 +80,7 @@ public class ProfileActivity extends BaseActivity {
         setToolbar();
         setLoginButton();
         updateUi();
+
     }
 
     @DebugLog
@@ -104,9 +105,7 @@ public class ProfileActivity extends BaseActivity {
 
         // Kullanıcı Login değilse
         if (!SuperHelper.checkUser()) {
-            //if (DbManager.getModelUser() == null && AccessToken.getCurrentAccessToken() != null) {
             LoginManager.getInstance().logOut();
-            //}
             hideMainContent();
             showLoginContent();
             makeBlur(ProfileActivity.this, mImageViewLoginBackground, mImageViewLoginBackground);
@@ -185,10 +184,28 @@ public class ProfileActivity extends BaseActivity {
                 EventBus.getDefault().postSticky(new UpdateLoginEvent());
                 break;
             }
+            case R.id.menuTanitimSayfasi: {
+                Intent i = new Intent(ProfileActivity.this, IntroActivity.class);
+                startActivity(i);
+                break;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @DebugLog
+    @Override
+    public void onBackPressed() {
+
+        if (!SuperHelper.checkUser()) {
+            Intent i = new Intent(this, IntroActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+        } else {
+            super.onBackPressed();
+        }
+
+    }
 
     @Override
     protected void onDestroy() {

@@ -28,4 +28,27 @@
     .secondary-text-color{color:#757575}
     .divider-color{border-color:#bdbdbd}
     -->
+
+
+    <color name="slide1_background">#2E5266</color>
+    <color name="slide1_buttons">#6E8898</color>
+
+    <color name="slide2_background">#6E8898</color>
+    <color name="slide2_buttons">#2E5266</color>
+
+    <color name="slide3_background">#9FB1BC</color>
+    <color name="slide3_buttons">#D3D0CB</color>
+
+    <color name="slide4_background">#D3D0CB</color>
+    <color name="slide4_buttons">#9FB1BC</color>
+
+    <color name="slide5_background">#D5B0AC</color>
+    <color name="slide5_buttons">#6E8898</color>
+
+    <color name="slide6_background">#37459B</color>
+    <color name="slide6_buttons">#9FB1BC</color>
+
+    <!--Splash Screen-->
+    <item name="splash_background" type="color">@color/colorPrimary</item>
+
 </resources>

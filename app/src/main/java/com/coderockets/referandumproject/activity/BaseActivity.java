@@ -60,8 +60,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setAccesTokenTracker();
+
         setProfileTracker();
+
         mCallbackManager = CallbackManager.Factory.create();
 
         LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
@@ -84,6 +87,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 Logger.e(error, "HATA");
             }
         });
+
     }
 
     @DebugLog
@@ -119,11 +123,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
                     if (deniedPermissions.contains("user_friends")) {
                         LoginManager.getInstance().logInWithReadPermissions(BaseActivity.this, Arrays.asList("user_friends"));
-                    }
-                    //else if (!currentAccessToken.getPermissions().contains("publish_actions")) { // Facebook da yayın yapmak için izin istiyoruz
-                    //    LoginManager.getInstance().logInWithPublishPermissions(BaseActivity.this, Arrays.asList("publish_actions"));
-                    //}
-                    else {
+                    } else {
                         saveUser(currentAccessToken.getToken());
                     }
                 } else {
@@ -189,10 +189,13 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @DebugLog
     public void updateProfileIcon(MenuItem menuItem) {
+
         ModelUser modelUser = DbManager.getModelUser();
+
         if (modelUser != null) {
 
             WeakReference<MenuItem> itemWeakReference = new WeakReference<>(menuItem);
+
             Target target = new Target() {
 
                 @Override
@@ -216,6 +219,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
                 }
             };
+
             Picasso.with(this)
                     .load(modelUser.getProfileImageUrl())
                     .transform(new PicassoCircleTransform())
