@@ -143,7 +143,9 @@ public class ProfileActivity extends BaseActivity {
         //adapter.addFragment(ProfileMe_.builder().build(), "Profil");
         adapter.addFragment(ProfileMyQuestions_.builder().build(), "Sorularım");
         adapter.addFragment(ProfileMyFavorites_.builder().build(), "Favorilerim");
+
         viewPager.setAdapter(adapter);
+
     }
 
     private void showLoginContent() {

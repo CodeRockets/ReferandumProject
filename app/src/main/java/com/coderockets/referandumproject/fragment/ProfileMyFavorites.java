@@ -2,9 +2,11 @@ package com.coderockets.referandumproject.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.ProfileActivity;
@@ -22,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import co.mobiwise.materialintro.animation.MaterialIntroListener;
+import co.mobiwise.materialintro.shape.Focus;
 import hugo.weaving.DebugLog;
 import rx.Observable;
 
@@ -29,15 +33,21 @@ import rx.Observable;
  * Created by aykutasil on 8.09.2016.
  */
 @EFragment(R.layout.profile_myfavorites_layout)
-public class ProfileMyFavorites extends BaseProfile {
+public class ProfileMyFavorites extends BaseProfile implements MaterialIntroListener {
 
     @ViewById(R.id.RecyclerViewFavorites)
     RecyclerView mRecyclerViewFavorites;
+
     //
+
+
+    private final String INTRO_KEY_QUESTION_FAVORITE = "question_favorite4";
+
     Context mContext;
     ProfileActivity mActivity;
     MyFavoritesAdapter mMyFavoritesAdapter;
     List<ModelQuestionInformation> mList;
+    View mLastIntroView;
 
     @DebugLog
     @Override
@@ -85,6 +95,46 @@ public class ProfileMyFavorites extends BaseProfile {
         for (ModelQuestionInformation mqi : rows) {
             mMyFavoritesAdapter.addItem(mqi);
         }
+
+
+        new Handler().postDelayed(() -> {
+
+            try {
+                if (mMyFavoritesAdapter.getItemCount() > 0) {
+                    mLastIntroView = mRecyclerViewFavorites.getChildAt(0).findViewById(R.id.FabFavorite);
+                }
+            } catch (Exception e) {
+                Logger.e(e, "HATA");
+            }
+        }, 1000);
+
+    }
+
+    @DebugLog
+    @Override
+    public boolean getUserVisibleHint() {
+        return super.getUserVisibleHint();
+    }
+
+    @DebugLog
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if (isVisibleToUser) {
+
+            SuperHelper.showIntro(getActivity(),
+                    mLastIntroView,
+                    this,
+                    INTRO_KEY_QUESTION_FAVORITE,
+                    "Favorilediğiniz soruları buradan kaldırabilirsiniz",
+                    Focus.MINIMUM);
+        }
+    }
+
+    @DebugLog
+    @Override
+    public void onUserClicked(String s) {
 
     }
 }

@@ -111,6 +111,7 @@ public class ReferandumFragment extends BaseFragment {
             @Override
             public void onPageSelected(int position) {
                 mActivity.updateProfileIcon(mActivity.mToolbar.getMenu().getItem(0));
+
                 checkTempAnsweredAndShowResult(position);
 
                 if (position == 0) {
@@ -124,6 +125,7 @@ public class ReferandumFragment extends BaseFragment {
                         sendQuestionAnswer("atla", "s", modelQuestionInformation);
                     }
                 }
+
                 ControlTempQuestion();
             }
 
