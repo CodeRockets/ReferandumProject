@@ -41,7 +41,7 @@ public class ProfileMyFavorites extends BaseProfile implements MaterialIntroList
     //
 
 
-    private final String INTRO_KEY_QUESTION_FAVORITE = "question_favorite4";
+    private final String INTRO_KEY_QUESTION_FAVORITE = "question_favorite6";
 
     Context mContext;
     ProfileActivity mActivity;

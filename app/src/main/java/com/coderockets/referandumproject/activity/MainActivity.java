@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.fragment.ReferandumFragment_;
@@ -17,6 +18,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import co.mobiwise.materialintro.shape.Focus;
 import hugo.weaving.DebugLog;
 
 @EActivity(R.layout.activity_main)
@@ -24,6 +26,8 @@ public class MainActivity extends BaseActivity {
 
     @ViewById(R.id.toolbar)
     public Toolbar mToolbar;
+
+    private final String INTRO_KEY_ASK_QUESTION = "ask_question3";
 
     public static int FRAGMENT_CONTAINER = R.id.Container;
 
@@ -54,6 +58,19 @@ public class MainActivity extends BaseActivity {
 
         EventBus.getDefault().register(this);
 
+        if (SuperHelper.checkUser() && mToolbar.findViewById(R.id.menuAskQuestion) != null) {
+
+            View vi = mToolbar.findViewById(R.id.menuAskQuestion);
+
+            SuperHelper.showIntro(this,
+                    vi,
+                    s -> {
+                    },
+                    INTRO_KEY_ASK_QUESTION,
+                    "Sorunuzu buradan oluşturabilirsiniz",
+                    Focus.MINIMUM);
+        }
+
     }
 
     @DebugLog
@@ -73,13 +90,17 @@ public class MainActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.mipmap.ic_launcher));
+
     }
 
     @DebugLog
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         getMenuInflater().inflate(R.menu.activity_main_menu, menu);
+
         updateProfileIcon(menu.getItem(0));
+
         return super.onCreateOptionsMenu(menu);
     }
 

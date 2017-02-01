@@ -60,6 +60,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import co.mobiwise.materialintro.shape.Focus;
 import de.hdodenhof.circleimageview.CircleImageView;
 import hugo.weaving.DebugLog;
 import rx.Subscription;
@@ -97,7 +98,11 @@ public class QuestionFragment extends Fragment {
 
     @ViewById(R.id.QuestionFragmentMainContainer)
     CoordinatorLayout mQuestionFragmentMainContainer;
+
     //
+
+    private final String INTRO_KEY_QUESTION_FAVORITE = "question_fav6";
+
     private Context mContext;
     private MainActivity mActivity;
     private ModelQuestionInformation mqi;
@@ -111,26 +116,34 @@ public class QuestionFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (savedInstanceState != null) {
             mIsFavorite = savedInstanceState.getBoolean(FAVORITE_KEY, false);
         }
+
         mLoginManager = LoginManager.getInstance();
+
         mCompositeSubscriptions = new CompositeSubscription();
+
         mReferandumFragment = (ReferandumFragment) getParentFragment();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+
         outState.putBoolean(FAVORITE_KEY, mIsFavorite);
     }
 
     @DebugLog
     @AfterViews
     public void SoruFragmentInstance() {
+
         this.mContext = getActivity();
         this.mActivity = (MainActivity) getActivity();
+
         //
+
         mAppbarlayout.setExpanded(false);
         mqi = getArguments().getParcelable(ModelQuestionInformation.class.getSimpleName());
         setSoru(mqi);
@@ -139,6 +152,20 @@ public class QuestionFragment extends Fragment {
         registerForContextMenu(mSoruText);
         setShareToolbar();
         //setFacebookShare();
+
+
+        if (getUserVisibleHint()) {
+
+            SuperHelper.showIntro(
+                    getActivity(),
+                    mFabFavorite,
+                    s -> {
+
+                    },
+                    INTRO_KEY_QUESTION_FAVORITE,
+                    "Soruyu favorilerinize ekleyerek daha sonra takibini sağlayabilirsiniz",
+                    Focus.MINIMUM);
+        }
     }
 
     private void setShareToolbar() {
@@ -194,10 +221,12 @@ public class QuestionFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
         EventBus.getDefault().register(this);
     }
 
     private void changeFavoriteFabColor() {
+
         if (!mIsFavorite) {
             mFabFavorite.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
         } else {
@@ -205,7 +234,9 @@ public class QuestionFragment extends Fragment {
         }
     }
 
+    @DebugLog
     private void setFavoriteFab() {
+
         if (SuperHelper.checkUser()) {
             mFabFavorite.show();
         } else {

@@ -28,7 +28,6 @@ import org.androidannotations.annotations.ViewById;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 import co.mobiwise.materialintro.animation.MaterialIntroListener;
 import co.mobiwise.materialintro.shape.Focus;
@@ -48,8 +47,8 @@ public class ProfileMyQuestions extends BaseProfile implements MaterialIntroList
 
     //
 
-    private final String INTRO_KEY_SWIPE_DELETE = "swipe_delete_question";
-    private final String INTRO_KEY_PERCENT_BAR = "percent_bar";
+    private final String INTRO_KEY_SWIPE_DELETE = "swipe_delete_question2";
+    private final String INTRO_KEY_PERCENT_BAR = "percent_bar2";
 
     Context mContext;
     ProfileActivity mActivity;
@@ -141,7 +140,7 @@ public class ProfileMyQuestions extends BaseProfile implements MaterialIntroList
                             vi,
                             this,
                             INTRO_KEY_SWIPE_DELETE,
-                            "Soruları sağa veya sola sürükleyerek silebilirsiniz.",
+                            "Sorularınızı sağa veya sola sürükleyerek silebilirsiniz.",
                             Focus.MINIMUM);
 
                 }
