@@ -80,7 +80,7 @@ public class LoginSlide extends SlideFragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
-        if (isVisibleToUser) {
+        if (isVisibleToUser && textSurface != null) {
             textSurface.postDelayed(this::show, 100);
         }
     }
@@ -348,10 +348,11 @@ public class LoginSlide extends SlideFragment {
         textSurface.play(
                 new Sequential(
                         new Loop(
-                                Alpha.show(textCodeRockets, 300),
-                                Delay.duration(500),
-                                ShapeReveal.create(textReferandum, 750, SideCut.show(Side.LEFT), false),
-                                Delay.duration(500)
+                                //Alpha.show(textCodeRockets, 300),
+                                //Delay.duration(500),
+                                ShapeReveal.create(textReferandum, 2000, SideCut.show(Side.LEFT), false),
+                                Delay.duration(2000),
+                                Alpha.hide(textReferandum,1000)
                         )
                 )
         );
