@@ -17,11 +17,23 @@ public class UserRequest {
     @SerializedName("token")
     private String Token;
 
+    @Expose
+    @SerializedName("reg_id")
+    private String RegId;
+
     public String getToken() {
         return Token;
     }
 
     public void setToken(String token) {
         Token = token;
+    }
+
+    public String getRegId() {
+        return RegId;
+    }
+
+    public void setRegId(String regId) {
+        RegId = regId;
     }
 }

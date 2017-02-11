@@ -108,7 +108,6 @@ public class QuestionFragment extends Fragment {
     private ModelQuestionInformation mqi;
     private final String FAVORITE_KEY = "Favorite";
     private boolean mIsFavorite = false;
-    LoginManager mLoginManager;
     CompositeSubscription mCompositeSubscriptions;
     ReferandumFragment mReferandumFragment;
 
@@ -120,8 +119,6 @@ public class QuestionFragment extends Fragment {
         if (savedInstanceState != null) {
             mIsFavorite = savedInstanceState.getBoolean(FAVORITE_KEY, false);
         }
-
-        mLoginManager = LoginManager.getInstance();
 
         mCompositeSubscriptions = new CompositeSubscription();
 
@@ -151,8 +148,6 @@ public class QuestionFragment extends Fragment {
         setFavoriteFab();
         registerForContextMenu(mSoruText);
         setShareToolbar();
-        //setFacebookShare();
-
 
         if (getUserVisibleHint()) {
 
@@ -189,31 +184,6 @@ public class QuestionFragment extends Fragment {
                 }
             }
             return false;
-        });
-    }
-
-    private void setFacebookShare() {
-
-        mLoginManager.registerCallback(mActivity.mCallbackManager, new FacebookCallback<LoginResult>() {
-            @DebugLog
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                //shareQuestionToFacebook();
-                Logger.i(new Gson().toJson(loginResult));
-            }
-
-            @Override
-            public void onCancel() {
-                Logger.i("Cancel Facebook Share");
-            }
-
-            @DebugLog
-            @Override
-            public void onError(FacebookException error) {
-                Logger.e(error, "HATA");
-                UiHelper.UiSnackBar.showSimpleSnackBar(getView(), error.toString(), Snackbar.LENGTH_LONG);
-                SuperHelper.CrashlyticsLog(error);
-            }
         });
     }
 
@@ -513,13 +483,6 @@ public class QuestionFragment extends Fragment {
     public void setPreviousNextButtonUi() {
         mReferandumFragment.mSorularAdapter.getRegisteredFragment(mReferandumFragment.mViewPagerSorular.getCurrentItem())
                 .getView().findViewById(R.id.Fab_PreviousQuestion).setVisibility(View.INVISIBLE);
-    }
-
-    @DebugLog
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        mActivity.mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @DebugLog

@@ -41,7 +41,7 @@ public class MainActivity extends BaseActivity {
 
             setFragment();
 
-            SuperHelper.sendFacebookToken(this);
+            SuperHelper.UpdateUser(this);
 
         } else {
             Intent i = new Intent(MainActivity.this, IntroActivity.class);

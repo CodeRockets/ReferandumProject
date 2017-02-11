@@ -1,8 +1,5 @@
 package com.coderockets.referandumproject.app;
 
-import android.app.Application;
-import android.content.Context;
-import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
 import com.activeandroid.ActiveAndroid;
@@ -15,9 +12,9 @@ import com.coderockets.referandumproject.model.ModelUser;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
-import com.fuck_boilerplate.rx_paparazzo.RxPaparazzo;
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
+import com.miguelbcr.ui.rx_paparazzo.RxPaparazzo;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 

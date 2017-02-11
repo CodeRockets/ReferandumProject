@@ -50,6 +50,8 @@ import rx.schedulers.Schedulers;
 public class IntroActivity extends MaterialIntroActivity {
 
 
+    public static final String SHOW_JUST_LOGIN_SLIDE = "ShowJustLoginSlide";
+
     AccessTokenTracker mAccessTokenTracker;
     public CallbackManager mCallbackManager;
     ImageButton mButtonNext;
@@ -66,15 +68,23 @@ public class IntroActivity extends MaterialIntroActivity {
         fbRegisterCallback();
 
         enableLastSlideAlphaExitTransition(true);
+
         setSkipButtonVisible();
 
         getBackButtonTranslationWrapper()
                 .setEnterTranslation(new IViewTranslation() {
+                    @DebugLog
                     @Override
                     public void translate(View view, @FloatRange(from = 0, to = 1.0) float percentage) {
                         view.setAlpha(percentage);
                     }
                 });
+
+
+        if (getIntent() != null && getIntent().getBooleanExtra(SHOW_JUST_LOGIN_SLIDE, false)) {
+            addSlide(new LoginSlide());
+            return;
+        }
 
         addSlide(new SlideFragmentBuilder()
                 .backgroundColor(R.color.slide1_background)
@@ -82,6 +92,7 @@ public class IntroActivity extends MaterialIntroActivity {
                 .image(R.drawable.ekrangoruntusu1)
                 .description(getResources().getString(R.string.slide1))
                 .build());
+
 
         addSlide(new SlideFragmentBuilder()
                 .backgroundColor(R.color.slide2_background)

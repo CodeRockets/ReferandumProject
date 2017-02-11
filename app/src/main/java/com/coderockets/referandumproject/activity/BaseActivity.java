@@ -51,9 +51,9 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
-    AccessTokenTracker mAccessTokenTracker;
-    ProfileTracker mProfileTracker;
-    public CallbackManager mCallbackManager;
+    //AccessTokenTracker mAccessTokenTracker;
+    //ProfileTracker mProfileTracker;
+    //public CallbackManager mCallbackManager;
 
     abstract void updateUi();
 
@@ -61,32 +61,32 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setAccesTokenTracker();
-
-        setProfileTracker();
-
-        mCallbackManager = CallbackManager.Factory.create();
-
-        LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-            @DebugLog
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                Logger.i("AccessToken: " + loginResult.getAccessToken());
-                Logger.i("registerCallback: onSuccess()");
-            }
-
-            @DebugLog
-            @Override
-            public void onCancel() {
-                Logger.i("registerCallback: onCancel()");
-            }
-
-            @DebugLog
-            @Override
-            public void onError(FacebookException error) {
-                Logger.e(error, "HATA");
-            }
-        });
+//        setAccesTokenTracker();
+//
+//        setProfileTracker();
+//
+//        mCallbackManager = CallbackManager.Factory.create();
+//
+//        LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+//            @DebugLog
+//            @Override
+//            public void onSuccess(LoginResult loginResult) {
+//                Logger.i("AccessToken: " + loginResult.getAccessToken());
+//                Logger.i("registerCallback: onSuccess()");
+//            }
+//
+//            @DebugLog
+//            @Override
+//            public void onCancel() {
+//                Logger.i("registerCallback: onCancel()");
+//            }
+//
+//            @DebugLog
+//            @Override
+//            public void onError(FacebookException error) {
+//                Logger.e(error, "HATA");
+//            }
+//        });
 
     }
 
@@ -96,96 +96,97 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @DebugLog
-    public void setAccesTokenTracker() {
-
-        mAccessTokenTracker = new AccessTokenTracker() {
-            @DebugLog
-            @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-
-                AccessToken.setCurrentAccessToken(currentAccessToken);
-
-                if (currentAccessToken != null) {
-
-                    for (String prms : AccessToken.getCurrentAccessToken().getPermissions()) {
-                        Logger.i("Facebook Permission Access Token: " + prms);
-                    }
-                    for (String prms : currentAccessToken.getPermissions()) {
-                        Logger.i("Facebook Permission Current: " + prms);
-                    }
-                }
-
-                EventBus.getDefault().postSticky(new ResetEvent());
-
-                if (currentAccessToken != null) {
-                    Set<String> deniedPermissions = currentAccessToken.getDeclinedPermissions();
-
-                    if (deniedPermissions.contains("user_friends")) {
-                        LoginManager.getInstance().logInWithReadPermissions(BaseActivity.this, Arrays.asList("user_friends"));
-                    } else {
-                        saveUser(currentAccessToken.getToken());
-                    }
-                } else {
-                    DbManager.deleteModelUser();
-                    updateUi();
-                }
-            }
-        };
-
-        mAccessTokenTracker.startTracking();
-    }
-
-    public void setProfileTracker() {
-
-        mProfileTracker = new ProfileTracker() {
-            @DebugLog
-            @Override
-            protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
-                Profile.setCurrentProfile(currentProfile);
-            }
-        };
-
-        mProfileTracker.startTracking();
-    }
-
-    @DebugLog
-    public void saveUser(String token) {
-
-        MaterialDialog materialDialog = new MaterialDialog.Builder(this)
-                .cancelable(false)
-                .icon(new IconDrawable(this, FontAwesomeIcons.fa_angle_right).actionBarSize().colorRes(com.aykuttasil.androidbasichelperlib.R.color.accent))
-                .content("Lütfen Bekleyiniz..")
-                .progress(true, 0)
-                .show();
-
-        UserRequest userRequest = new UserRequest();
-        userRequest.setToken(token);
-
-        Logger.i(userRequest.getToken());
-
-        try {
-            Subscription subscription = ApiManager.getInstance(this).SaveUser(userRequest)
-                    .subscribe(response -> {
-                                Logger.i(response.getData().getName());
-                                response.getData().save();
-                                EventBus.getDefault().postSticky(new UpdateLoginEvent());
-                                updateUi();
-                            }, error -> {
-                                materialDialog.dismiss();
-                                SuperHelper.CrashlyticsLog(error);
-                                UiHelper.UiDialog.newInstance(this).getOKDialog("HATA", error.getMessage(), null).show();
-                            },
-                            materialDialog::dismiss
-                    );
-
-        } catch (Exception e) {
-            SuperHelper.CrashlyticsLog(e);
-            materialDialog.dismiss();
-            e.printStackTrace();
-        }
-
-    }
+//    @DebugLog
+//    public void setAccesTokenTracker() {
+//
+//        mAccessTokenTracker = new AccessTokenTracker() {
+//            @DebugLog
+//            @Override
+//            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+//
+//                AccessToken.setCurrentAccessToken(currentAccessToken);
+//
+//                if (currentAccessToken != null) {
+//
+//                    for (String prms : AccessToken.getCurrentAccessToken().getPermissions()) {
+//                        Logger.i("Facebook Permission Access Token: " + prms);
+//                    }
+//                    for (String prms : currentAccessToken.getPermissions()) {
+//                        Logger.i("Facebook Permission Current: " + prms);
+//                    }
+//                }
+//
+//                EventBus.getDefault().postSticky(new ResetEvent());
+//
+//                if (currentAccessToken != null) {
+//                    Set<String> deniedPermissions = currentAccessToken.getDeclinedPermissions();
+//
+//                    if (deniedPermissions.contains("user_friends")) {
+//                        LoginManager.getInstance().logInWithReadPermissions(BaseActivity.this, Arrays.asList("user_friends"));
+//                    } else {
+//                        saveUser(currentAccessToken.getToken());
+//                    }
+//                } else {
+//                    DbManager.deleteModelUser();
+//                    updateUi();
+//                }
+//            }
+//        };
+//
+//        mAccessTokenTracker.startTracking();
+//    }
+//
+//    public void setProfileTracker() {
+//
+//        mProfileTracker = new ProfileTracker() {
+//            @DebugLog
+//            @Override
+//            protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+//                Profile.setCurrentProfile(currentProfile);
+//            }
+//        };
+//
+//        mProfileTracker.startTracking();
+//    }
+//
+//    @DebugLog
+//    public void saveUser(String token) {
+//
+//
+//        MaterialDialog materialDialog = new MaterialDialog.Builder(this)
+//                .cancelable(false)
+//                .icon(new IconDrawable(this, FontAwesomeIcons.fa_angle_right).actionBarSize().colorRes(com.aykuttasil.androidbasichelperlib.R.color.accent))
+//                .content("Lütfen Bekleyiniz..")
+//                .progress(true, 0)
+//                .show();
+//
+//        UserRequest userRequest = new UserRequest();
+//        userRequest.setToken(token);
+//
+//        Logger.i(userRequest.getToken());
+//
+//        try {
+//            Subscription subscription = ApiManager.getInstance(this).SaveUser(userRequest)
+//                    .subscribe(response -> {
+//                                Logger.i(response.getData().getName());
+//                                response.getData().save();
+//                                EventBus.getDefault().postSticky(new UpdateLoginEvent());
+//                                updateUi();
+//                            }, error -> {
+//                                materialDialog.dismiss();
+//                                SuperHelper.CrashlyticsLog(error);
+//                                UiHelper.UiDialog.newInstance(this).getOKDialog("HATA", error.getMessage(), null).show();
+//                            },
+//                            materialDialog::dismiss
+//                    );
+//
+//        } catch (Exception e) {
+//            SuperHelper.CrashlyticsLog(e);
+//            materialDialog.dismiss();
+//            e.printStackTrace();
+//        }
+//
+//    }
 
     @DebugLog
     public void updateProfileIcon(MenuItem menuItem) {
@@ -234,15 +235,15 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mCallbackManager.onActivityResult(requestCode, resultCode, data);
+        //mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
 
     @DebugLog
     @Override
     protected void onDestroy() {
-        mAccessTokenTracker.stopTracking();
-        mProfileTracker.stopTracking();
+        //mAccessTokenTracker.stopTracking();
+        //mProfileTracker.stopTracking();
         super.onDestroy();
     }
 }

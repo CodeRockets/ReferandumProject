@@ -43,6 +43,10 @@ public class LoginSlide extends SlideFragment {
 
         setLoginButton();
 
+        if (getUserVisibleHint()) {
+            startTextSurface();
+        }
+
         return view;
     }
 
@@ -81,8 +85,13 @@ public class LoginSlide extends SlideFragment {
         super.setUserVisibleHint(isVisibleToUser);
 
         if (isVisibleToUser && textSurface != null) {
-            textSurface.postDelayed(this::show, 100);
+            startTextSurface();
         }
+    }
+
+    @DebugLog
+    private void startTextSurface() {
+        textSurface.postDelayed(this::show, 100);
     }
 
 
@@ -352,7 +361,7 @@ public class LoginSlide extends SlideFragment {
                                 //Delay.duration(500),
                                 ShapeReveal.create(textReferandum, 2000, SideCut.show(Side.LEFT), false),
                                 Delay.duration(2000),
-                                Alpha.hide(textReferandum,1000)
+                                Alpha.hide(textReferandum, 1000)
                         )
                 )
         );

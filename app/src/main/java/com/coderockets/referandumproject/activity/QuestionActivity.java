@@ -23,10 +23,10 @@ import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.rest.ApiManager;
 import com.coderockets.referandumproject.rest.RestModel.SoruSorRequest;
 import com.coderockets.referandumproject.util.AutoFitTextView;
-import com.fuck_boilerplate.rx_paparazzo.RxPaparazzo;
-import com.fuck_boilerplate.rx_paparazzo.entities.Options;
-import com.fuck_boilerplate.rx_paparazzo.entities.Size;
 import com.jakewharton.rxbinding.widget.RxTextView;
+import com.miguelbcr.ui.rx_paparazzo.RxPaparazzo;
+import com.miguelbcr.ui.rx_paparazzo.entities.Options;
+import com.miguelbcr.ui.rx_paparazzo.entities.size.ScreenSize;
 import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.MemoryPolicy;
@@ -74,8 +74,8 @@ public class QuestionActivity extends BaseActivity {
     @ViewById(R.id.ImageView_SoruImage)
     ImageView mImageView_SoruImage;
 
-    @ViewById(R.id.RxAutoFitTextViewSoru)
-    AutoFitTextView mRxAutoFitTextViewSoru;
+    @ViewById(R.id.AutoFitTextViewSoru)
+    AutoFitTextView mAutoFitTextViewSoru;
 
     RxPermissions mRxPermissions;
     private String mFilePath = null;
@@ -86,7 +86,7 @@ public class QuestionActivity extends BaseActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRxPermissions = RxPermissions.getInstance(this);
+        mRxPermissions = new RxPermissions(this);
     }
 
     @AfterViews
@@ -125,7 +125,7 @@ public class QuestionActivity extends BaseActivity {
                     }
                 })
                 .subscribe(text -> {
-                    mRxAutoFitTextViewSoru.setText(text);
+                    mAutoFitTextViewSoru.setText(text);
                 }, error -> {
                     error.printStackTrace();
                     SuperHelper.CrashlyticsLog(error);
@@ -310,7 +310,7 @@ public class QuestionActivity extends BaseActivity {
 
     private void captureImage() {
         RxPaparazzo.takeImage(this)
-                .size(Size.Screen)
+                .size(new ScreenSize())
                 .useInternalStorage()
                 .usingCamera()
                 .subscribe(response -> {
@@ -340,9 +340,9 @@ public class QuestionActivity extends BaseActivity {
         //options.setLogoColor(Color.BLACK);
 
         RxPaparazzo.takeImage(this)
-                .size(Size.Screen)
+                .size(new ScreenSize())
                 .crop(options)
-                .useInternalStorage()
+                //.useInternalStorage()
                 .usingCamera()
                 .subscribe(response -> {
                     if (response.resultCode() != Activity.RESULT_OK) {
@@ -370,9 +370,9 @@ public class QuestionActivity extends BaseActivity {
         //options.withAspectRatio(150,60);
 
         RxPaparazzo.takeImage(this)
-                .useInternalStorage()
+                //.useInternalStorage()
                 .crop(options)
-                .size(Size.Screen)
+                .size(new ScreenSize())
                 .usingGallery()
                 .subscribe(response -> {
                     Logger.i(response.data());
@@ -395,7 +395,7 @@ public class QuestionActivity extends BaseActivity {
         RxPaparazzo.takeImages(this)
                 .useInternalStorage()
                 .crop()
-                .size(Size.Screen)
+                .size(new ScreenSize())
                 .usingGallery()
                 .subscribe(response -> {
                     if (response.resultCode() != Activity.RESULT_OK) {

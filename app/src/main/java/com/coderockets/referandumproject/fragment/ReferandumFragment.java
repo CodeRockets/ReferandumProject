@@ -76,7 +76,7 @@ public class ReferandumFragment extends BaseFragment {
         this.mContext = getActivity();
         this.mActivity = (MainActivity) getActivity();
         this.mListSubscription = new ArrayList<>();
-        this.mRxPermission = RxPermissions.getInstance(mContext);
+        this.mRxPermission = new RxPermissions(getActivity());
     }
 
     @DebugLog
@@ -198,6 +198,7 @@ public class ReferandumFragment extends BaseFragment {
         }
     }
 
+    @DebugLog
     private void ControlTempQuestion() {
         // Eğer modControl hashtable ında 10 ve katlarında bir kayıt yoksa 10 soru çekilir.
         // Bu kontrolün amacı 11. soruda iken 10. soruya dönüldüğünde tekrar soru yüklenmesini engellemek için.
@@ -217,6 +218,7 @@ public class ReferandumFragment extends BaseFragment {
         }
     }
 
+    @DebugLog
     private void showAnswerResult(String which) {
         try {
 
@@ -244,6 +246,7 @@ public class ReferandumFragment extends BaseFragment {
         }
     }
 
+    @DebugLog
     private void showCustomAnswerPercent(QuestionFragment qf) {
         try {
             List<BarImageModel> mlist = new ArrayList<>();
@@ -277,6 +280,11 @@ public class ReferandumFragment extends BaseFragment {
 
     @DebugLog
     private void addQuestionsToAdapter(int count) {
+
+        if (!isAdded()) {
+            return;
+        }
+
         try {
 
             MaterialDialog progressDialog = UiHelper.UiDialog.newInstance(mContext).getProgressDialog("Lütfen bekleyiniz..", null);

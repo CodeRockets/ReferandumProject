@@ -180,16 +180,16 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
 
-    compile 'io.reactivex:rxandroid:1.2.0'
+    compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.1.5'
-    compile 'com.github.miguelbcr:RxPaparazzo:0.2.0'
+    compile "com.github.miguelbcr:RxPaparazzo:0.4.5"
 
     compile 'jp.wasabeef:blurry:2.0.2'
     compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
     compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:0.4.0'
     compile 'com.jakewharton.rxbinding:rxbinding-design:0.4.0'
     compile 'com.jakewharton.rxbinding:rxbinding-recyclerview-v7:0.4.0'
-    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.7.0@aar'
+    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.1@aar'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile "com.andkulikov:transitionseverywhere:1.7.0"
     compile 'agency.tango.android:material-intro-screen:0.0.5'

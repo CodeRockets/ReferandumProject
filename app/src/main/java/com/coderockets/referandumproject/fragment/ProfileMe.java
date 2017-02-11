@@ -111,7 +111,6 @@ public class ProfileMe extends BaseProfile implements AppBarLayout.OnOffsetChang
     @DebugLog
     @Click(R.id.ButtonCikisYap)
     public void ButtonCikisYapClick() {
-        mActivity.mLoginButton.performClick();
         EventBus.getDefault().postSticky(new UpdateLoginEvent());
     }
 

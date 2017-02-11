@@ -19,6 +19,7 @@ import com.coderockets.referandumproject.rest.ApiManager;
 import com.coderockets.referandumproject.rest.RestModel.UserRequest;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.AccessToken;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.orhanobut.logger.Logger;
 import com.slmyldz.random.Randoms;
 import com.squareup.picasso.MemoryPolicy;
@@ -47,7 +48,7 @@ public class SuperHelper extends com.aykuttasil.androidbasichelperlib.SuperHelpe
 
     @DebugLog
     public static boolean checkUser() {
-        return AccessToken.getCurrentAccessToken() != null && DbManager.getModelUser() != null;
+        return AccessToken.getCurrentAccessToken() != null && DbManager.getModelUser() != null && FirebaseInstanceId.getInstance().getToken() != null;
     }
 
     @DebugLog
@@ -77,10 +78,14 @@ public class SuperHelper extends com.aykuttasil.androidbasichelperlib.SuperHelpe
     }
 
     @DebugLog
-    public static void sendFacebookToken(Context context) {
+    public static void UpdateUser(Context context) {
+
         if (checkUser()) {
+
             UserRequest userRequest = new UserRequest();
             userRequest.setToken(AccessToken.getCurrentAccessToken().getToken());
+            userRequest.setRegId(FirebaseInstanceId.getInstance().getToken());
+
             ApiManager.getInstance(context).SaveUser(userRequest).subscribe();
         }
     }
