@@ -23,6 +23,7 @@ import com.coderockets.referandumproject.rest.RestModel.SoruSorResponse;
 import com.coderockets.referandumproject.rest.RestModel.UserQuestionsResponse;
 import com.coderockets.referandumproject.rest.RestModel.UserRequest;
 import com.coderockets.referandumproject.rest.RestModel.UserResponse;
+import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 
 import java.util.Map;
@@ -103,7 +104,7 @@ public class ApiManager {
     @DebugLog
     public Observable<UserResponse> SaveUser(UserRequest userRequest) {
 
-        Logger.i("UserRequest: " + userRequest);
+        Logger.i("UserRequest: " + new Gson().toJson(userRequest));
 
         return RestClient.getInstance().getApiService()
                 .User(
