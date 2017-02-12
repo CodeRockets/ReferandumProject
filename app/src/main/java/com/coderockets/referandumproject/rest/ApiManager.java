@@ -23,11 +23,11 @@ import com.coderockets.referandumproject.rest.RestModel.SoruSorResponse;
 import com.coderockets.referandumproject.rest.RestModel.UserQuestionsResponse;
 import com.coderockets.referandumproject.rest.RestModel.UserRequest;
 import com.coderockets.referandumproject.rest.RestModel.UserResponse;
+import com.orhanobut.logger.Logger;
 
 import java.util.Map;
 
 import hugo.weaving.DebugLog;
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -102,6 +102,8 @@ public class ApiManager {
 
     @DebugLog
     public Observable<UserResponse> SaveUser(UserRequest userRequest) {
+
+        Logger.i("UserRequest: " + userRequest);
 
         return RestClient.getInstance().getApiService()
                 .User(

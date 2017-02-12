@@ -41,6 +41,7 @@ public class MainActivity extends BaseActivity {
 
             setFragment();
 
+            // Her açılışta kulanıcı bilgileri güncelleniyor
             SuperHelper.UpdateUser(this);
 
         } else {
