@@ -113,6 +113,14 @@ public interface ApiService {
             @Query("account_url") String username,
             @Part("file\"; filename=\"referandum.png\" ") RequestBody image);
 
+    @GET("v1/question/get/{id}")
+    Observable<SoruGetirBaseResponse> TekSoruGetir(@Header("x-voter-client-id") String clientId,
+                                                   @Header("x-voter-version") String version,
+                                                   @Header("x-voter-installation") String installation,
+                                                   @Path("id") String questionId,
+                                                   @Query(value = "app") String app,
+                                                   @Query(value = "user_id") String userId);
+
     //@Multipart
     //@POST("api/belge")
     //Call<BelgeResponse> Belge(@Header("X-Api-Version") String apiVersion, @Header("X-App-Version") String appVersion, @Part(value = "file\"; filename=\"GrandCanyon.jpg") RequestBody Files);

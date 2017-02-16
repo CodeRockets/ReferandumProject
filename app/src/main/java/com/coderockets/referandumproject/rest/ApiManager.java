@@ -208,4 +208,21 @@ public class ApiManager {
                 .observeOn(AndroidSchedulers.mainThread());
 
     }
+
+
+    @DebugLog
+    public Observable<SoruGetirBaseResponse> TekSoruGetir(String questionId) {
+
+        return RestClient.getInstance().getApiService()
+                .TekSoruGetir(
+                        Const.CLIENT_ID,
+                        Const.REFERANDUM_VERSION,
+                        PrefsHelper.readPrefString(mContext, Const.PREFS_KEY_REFERANDUM_UUID),
+                        questionId,
+                        String.valueOf(Const.REFERANDUM_APP),
+                        SuperHelper.checkUser() ? DbManager.getModelUser().getUserId() : ""
+                )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }

@@ -1,11 +1,10 @@
 package com.coderockets.referandumproject.service;
 
-import com.coderockets.referandumproject.model.Event.FcmRegistraionIDEvent;
+import com.coderockets.referandumproject.db.DbManager;
+import com.coderockets.referandumproject.model.ModelUser;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.orhanobut.logger.Logger;
-
-import org.greenrobot.eventbus.EventBus;
 
 import hugo.weaving.DebugLog;
 
@@ -21,10 +20,20 @@ public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Logger.i("Refreshed token: " + refreshedToken);
 
+        ModelUser modelUser = DbManager.getModelUser();
+
+        if (modelUser != null) {
+            modelUser.setRegId(refreshedToken);
+            modelUser.save();
+        }
+
+
+        /*
         FcmRegistraionIDEvent fcmRegistraionIDEvent = new FcmRegistraionIDEvent();
         fcmRegistraionIDEvent.setRegID(refreshedToken);
 
         EventBus.getDefault().post(fcmRegistraionIDEvent);
+        */
 
         /*
         ModelSweetLocPreference modelSweetLocPreference = DbManager.getModelSweetLocPreference();

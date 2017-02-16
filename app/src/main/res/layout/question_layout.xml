@@ -84,14 +84,21 @@
                     android:paddingRight="10dp"
                     android:textSize="110sp" />
 
+
+                <!--app:bmb_buttonEnum="textInsideCircle"-->
+                <!--app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1"-->
+                <!--app:bmb_piecePlaceEnum="piecePlace_dot_9_1" />-->
+
+
                 <com.aykuttasil.percentbar.PercentBarView
                     android:id="@+id/MyPercentBar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_alignParentBottom="true"
                     android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
                     custom:barLeftColor="@color/color7"
                     custom:barRightColor="@color/colorPrimary" />
+
 
             </RelativeLayout>
 
@@ -118,6 +125,16 @@
                 android:src="@android:drawable/ic_media_rew"
                 app:backgroundTint="@color/white"
                 app:fabSize="mini" />
+
+            <com.nightonke.boommenu.BoomMenuButton
+                android:id="@+id/bmb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/SoruTextLayout"
+                android:layout_alignParentEnd="true"
+                android:visibility="gone"
+                app:bmb_normalColor="@color/blue"
+                app:bmb_shadowColor="@color/white" />
 
             <!--<android.support.design.widget.FloatingActionButton-->
             <!--android:id="@+id/Fab_NextQuestion"-->

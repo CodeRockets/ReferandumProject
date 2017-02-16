@@ -57,6 +57,11 @@ public class ModelUser extends Model {
     @SerializedName("profile_img")
     private String ProfileImageUrl;
 
+    @Expose
+    @Column
+    @SerializedName("reg_id")
+    private String RegId;
+
 
     public ModelUser() {
         super();
@@ -149,5 +154,13 @@ public class ModelUser extends Model {
 
     public void setDeleted(boolean deleted) {
         IsDeleted = deleted;
+    }
+
+    public String getRegId() {
+        return RegId;
+    }
+
+    public void setRegId(String regId) {
+        RegId = regId;
     }
 }

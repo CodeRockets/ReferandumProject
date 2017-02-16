@@ -96,6 +96,7 @@ public class ReferandumFragment extends BaseFragment {
     private void setViewPager() {
 
         mSorularAdapter = new CustomSorularAdapter(getChildFragmentManager());
+
         mViewPagerSorular.setAdapter(mSorularAdapter);
         //mViewPagerSorular.setPageTransformer(true, new FlipHorizontalTransformer());
 
@@ -110,6 +111,7 @@ public class ReferandumFragment extends BaseFragment {
             @DebugLog
             @Override
             public void onPageSelected(int position) {
+
                 mActivity.updateProfileIcon(mActivity.mToolbar.getMenu().getItem(0));
 
                 checkTempAnsweredAndShowResult(position);
@@ -213,6 +215,7 @@ public class ReferandumFragment extends BaseFragment {
                 // HashTable a ViewPager.getCurrentItem() değerini atıyoruz.
                 // Bu sayede ViewPager.getCurrentItem() sayfasında iken null değeri dönmeyecek ve tekrar soru yüklmesi yapılmayacak.
                 modControl.put(mViewPagerSorular.getCurrentItem(), true);
+
                 addQuestionsToAdapter(10);
             }
         }
@@ -397,6 +400,13 @@ public class ReferandumFragment extends BaseFragment {
         if (tempAnswer.get(modelQuestionInformation.getSoruId()) != null) {
             showCustomAnswerPercent(getCurrentQuestionFragment());
         }
+    }
+
+
+
+    private void abc()
+    {
+
     }
 
     @DebugLog

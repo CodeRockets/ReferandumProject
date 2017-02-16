@@ -10,6 +10,7 @@ import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.fragment.ReferandumFragment_;
 import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.model.Event.UpdateLoginEvent;
+import com.facebook.login.LoginManager;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -33,7 +34,8 @@ public class MainActivity extends BaseActivity {
 
     @DebugLog
     @AfterViews
-    public void MainActivityInit() {
+    @Override
+    public void initAfterViews() {
 
         if (SuperHelper.checkUser()) {
 
@@ -45,6 +47,9 @@ public class MainActivity extends BaseActivity {
             SuperHelper.UpdateUser(this);
 
         } else {
+
+            LoginManager.getInstance().logOut();
+
             Intent i = new Intent(MainActivity.this, IntroActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);

@@ -31,6 +31,7 @@ public class CustomSorularAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+
         QuestionFragment questionFragment = mFragmentList.get(position);
 
         if (questionFragment.isVisible()) {

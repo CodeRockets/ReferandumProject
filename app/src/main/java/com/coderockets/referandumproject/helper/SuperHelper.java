@@ -82,9 +82,15 @@ public class SuperHelper extends com.aykuttasil.androidbasichelperlib.SuperHelpe
 
         if (checkUser()) {
 
+            String regId = FirebaseInstanceId.getInstance().getToken();
+
+            ModelUser modelUser = DbManager.getModelUser();
+            modelUser.setRegId(regId);
+            modelUser.save();
+
             UserRequest userRequest = new UserRequest();
             userRequest.setToken(AccessToken.getCurrentAccessToken().getToken());
-            userRequest.setRegId(FirebaseInstanceId.getInstance().getToken());
+            userRequest.setRegId(regId);
 
             ApiManager.getInstance(context).SaveUser(userRequest).subscribe();
         }

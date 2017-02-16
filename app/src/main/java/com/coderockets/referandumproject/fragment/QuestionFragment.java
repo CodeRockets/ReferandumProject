@@ -1,7 +1,6 @@
 package com.coderockets.referandumproject.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -16,7 +15,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,8 +24,6 @@ import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.aykuttasil.imageupload.ImageUpload;
 import com.aykuttasil.imageupload.seed.Imgur;
 import com.coderockets.referandumproject.R;
-import com.coderockets.referandumproject.activity.MainActivity;
-import com.coderockets.referandumproject.activity.ProfileActivity_;
 import com.coderockets.referandumproject.app.Const;
 import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.model.Event.UpdateLoginEvent;
@@ -36,9 +32,13 @@ import com.coderockets.referandumproject.rest.ApiManager;
 import com.coderockets.referandumproject.rest.RestModel.FavoriteRequest;
 import com.coderockets.referandumproject.rest.RestModel.ReportAbuseRequest;
 import com.coderockets.referandumproject.util.AutoFitTextView;
-import com.facebook.AccessToken;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
+import com.nightonke.boommenu.Animation.BoomEnum;
+import com.nightonke.boommenu.BoomButtons.ButtonPlaceEnum;
+import com.nightonke.boommenu.BoomButtons.SimpleCircleButton;
+import com.nightonke.boommenu.BoomMenuButton;
+import com.nightonke.boommenu.Piece.PiecePlaceEnum;
 import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -62,6 +62,8 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+
+import static com.nightonke.boommenu.ButtonEnum.SimpleCircle;
 
 /**
  * Created by aykutasil on 18.08.2016.
@@ -96,17 +98,18 @@ public class QuestionFragment extends Fragment {
     @ViewById(R.id.QuestionFragmentMainContainer)
     CoordinatorLayout mQuestionFragmentMainContainer;
 
+    @ViewById(R.id.bmb)
+    BoomMenuButton boomMenuButton;
+
     //
 
     private final String INTRO_KEY_QUESTION_FAVORITE = "question_fav6";
 
     private Context mContext;
-    private MainActivity mActivity;
     private ModelQuestionInformation mqi;
     private final String FAVORITE_KEY = "Favorite";
     private boolean mIsFavorite = false;
     CompositeSubscription mCompositeSubscriptions;
-    ReferandumFragment mReferandumFragment;
 
     @DebugLog
     @Override
@@ -119,7 +122,6 @@ public class QuestionFragment extends Fragment {
 
         mCompositeSubscriptions = new CompositeSubscription();
 
-        mReferandumFragment = (ReferandumFragment) getParentFragment();
     }
 
     @Override
@@ -134,7 +136,6 @@ public class QuestionFragment extends Fragment {
     public void SoruFragmentInstance() {
 
         this.mContext = getActivity();
-        this.mActivity = (MainActivity) getActivity();
 
         //
 
@@ -144,7 +145,8 @@ public class QuestionFragment extends Fragment {
         changeFavoriteFabColor();
         setFavoriteFab();
         registerForContextMenu(mSoruText);
-        setShareToolbar();
+        //setShareToolbar();
+        initBoomMenu();
 
         if (getUserVisibleHint()) {
 
@@ -160,18 +162,51 @@ public class QuestionFragment extends Fragment {
         }
     }
 
+    private void initBoomMenu() {
+
+        boomMenuButton.setBoomEnum(BoomEnum.PARABOLA_3);
+        boomMenuButton.setButtonEnum(SimpleCircle);
+        boomMenuButton.setPiecePlaceEnum(PiecePlaceEnum.DOT_1);
+        boomMenuButton.setButtonPlaceEnum(ButtonPlaceEnum.SC_1);
+
+        boomMenuButton.setInFragment(true); // Fragment içinde kullanıyorsak true değerini giriyoruz.
+        boomMenuButton.setBackPressListened(false); // geri tuşuna basıldığında menünü tekrar açılmamasını söylüyoruz
+        boomMenuButton.setBoomInWholeScreen(true); // boom menü açıldığında tüm ekranı (actionbar vs dahil) kaplayıp kaplamayacağını belirtiyoruz
+
+        for (int i = 0; i < boomMenuButton.getPiecePlaceEnum().pieceNumber(); i++) {
+
+            SimpleCircleButton.Builder builder = new SimpleCircleButton.Builder()
+                    .normalImageRes(R.drawable.ic_facebook)
+                    //.normalText("Butter Doesn't fly!")
+                    .normalColorRes(R.color.white)
+                    //.normalTextColor(R.color.blue)
+                    //.subNormalText("Aykut Asil")
+                    //.subNormalTextColor(R.color.blue)
+                    .rippleEffect(true)
+                    .listener(index -> {
+                        shareQuestionToFacebook();
+                    });
+
+            boomMenuButton.addBuilder(builder);
+        }
+
+
+    }
+
+    /*
     private void setShareToolbar() {
 
         mToolbar_Share.inflateMenu(R.menu.question_share_menu);
 
         mToolbar_Share.setOnMenuItemClickListener(item -> {
+
             switch (item.getItemId()) {
                 case R.id.menuFacebook: {
 
                     hideShareButton();
 
                     if (SuperHelper.checkUser()) {
-                        shareQuestion();
+                        shareQuestionToFacebook();
                     } else {
                         Intent activityIntent = new Intent(mContext, ProfileActivity_.class);
                         activityIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -183,6 +218,7 @@ public class QuestionFragment extends Fragment {
             return false;
         });
     }
+    */
 
     @DebugLog
     @Override
@@ -297,7 +333,10 @@ public class QuestionFragment extends Fragment {
     @DebugLog
     @Click(R.id.Fab_PreviousQuestion)
     public void Fab_PreviousQuestionClick() {
-        mReferandumFragment.skipPreviousQuestion(0);
+
+        if (getParentFragment() != null && getParentFragment() instanceof ReferandumFragment) {
+            ((ReferandumFragment) getParentFragment()).skipPreviousQuestion(0);
+        }
     }
 
     public boolean visible = true;
@@ -306,37 +345,93 @@ public class QuestionFragment extends Fragment {
     @Click(R.id.ProfilePicture)
     public void ProfilePictureClick() {
 
-        Transition transitionSlide = new Slide(Gravity.END);
-        transitionSlide.setDuration(1000);
 
-        TransitionManager.beginDelayedTransition(mQuestionFragmentMainContainer, transitionSlide);
+        //ProgressBar progressBar = new ProgressBar(mContext);
+        //CubeGrid cubeGrid = new CubeGrid();
+        //progressBar.setIndeterminateDrawable(cubeGrid);
+
+        //TransitionManager.endTransitions(mQuestionFragmentMainContainer);
+        //Transition transitionSlide = new Slide(Gravity.END);
+        //transitionSlide.setDuration(1000);
+        //transitionSlide.addTarget(mSoruText);
+
+        //TransitionManager.beginDelayedTransition(mQuestionFragmentMainContainer, transitionSlide);
+        // mSoruText.setVisibility(visible ? View.GONE : View.VISIBLE);
+        //visible = !visible;
+
 
         //TransitionManager.endTransitions(mQuestionFragmentMainContainer);
 
-        visible = !visible;
-        mSoruText.setVisibility(visible ? View.GONE : View.VISIBLE);
+        /*
+        new SweetAlertDialog(mContext, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Are you sure?")
+                .setContentText("Won't be able to recover this file!")
+                .setCancelText("No,cancel plx!")
+                .setConfirmText("Yes,delete it!")
+                .showCancelButton(true)
+                .setConfirmClickListener(sDialog -> {
+
+                    sDialog
+                            .setTitleText("Lütfen Bekleyin")
+                            .setContentText("Siliniyor")
+                            .changeAlertType(SweetAlertDialog.PROGRESS_TYPE);
+
+                    sDialog.showCancelButton(false);
+                    sDialog.setCancelable(false);
+
+                    new Handler().postDelayed(() -> {
+                        sDialog
+                                .setTitleText("İşleminiz tamamlandı")
+                                .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+
+                        sDialog.setConfirmText("Tamam");
+                        sDialog.setCanceledOnTouchOutside(true);
+                        sDialog.setConfirmClickListener(null);
+                    }, 3000);
+
+                })
+                .show();
+                */
+
+
+        //RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) boomMenuButton.getLayoutParams();
+        //layoutParams.bottomMargin = (layoutParams.bottomMargin == 0) ? 100 : 0;
+        //boomMenuButton.setLayoutParams(layoutParams);
+
+
+        Transition transitionSlide1 = new Slide();
+        transitionSlide1.setDuration(300);
+        transitionSlide1.addTarget(boomMenuButton);
+
+        TransitionManager.beginDelayedTransition(mQuestionFragmentMainContainer, transitionSlide1);
+        boomMenuButton.setVisibility(boomMenuButton.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+
+        //boomMenuButton.setLayoutParams(boomMenuButton.getLayoutParams().);
+        //boomMenuButton.setVisibility(boomMenuButton.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+
     }
 
-    @DebugLog
-    private void shareQuestion() {
 
-        for (String prms : AccessToken.getCurrentAccessToken().getPermissions()) {
-            Logger.i("Facebook Permission: " + prms);
-        }
-
-        if (!AccessToken.getCurrentAccessToken().getPermissions().contains("publish_actions")) {
-
-            Logger.i("Facebook publish_actions permission is denied.");
-
-            shareQuestionToFacebook();
-
-            //LoginManager.getInstance().logInWithPublishPermissions(mActivity, Collections.singletonList("publish_actions"));
-
-        } else {
-            shareQuestionToFacebook();
-        }
-
-    }
+//    @DebugLog
+//    private void shareQuestion() {
+//
+//        for (String prms : AccessToken.getCurrentAccessToken().getPermissions()) {
+//            Logger.i("Facebook Permission: " + prms);
+//        }
+//
+//        if (!AccessToken.getCurrentAccessToken().getPermissions().contains("publish_actions")) {
+//
+//            Logger.i("Facebook publish_actions permission is denied.");
+//
+//            shareQuestionToFacebook();
+//
+//            //LoginManager.getInstance().logInWithPublishPermissions(mActivity, Collections.singletonList("publish_actions"));
+//
+//        } else {
+//            shareQuestionToFacebook();
+//        }
+//
+//    }
 
     @UiThread(delay = 1000)
     @DebugLog
@@ -418,12 +513,28 @@ public class QuestionFragment extends Fragment {
 
     @DebugLog
     public void showShareButton() {
-        mAppbarlayout.setExpanded(true, true);
+        //mAppbarlayout.setExpanded(true, true);
+
+        Transition transitionSlide1 = new Slide();
+        transitionSlide1.setDuration(300);
+        transitionSlide1.addTarget(boomMenuButton);
+
+        TransitionManager.beginDelayedTransition(mQuestionFragmentMainContainer, transitionSlide1);
+        //boomMenuButton.setVisibility(boomMenuButton.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+        boomMenuButton.setVisibility(View.VISIBLE);
+
     }
 
     @DebugLog
     public void hideShareButton() {
-        mAppbarlayout.setExpanded(false, true);
+        //mAppbarlayout.setExpanded(false, true);
+
+        Transition transitionSlide1 = new Slide();
+        transitionSlide1.setDuration(300);
+        transitionSlide1.addTarget(boomMenuButton);
+
+        TransitionManager.beginDelayedTransition(mQuestionFragmentMainContainer, transitionSlide1);
+        boomMenuButton.setVisibility(boomMenuButton.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
     }
 
     @DebugLog
@@ -480,8 +591,14 @@ public class QuestionFragment extends Fragment {
 
     @DebugLog
     public void setPreviousNextButtonUi() {
-        mReferandumFragment.mSorularAdapter.getRegisteredFragment(mReferandumFragment.mViewPagerSorular.getCurrentItem())
-                .getView().findViewById(R.id.Fab_PreviousQuestion).setVisibility(View.INVISIBLE);
+
+        if (getParentFragment() != null && getParentFragment() instanceof ReferandumFragment) {
+
+            ReferandumFragment referandumFragment = ((ReferandumFragment) getParentFragment());
+
+            referandumFragment.mSorularAdapter.getRegisteredFragment(referandumFragment.mViewPagerSorular.getCurrentItem())
+                    .getView().findViewById(R.id.Fab_PreviousQuestion).setVisibility(View.INVISIBLE);
+        }
     }
 
     @DebugLog

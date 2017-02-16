@@ -53,7 +53,8 @@ public class ProfileActivity extends BaseActivity {
 
     @DebugLog
     @AfterViews
-    public void ProfileActivityInit() {
+    @Override
+    public void initAfterViews() {
         mRxPermissions = new RxPermissions(this);
         mListSubscription = new ArrayList<>();
         //

@@ -91,7 +91,8 @@ public class QuestionActivity extends BaseActivity {
 
     @AfterViews
     @DebugLog
-    public void QuestionActivityInit() {
+    @Override
+    public void initAfterViews() {
         setToolbar();
         setFab();
         setReactiveEditText();

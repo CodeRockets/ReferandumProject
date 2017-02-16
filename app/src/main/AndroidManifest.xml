@@ -19,7 +19,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:name">
+        tools:replace="android:name,android:icon">
 
         <activity
             android:name=".activity.MainActivity_"
@@ -53,6 +53,21 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity_" />
         </activity>
+
+        <activity
+            android:name=".activity.UniqueQuestionActivity_"
+            android:parentActivityName=".activity.MainActivity_">
+
+            <intent-filter>
+                <action android:name="ACTION_OPEN_FRIEND_QUESTION" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity_" />
+        </activity>
+
 
         <activity
             android:name="com.facebook.FacebookActivity"
@@ -105,7 +120,7 @@
 
         <meta-data
             android:name="AA_DB_NAME"
-            android:value="referandum3.db" />
+            android:value="referandum4.db" />
 
         <meta-data
             android:name="AA_DB_VERSION"
