@@ -124,7 +124,7 @@ public interface ApiService {
                                                    @Query(value = "user_id") String userId);
 
 
-    @POST("https://fcm.googleapis.com/fcm/send")
+    @POST("https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=AIzaSyBYwTnLlKECTq6rdXJpLvVmNVOW8seMyNk")
     Observable<DynamicLinkResponse> DynamicLink(@Body DynamicLinkRequest request);
 
     //@Multipart

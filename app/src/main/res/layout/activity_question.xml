@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                app:layout_flexBasisPercent="35%">
+                app:layout_flexBasisPercent="30%">
 
                 <ImageView
                     android:id="@+id/ImageView_SoruImage"
@@ -101,7 +101,7 @@
                 android:paddingRight="10dp"
                 android:text="sdsd"
                 android:textSize="110sp"
-                app:layout_flexBasisPercent="45%" />
+                app:layout_flexBasisPercent="50%" />
 
             <LinearLayout
                 android:layout_width="match_parent"

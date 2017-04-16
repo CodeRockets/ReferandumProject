@@ -87,8 +87,12 @@
 
                 <!-- Accepts URIs that begin with "example://gizmos” -->
                 <data
-                    android:host="question"
-                    android:scheme="referandum" />
+                    android:host="referandum"
+                    android:scheme="http" />
+
+                <data
+                    android:host="referandum"
+                    android:scheme="https" />
 
             </intent-filter>
 

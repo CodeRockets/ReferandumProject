@@ -68,9 +68,7 @@ public class ApiManager {
                         Const.CLIENT_ID,
                         Const.REFERANDUM_VERSION,
                         PrefsHelper.readPrefString(mContext, Const.PREFS_KEY_REFERANDUM_UUID),
-                        soruSorRequest)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                        soruSorRequest);
     }
 
     @DebugLog
@@ -128,9 +126,7 @@ public class ApiManager {
                         Const.REFERANDUM_VERSION,
                         PrefsHelper.readPrefString(mContext, Const.PREFS_KEY_REFERANDUM_UUID),
                         map
-                )
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                );
 
     }
 

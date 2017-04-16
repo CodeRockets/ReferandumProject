@@ -51,7 +51,7 @@ public class UniqueQuestionActivity extends BaseActivity {
 
     @ViewById(R.id.Toolbar)
     Toolbar mToolbar;
-    
+
     public static final String ACTION_OPEN_QUESTION = "ACTION_OPEN_FRIEND_QUESTION";
     public static final String PUSH_NODE_QUESTION_ID = "PayloadQuestionId";
 
@@ -69,12 +69,22 @@ public class UniqueQuestionActivity extends BaseActivity {
 
         initToolbar();
 
-        if (getIntent() != null && getIntent().getAction() != null && getIntent().getAction().equals(ACTION_OPEN_QUESTION)) {
+        if (getIntent() != null && getIntent().getAction() != null) {
 
-            Bundle extras = getIntent().getExtras();
-
-            String questionId = extras.getString(PUSH_NODE_QUESTION_ID);
-
+            String questionId = "";
+            switch (getIntent().getAction()) {
+                case ACTION_OPEN_QUESTION: {
+                    Bundle extras = getIntent().getExtras();
+                    questionId = extras.getString(PUSH_NODE_QUESTION_ID);
+                    break;
+                }
+                case Intent.ACTION_VIEW: {
+                    if (getIntent().getData().getHost().equals("referandum")) {
+                        questionId = getIntent().getData().getQueryParameter("questionId");
+                    }
+                    break;
+                }
+            }
             initQuestionFragment(questionId);
         }
 

@@ -39,7 +39,7 @@ public class DynamicLinkRequest {
 
 
     @DebugLog
-    public static DynamicLinkRequest getDynamicLink(String link, String socialTitle, String socialDesc, String socialImgUrl) {
+    public static DynamicLinkRequest getDynamicLinkRequest(String link, String socialTitle, String socialDesc, String socialImgUrl) {
         DynamicLinkRequest dynamicLinkRequest = new DynamicLinkRequest();
 
         Suffix suffix = new Suffix();
@@ -47,22 +47,24 @@ public class DynamicLinkRequest {
         dynamicLinkRequest.setSuffix(suffix);
 
         DynamicLinkInfo dynamicLinkInfo = new DynamicLinkInfo();
-        dynamicLinkInfo.setLink(link);
+        dynamicLinkInfo.setLink("https://play.google.com/store/apps/details?id=com.coderockets.referandumproject");
+        dynamicLinkInfo.setDynamicLinkDomain("c49ss.app.goo.gl");
 
         AndroidInfo androidInfo = new AndroidInfo();
         androidInfo.setAndroidPackageName(BuildConfig.APPLICATION_ID);
         androidInfo.setAndroidMinPackageVersionCode("21");
-        //androidInfo.setAndroidLink("");
+        androidInfo.setAndroidLink(link);
         dynamicLinkInfo.setAndroidInfo(androidInfo);
 
 
         SocialMetaTagInfo socialMetaTagInfo = new SocialMetaTagInfo();
         socialMetaTagInfo.setSocialTitle(socialTitle);
-        socialMetaTagInfo.setSocialDescription(socialDesc);
+        socialMetaTagInfo.setSocialDescription("Hemen Referandum topluluğuna katılarak cevap verebilirsin.");
         socialMetaTagInfo.setSocialImageLink(socialImgUrl);
         dynamicLinkInfo.setSocialMetaTagInfo(socialMetaTagInfo);
 
         dynamicLinkRequest.setDynamicLinkInfo(dynamicLinkInfo);
+
         return dynamicLinkRequest;
     }
 }

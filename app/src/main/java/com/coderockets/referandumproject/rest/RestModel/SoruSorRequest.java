@@ -46,15 +46,19 @@ public class SoruSorRequest extends BaseRequest {
     @SerializedName("option_b")
     private String Option_B;
 
+    @Expose
+    @SerializedName("question_private")
+    private boolean QuestionPrivate;
+
     private SoruSorRequest() {
     }
 
     public static SoruSorRequest SoruSorRequestInstance() {
         ModelUser modelUser = DbManager.getModelUser();
-
         SoruSorRequest request = new SoruSorRequest();
         request.setUserId(modelUser.getUserId());
         request.setApp(Const.REFERANDUM_APP);
+        request.setQuestionPrivate(false);
         return request;
     }
 
@@ -104,5 +108,13 @@ public class SoruSorRequest extends BaseRequest {
 
     public void setApp(int app) {
         App = app;
+    }
+
+    public boolean isQuestionPrivate() {
+        return QuestionPrivate;
+    }
+
+    public void setQuestionPrivate(boolean questionPrivate) {
+        QuestionPrivate = questionPrivate;
     }
 }
