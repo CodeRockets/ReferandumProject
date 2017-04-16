@@ -10,6 +10,8 @@ import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.model.ModelUser;
 import com.coderockets.referandumproject.rest.RestModel.AnswerRequest;
 import com.coderockets.referandumproject.rest.RestModel.AnswerResponse;
+import com.coderockets.referandumproject.rest.RestModel.DynamicLinkRequest;
+import com.coderockets.referandumproject.rest.RestModel.DynamicLinkResponse;
 import com.coderockets.referandumproject.rest.RestModel.FavoriteRequest;
 import com.coderockets.referandumproject.rest.RestModel.FavoriteResponse;
 import com.coderockets.referandumproject.rest.RestModel.ImageUploadResponse;
@@ -209,7 +211,6 @@ public class ApiManager {
 
     }
 
-
     @DebugLog
     public Observable<SoruGetirBaseResponse> TekSoruGetir(String questionId) {
 
@@ -224,5 +225,11 @@ public class ApiManager {
                 )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @DebugLog
+    public Observable<DynamicLinkResponse> DynamicLink(DynamicLinkRequest request) {
+        return RestClient.getInstance().getApiService()
+                .DynamicLink(request);
     }
 }

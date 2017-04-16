@@ -2,6 +2,8 @@ package com.coderockets.referandumproject.rest;
 
 import com.coderockets.referandumproject.rest.RestModel.AnswerRequest;
 import com.coderockets.referandumproject.rest.RestModel.AnswerResponse;
+import com.coderockets.referandumproject.rest.RestModel.DynamicLinkRequest;
+import com.coderockets.referandumproject.rest.RestModel.DynamicLinkResponse;
 import com.coderockets.referandumproject.rest.RestModel.FavoriteRequest;
 import com.coderockets.referandumproject.rest.RestModel.FavoriteResponse;
 import com.coderockets.referandumproject.rest.RestModel.ImageUploadResponse;
@@ -120,6 +122,10 @@ public interface ApiService {
                                                    @Path("id") String questionId,
                                                    @Query(value = "app") String app,
                                                    @Query(value = "user_id") String userId);
+
+
+    @POST("https://fcm.googleapis.com/fcm/send")
+    Observable<DynamicLinkResponse> DynamicLink(@Body DynamicLinkRequest request);
 
     //@Multipart
     //@POST("api/belge")
