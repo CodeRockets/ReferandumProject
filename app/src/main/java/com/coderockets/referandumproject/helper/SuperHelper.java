@@ -48,7 +48,11 @@ public class SuperHelper extends com.aykuttasil.androidbasichelperlib.SuperHelpe
 
     @DebugLog
     public static boolean checkUser() {
-        return AccessToken.getCurrentAccessToken() != null && DbManager.getModelUser() != null && FirebaseInstanceId.getInstance().getToken() != null;
+        Logger.i("AccessToken.getCurrentAccessToken(): " + AccessToken.getCurrentAccessToken());
+        Logger.i("DbManager.getModelUser(): " + DbManager.getModelUser());
+        Logger.i("FirebaseInstanceId.getInstance().getToken(): " + FirebaseInstanceId.getInstance().getToken());
+
+        return AccessToken.getCurrentAccessToken() != null && DbManager.getModelUser() != null && DbManager.getModelUser().getRegId() != null;
     }
 
     @DebugLog

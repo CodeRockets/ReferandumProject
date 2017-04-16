@@ -27,6 +27,7 @@ import com.jakewharton.rxbinding.widget.RxTextView;
 import com.miguelbcr.ui.rx_paparazzo.RxPaparazzo;
 import com.miguelbcr.ui.rx_paparazzo.entities.Options;
 import com.miguelbcr.ui.rx_paparazzo.entities.size.ScreenSize;
+import com.nightonke.jellytogglebutton.JellyToggleButton;
 import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.MemoryPolicy;
@@ -36,6 +37,7 @@ import com.tbruyelle.rxpermissions.RxPermissions;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Fullscreen;
 import org.androidannotations.annotations.ViewById;
 import org.greenrobot.eventbus.EventBus;
 
@@ -53,6 +55,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by aykutasil on 5.09.2016.
  */
+@Fullscreen
 @EActivity(R.layout.activity_question)
 public class QuestionActivity extends BaseActivity {
 
@@ -77,6 +80,9 @@ public class QuestionActivity extends BaseActivity {
     @ViewById(R.id.AutoFitTextViewSoru)
     AutoFitTextView mAutoFitTextViewSoru;
 
+    @ViewById(R.id.JellyToggleButtonFriendNotif)
+    JellyToggleButton mJellyToggleButtonFriendNotif;
+
     RxPermissions mRxPermissions;
     private String mFilePath = null;
     //PhotoViewAttacher photoViewAttacher;
@@ -86,6 +92,7 @@ public class QuestionActivity extends BaseActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
         mRxPermissions = new RxPermissions(this);
     }
 
@@ -100,7 +107,6 @@ public class QuestionActivity extends BaseActivity {
         //photoViewAttacher = new PhotoViewAttacher(mImageView_SoruImage);
         //photoViewAttacher.setAllowParentInterceptOnEdge(true);
         //photoViewAttacher.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
     }
 
     @DebugLog
@@ -227,7 +233,7 @@ public class QuestionActivity extends BaseActivity {
     @DebugLog
     public void sendQuestionRequest() {
 
-        if (validateIsEmpty(mEditText_SoruText)) return;
+        if (SuperHelper.validateIsEmpty(mEditText_SoruText)) return;
 
         MaterialDialog materialDialog = UiHelper.UiDialog.newInstance(this).getProgressDialog("Lütfen Bekleyiniz..", null);
         materialDialog.show();
@@ -262,13 +268,14 @@ public class QuestionActivity extends BaseActivity {
                 */
 
             } else {
-                File file;
-                file = new File(mFilePath);
+
+                File file = new File(mFilePath);
+
                 Logger.i("FilePath: " + mFilePath);
+
                 Map<String, RequestBody> map = new HashMap<>();
                 RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpg"), file);
                 map.put("file\"; filename=\"" + "file", requestBody);
-
 
                 ApiManager.getInstance(this).ImageUpload(map)
                         .flatMap(response -> {
@@ -436,20 +443,6 @@ public class QuestionActivity extends BaseActivity {
 
     private void showUserCanceled() {
         Toast.makeText(this, "İptal edildi.", Toast.LENGTH_SHORT).show();
-    }
-
-    private boolean validateIsEmpty(EditText... editTexts) {
-
-        boolean flag = false;
-        for (EditText editText : editTexts) {
-            if (editText.getText().toString().length() == 0) {
-                editText.setError("Boş bırakmayınız !");
-                flag = true;
-            } else {
-                editText.setError(null);
-            }
-        }
-        return flag;
     }
 
     @Override

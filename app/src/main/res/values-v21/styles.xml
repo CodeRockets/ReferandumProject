@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+        <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+                <!-- Customize your theme here. -->
+                <item name="colorPrimary">@color/blue</item>
+                <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+                <item name="colorAccent">@color/rrr</item>
+
+
+                <!--<item name="android:windowBackground">@color/primary</item>-->
+
+                <item name="colorControlNormal">@color/iron</item>
+                <item name="colorControlActivated">@color/primary_dark</item>
+                <item name="colorControlHighlight">@color/primary_light</item>
+                <item name="android:textColorHint">@color/primary</item>
+                <item name="android:textColor">@color/secondaryTextColor</item>
+
+                <item name="colorButtonNormal">@color/blue</item>
+                <item name="buttonStyle">@style/MyCustomButton</item>
+                <item name="android:buttonStyle">@style/MyCustomButton</item>
+                <item name="android:statusBarColor">@color/white</item>
+        </style>
+</resources>

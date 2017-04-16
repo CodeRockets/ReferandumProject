@@ -11,17 +11,22 @@ import com.coderockets.referandumproject.fragment.ReferandumFragment_;
 import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.model.Event.UpdateLoginEvent;
 import com.facebook.login.LoginManager;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Fullscreen;
 import org.androidannotations.annotations.ViewById;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
+
 import co.mobiwise.materialintro.shape.Focus;
 import hugo.weaving.DebugLog;
 
+@Fullscreen
 @EActivity(R.layout.activity_main)
 public class MainActivity extends BaseActivity {
 
@@ -39,7 +44,7 @@ public class MainActivity extends BaseActivity {
 
         if (SuperHelper.checkUser()) {
 
-            setToolbar();
+            initToolbar();
 
             setFragment();
 
@@ -50,10 +55,26 @@ public class MainActivity extends BaseActivity {
 
             LoginManager.getInstance().logOut();
 
+            try {
+                FirebaseInstanceId.getInstance().deleteInstanceId();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             Intent i = new Intent(MainActivity.this, IntroActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         }
+
+    }
+
+    @DebugLog
+    private void initToolbar() {
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.mipmap.ic_launcher));
 
     }
 
@@ -68,9 +89,7 @@ public class MainActivity extends BaseActivity {
 
             View vi = mToolbar.findViewById(R.id.menuAskQuestion);
 
-            SuperHelper.showIntro(this,
-                    vi,
-                    s -> {
+            SuperHelper.showIntro(this, vi, listener -> {
                     },
                     INTRO_KEY_ASK_QUESTION,
                     "Sorunuzu buradan oluşturabilirsiniz",
@@ -87,16 +106,6 @@ public class MainActivity extends BaseActivity {
                 ReferandumFragment_.builder().build(),
                 FRAGMENT_CONTAINER,
                 false);
-    }
-
-    @DebugLog
-    private void setToolbar() {
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("Referandum");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.mipmap.ic_launcher));
-
     }
 
     @DebugLog

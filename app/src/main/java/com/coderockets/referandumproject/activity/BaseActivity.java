@@ -30,7 +30,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
-
     abstract void initAfterViews();
 
     abstract void updateUi();
@@ -87,7 +86,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(RemoteMessage remoteMessage) {
+    public void onEventRemoteMessage(RemoteMessage remoteMessage) {
 
         SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.CUSTOM_IMAGE_TYPE);
         sweetAlertDialog.setCustomImage(R.drawable.anonym);

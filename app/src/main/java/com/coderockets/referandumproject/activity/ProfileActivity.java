@@ -20,6 +20,7 @@ import com.tbruyelle.rxpermissions.RxPermissions;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Fullscreen;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ import rx.Subscription;
 /**
  * Created by aykutasil on 5.09.2016.
  */
+@Fullscreen
 @EActivity(R.layout.activiy_profile)
 public class ProfileActivity extends BaseActivity {
 

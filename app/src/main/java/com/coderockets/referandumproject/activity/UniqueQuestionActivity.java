@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.aykuttasil.percentbar.PercentBarView;
 import com.aykuttasil.percentbar.models.BarImageModel;
@@ -29,6 +30,7 @@ import com.orhanobut.logger.Logger;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Fullscreen;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
@@ -40,6 +42,7 @@ import rx.Subscription;
 /**
  * Created by aykutasil on 15.02.2017.
  */
+@Fullscreen
 @EActivity(R.layout.activity_unique_question_layout)
 public class UniqueQuestionActivity extends BaseActivity {
 
@@ -48,11 +51,11 @@ public class UniqueQuestionActivity extends BaseActivity {
 
     @ViewById(R.id.Toolbar)
     Toolbar mToolbar;
-
-    //
-
+    
     public static final String ACTION_OPEN_QUESTION = "ACTION_OPEN_FRIEND_QUESTION";
     public static final String PUSH_NODE_QUESTION_ID = "PayloadQuestionId";
+
+    // Eğer uygulama (MainActivity) açık değilse
     public static final String ACTION_APP_ALREADY_OPEN_CONTROL = "AlreadyOpenControl";
 
     QuestionFragment mQuestionFragment;
@@ -95,6 +98,9 @@ public class UniqueQuestionActivity extends BaseActivity {
     @DebugLog
     private void initQuestionFragment(String questionId) {
 
+        MaterialDialog dialog = UiHelper.UiDialog.newInstance(this).getProgressDialog("Lütfen Bekleyiniz", null);
+        dialog.show();
+
         ApiManager.getInstance(this).TekSoruGetir(questionId)
                 .subscribe(resp -> {
 
@@ -107,14 +113,15 @@ public class UniqueQuestionActivity extends BaseActivity {
 
                     SuperHelper.ReplaceFragmentBeginTransaction(this, mQuestionFragment, R.id.Container, false);
 
+                    dialog.dismiss();
                 }, error -> {
-
+                    dialog.dismiss();
                 }, () -> {
                     new Handler().postDelayed(() -> {
                         if (mQuestionFragment.getView() != null)
                             mQuestionFragment.getView().findViewById(R.id.Fab_PreviousQuestion).setVisibility(View.INVISIBLE);
 
-                    }, 10);
+                    }, 30);
                 });
     }
 
@@ -181,10 +188,14 @@ public class UniqueQuestionActivity extends BaseActivity {
 
     @DebugLog
     private void showCustomAnswerPercent(QuestionFragment qf) {
+
         try {
             List<BarImageModel> mlist = new ArrayList<>();
+
             if (qf.getQuestion().getModelFriends() != null) {
+
                 for (ModelFriend friend : qf.getQuestion().getModelFriends()) {
+
                     BarImageModel barImageModel = new BarImageModel();
                     barImageModel.setValue(friend.getOption().equals("a") ? PercentBarView.BarField.RIGHT : PercentBarView.BarField.LEFT);
                     barImageModel.setBarText(friend.getName());

@@ -24,11 +24,9 @@
         <activity
             android:name=".activity.MainActivity_"
             android:hardwareAccelerated="true"
-            android:label="Referandum"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -47,6 +45,15 @@
         </activity>
 
         <activity
+            android:name=".activity.QuestionDetailActivity_"
+            android:parentActivityName=".activity.ProfileActivity_">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.ProfileActivity_" />
+        </activity>
+
+        <activity
             android:name=".activity.QuestionActivity_"
             android:parentActivityName=".activity.MainActivity_">
             <meta-data
@@ -61,6 +68,28 @@
             <intent-filter>
                 <action android:name="ACTION_OPEN_FRIEND_QUESTION" />
                 <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Accepts URIs that begin with "http://www.example.com/gizmos” -->
+                <!-- note that the leading "/" is required for pathPrefix-->
+                <!--
+                <data
+                    android:host="www.example.com"
+                    android:pathPrefix="/gizmos"
+                    android:scheme="http" />
+                    -->
+
+                <!-- Accepts URIs that begin with "example://gizmos” -->
+                <data
+                    android:host="question"
+                    android:scheme="referandum" />
+
             </intent-filter>
 
             <meta-data
@@ -120,7 +149,7 @@
 
         <meta-data
             android:name="AA_DB_NAME"
-            android:value="referandum4.db" />
+            android:value="referandum5.db" />
 
         <meta-data
             android:name="AA_DB_VERSION"

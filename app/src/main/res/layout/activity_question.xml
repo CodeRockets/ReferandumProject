@@ -33,19 +33,49 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                app:layout_flexBasisPercent="30%">
+                app:layout_flexBasisPercent="35%">
 
                 <ImageView
                     android:id="@+id/ImageView_SoruImage"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="match_parent"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:scaleType="centerCrop"
                     android:src="@drawable/question_bg" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:background="#CCFFFFFF"
+                    android:gravity="center_vertical|right"
+                    android:orientation="horizontal"
+                    android:padding="5dp"
+                    app:layout_flexBasisPercent="10%">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="20dp"
+                        android:text="Arkadaşlarıma Bildir" />
+
+                    <com.nightonke.jellytogglebutton.JellyToggleButton
+                        android:id="@+id/JellyToggleButtonFriendNotif"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        app:jtbEaseType="ease_in_out_circ"
+                        app:jtbJelly="active_tremble_tail_slim_jim"
+                        app:jtbLeftBackgroundColor="@color/blue"
+                        app:jtbLeftThumbColor="@color/primary"
+                        app:jtbRightBackgroundColor="@color/primary"
+                        app:jtbRightThumbColor="@color/blue" />
+                </LinearLayout>
 
                 <!--<android.support.design.widget.FloatingActionButton-->
                 <!--android:id="@+id/FabRefreshImage"-->
@@ -57,6 +87,7 @@
                 <!--android:layout_marginRight="10dp"-->
                 <!--app:fabSize="mini" />-->
             </RelativeLayout>
+
 
             <com.coderockets.referandumproject.util.AutoFitTextView
                 android:id="@+id/AutoFitTextViewSoru"
@@ -70,7 +101,7 @@
                 android:paddingRight="10dp"
                 android:text="sdsd"
                 android:textSize="110sp"
-                app:layout_flexBasisPercent="50%" />
+                app:layout_flexBasisPercent="45%" />
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -26,24 +26,5 @@ public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
             modelUser.setRegId(refreshedToken);
             modelUser.save();
         }
-
-
-        /*
-        FcmRegistraionIDEvent fcmRegistraionIDEvent = new FcmRegistraionIDEvent();
-        fcmRegistraionIDEvent.setRegID(refreshedToken);
-
-        EventBus.getDefault().post(fcmRegistraionIDEvent);
-        */
-
-        /*
-        ModelSweetLocPreference modelSweetLocPreference = DbManager.getModelSweetLocPreference();
-        if (modelSweetLocPreference == null) {
-            modelSweetLocPreference = new ModelSweetLocPreference();
-        }
-        modelSweetLocPreference.setRegId(refreshedToken);
-        modelSweetLocPreference.save();
-        */
-        // TODO: Implement this method to send any registration to your app's servers.
-        //sendRegistrationToServer(refreshedToken);
     }
 }

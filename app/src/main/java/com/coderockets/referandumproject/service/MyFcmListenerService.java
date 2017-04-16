@@ -13,6 +13,10 @@ import hugo.weaving.DebugLog;
  */
 public class MyFcmListenerService extends FirebaseMessagingService {
 
+
+    private static final String PUSH_ACTION = "PushAction";
+    private static final String PUSH_ACTION_FRIEND_ASK_QUESTION = "ActionFriendAskQuestion";
+
     @DebugLog
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -20,17 +24,12 @@ public class MyFcmListenerService extends FirebaseMessagingService {
         Logger.i("data: " + remoteMessage.getData());
 
         if (remoteMessage.getData().size() > 0) {
-
-            switch (remoteMessage.getData().get("PushAction")) {
-                case "ActionFriendAskQuestion": {
-
+            switch (remoteMessage.getData().get(PUSH_ACTION)) {
+                case PUSH_ACTION_FRIEND_ASK_QUESTION: {
                     EventBus.getDefault().post(remoteMessage);
-
                     break;
                 }
             }
-
-
         }
 
 
@@ -42,8 +41,6 @@ public class MyFcmListenerService extends FirebaseMessagingService {
                 .setSmallIcon(R.drawable.ic_account_circle_pink_900_48dp)
                 .setContentText(notification.getBody());
                 */
-
-
     }
 
     @DebugLog

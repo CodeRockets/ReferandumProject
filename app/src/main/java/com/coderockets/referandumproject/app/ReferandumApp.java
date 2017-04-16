@@ -12,6 +12,7 @@ import com.coderockets.referandumproject.model.ModelUser;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import com.miguelbcr.ui.rx_paparazzo.RxPaparazzo;
@@ -63,6 +64,8 @@ public class ReferandumApp extends MultiDexApplication {
         AppEventsLogger.activateApp(this);
 
         RxPaparazzo.register(this);
+
+        FirebaseAnalytics.getInstance(getApplicationContext());
 
     }
 
