@@ -28,8 +28,8 @@ android {
     defaultConfig {
         applicationId "com.coderockets.referandumproject"
         targetSdkVersion project.sdk
-        versionCode 20
-        versionName "1.0.19"
+        versionCode 21
+        versionName "1.0.20"
         multiDexEnabled true
     }
 
@@ -120,90 +120,136 @@ dependencies {
 
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
+
+    // Robolectric unit test
     testCompile 'org.robolectric:robolectric:3.0'
+
+    // Facebook Stetho
     debugCompile 'com.facebook.stetho:stetho:1.3.0'
     debugCompile 'com.facebook.stetho:stetho-js-rhino:1.3.0'
+
+    // Logger
     compile 'com.orhanobut:logger:1.15'
 
-    //debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
-    //releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-    //testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    // Crashlytics
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
+        transitive = true;
+    }
 
+    // Android Annotations
+    apt "org.androidannotations:androidannotations:$AAVersion"
+    compile "org.androidannotations:androidannotations-api:$AAVersion"
+
+    // Support Libs
     compile "com.android.support:appcompat-v7:$project.supportVersion"
     compile "com.android.support:design:$project.supportVersion"
     compile "com.android.support:cardview-v7:$project.supportVersion"
     compile "com.android.support:recyclerview-v7:$project.supportVersion"
-
     compile 'com.android.support:multidex:1.0.1'
-    //compile 'com.google.android.gms:play-services-identity:9.2.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
-
+    // Firebase
     compile "com.google.firebase:firebase-core:$project.playVersion"
     compile "com.google.firebase:firebase-messaging:$project.playVersion"
     compile "com.google.firebase:firebase-database:$project.playVersion"
     compile "com.google.firebase:firebase-config:$project.playVersion"
     compile "com.google.firebase:firebase-auth:$project.playVersion"
     compile "com.google.firebase:firebase-crash:$project.playVersion"
+    compile "com.google.firebase:firebase-invites:$project.playVersion"
+    //compile 'com.google.android.gms:play-services-identity:9.2.0'
+
+    // Play Services
     compile "com.google.android.gms:play-services-gcm:$project.playVersion"
     compile "com.google.android.gms:play-services-location:$project.playVersion"
 
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
-        transitive = true;
-    }
-
-    apt "org.androidannotations:androidannotations:$AAVersion"
-    compile "org.androidannotations:androidannotations-api:$AAVersion"
-
+    // Eventbus
     compile 'org.greenrobot:eventbus:3.0.0'
-    //compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
+
+    // Database
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
+
+    // Icon lib
     compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.1.1'
+
+    // Material Cards
     compile 'com.github.gabrielemariotti.cards:cardslib-core:2.1.0'
     compile 'com.github.gabrielemariotti.cards:cardslib-recyclerview:2.1.0'
+
+    // Font Lib
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
-    //compile 'com.mikhaellopez:circularimageview:3.0.2'
+
+    //------UI------
+    // Circle ImageView
     compile 'de.hdodenhof:circleimageview:2.1.0'
+    // TextSurface
+    compile 'com.github.elevenetc:textsurface:0.9.1'
+    //
+    compile 'io.github.yavski:fab-speed-dial:1.0.4'
+    // ViewPager Transforms
+    compile 'com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.2.32@aar'
+    // Flexbox Layout
+    compile 'com.google.android:flexbox:0.2.1' // Google FlexboxLayout kullanımı için
+    // Blur View
+    compile 'jp.wasabeef:blurry:2.0.2'
+    // Boom Menu
+    compile 'com.nightonke:boommenu:2.0.7'
+    // SweetAlert Dialog
+    compile 'cn.pedant.sweetalert:library:1.3'
+    // Material Intro Screen / Splash Screen
+    compile 'agency.tango.android:material-intro-screen:0.0.5'
+    // Material intro view
+    compile 'com.github.iammert:MaterialIntroView:1.5.2'
+    // Anroid Loading View
+    compile 'com.github.ybq:Android-SpinKit:1.1.0'
+
+    // Facebook
     compile 'com.facebook.android:facebook-android-sdk:4.+'
-    //compile 'com.github.florent37:glidepalette:1.0.6'
-    // Google Glide ve Palette kütüphanelerinin birlikte kullanılmasını sağlar
-    //compile 'com.aykuttasil:androidbasichelper:1.0.8'
+
+    // Aykut Asil libs
     compile 'com.aykuttasil:percentbar:3.0.4'
     compile 'com.aykuttasil:imageupload:0.0.5'
 
-    compile 'com.google.android:flexbox:0.2.1' // Google FlexboxLayout kullanımı için
+    // Android Random
     compile 'com.github.slmyldz:AndroidRandom:1.0' // Her türden random veriler üretilmesini sağlar
-    compile 'io.github.yavski:fab-speed-dial:1.0.4'
-    compile 'com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.2.32@aar'
 
+    // Square Libs
     compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 
+    // Rx
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.1.5'
+
+    // RxPaparazzo Camera
     compile "com.github.miguelbcr:RxPaparazzo:0.4.5"
 
-    compile 'jp.wasabeef:blurry:2.0.2'
+    // RxBinding
     compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
     compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:0.4.0'
     compile 'com.jakewharton.rxbinding:rxbinding-design:0.4.0'
     compile 'com.jakewharton.rxbinding:rxbinding-recyclerview-v7:0.4.0'
+
+    // Rx Permissions
     compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.1@aar'
-    compile 'com.squareup.picasso:picasso:2.5.2'
+
+    // Transition View
     compile "com.andkulikov:transitionseverywhere:1.7.0"
-    compile 'agency.tango.android:material-intro-screen:0.0.5'
-    compile 'com.github.iammert:MaterialIntroView:1.5.2'
-    compile 'com.github.elevenetc:textsurface:0.9.1'
+
+    // Toggle Button
+    //compile 'com.nightonke:faceofftogglebutton:1.0.0'
+    compile 'com.nightonke:jellytogglebutton:1.0.2'
+
+
+    //compile 'com.mikhaellopez:circularimageview:3.0.2'
+    //compile 'com.github.florent37:glidepalette:1.0.6'
+    // Google Glide ve Palette kütüphanelerinin birlikte kullanılmasını sağlar
+    //compile 'com.aykuttasil:androidbasichelper:1.0.8'
     //compile 'devlight.io:navigationtabbar:1.2.5'
-    compile 'com.github.ybq:Android-SpinKit:1.1.0'
-    compile 'cn.pedant.sweetalert:library:1.3'
-    compile 'com.nightonke:boommenu:2.0.7'
-
-
     //compile 'com.github.chrisbanes:PhotoView:1.3.0'
-
     //compile 'com.yalantis:sidemenu:1.0'
     //compile 'com.github.ozodrukh:CircularReveal:1.3.1@aar'
     //compile 'link.fls:swipestack:0.3.0'

@@ -6,7 +6,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.android.tools.build:gradle:2.3.1'
         classpath 'com.google.gms:google-services:3.0.0'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
         classpath 'io.fabric.tools:gradle:1.+'
@@ -30,6 +30,6 @@ ext {
     minSdk = 17
     libraryVersion = "1.1.0"
     libraryVersionCode = 4
-    supportVersion = "25.1.1"
-    playVersion = "10.0.1"
+    supportVersion = "25.3.1"
+    playVersion = "10.2.1"
 }
