@@ -43,19 +43,13 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @DebugLog
     public void updateProfileIcon(MenuItem menuItem) {
-
         ModelUser modelUser = DbManager.getModelUser();
-
         if (modelUser != null) {
-
             WeakReference<MenuItem> itemWeakReference = new WeakReference<>(menuItem);
-
             Target target = new Target() {
-
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                     MenuItem menuItem = itemWeakReference.get();
-
                     if (menuItem != null) {
                         Drawable drawable = new BitmapDrawable(getResources(), bitmap);
                         drawable.setBounds(0, 0, 100, 100);
@@ -73,7 +67,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
                 }
             };
-
             Picasso.with(this)
                     .load(modelUser.getProfileImageUrl())
                     .transform(new PicassoCircleTransform())
@@ -87,7 +80,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     @DebugLog
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventRemoteMessage(RemoteMessage remoteMessage) {
-
         SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this, SweetAlertDialog.CUSTOM_IMAGE_TYPE);
         sweetAlertDialog.setCustomImage(R.drawable.anonym);
         sweetAlertDialog.setTitleText("Arkadaşınız yeni bir soru sordu.");
@@ -96,7 +88,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         sweetAlertDialog.setConfirmText("Cevapla");
 
         sweetAlertDialog.setConfirmClickListener(sweetAlertDialog1 -> {
-
             sweetAlertDialog1.dismiss();
 
             String questionId = remoteMessage.getData().get(UniqueQuestionActivity.PUSH_NODE_QUESTION_ID);
@@ -108,11 +99,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             i.putExtra(UniqueQuestionActivity.ACTION_APP_ALREADY_OPEN_CONTROL, UniqueQuestionActivity.ACTION_APP_ALREADY_OPEN_CONTROL);
 
             startActivity(i);
-
         });
-
         sweetAlertDialog.show();
-
     }
 
 }

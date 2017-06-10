@@ -120,6 +120,12 @@ public class QuestionActivity extends BaseActivity {
         setReactiveEditText();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+    }
+
     @DebugLog
     private void setToolbar() {
         setSupportActionBar(mToolbar);
@@ -485,4 +491,9 @@ public class QuestionActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
 }

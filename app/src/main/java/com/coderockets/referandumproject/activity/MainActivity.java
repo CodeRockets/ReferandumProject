@@ -41,18 +41,12 @@ public class MainActivity extends BaseActivity {
     @AfterViews
     @Override
     public void initAfterViews() {
-
         if (SuperHelper.checkUser()) {
-
             initToolbar();
-
             setFragment();
-
             // Her açılışta kulanıcı bilgileri güncelleniyor
             SuperHelper.UpdateUser(this);
-
         } else {
-
             LoginManager.getInstance().logOut();
 
             try {
@@ -75,32 +69,25 @@ public class MainActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(getResources().getDrawable(R.mipmap.ic_launcher));
-
     }
 
     @DebugLog
     @Override
     protected void onResume() {
         super.onResume();
-
         EventBus.getDefault().register(this);
-
         if (SuperHelper.checkUser() && mToolbar.findViewById(R.id.menuAskQuestion) != null) {
-
             View vi = mToolbar.findViewById(R.id.menuAskQuestion);
-
             SuperHelper.showIntro(this, vi, listener -> {
                     },
                     INTRO_KEY_ASK_QUESTION,
                     "Sorunuzu buradan oluşturabilirsiniz",
                     Focus.MINIMUM);
         }
-
     }
 
     @DebugLog
     private void setFragment() {
-
         SuperHelper.ReplaceFragmentBeginTransaction(
                 this,
                 ReferandumFragment_.builder().build(),
@@ -111,11 +98,8 @@ public class MainActivity extends BaseActivity {
     @DebugLog
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.activity_main_menu, menu);
-
         updateProfileIcon(menu.getItem(0));
-
         return super.onCreateOptionsMenu(menu);
     }
 

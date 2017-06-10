@@ -20,9 +20,7 @@ public class MyFcmListenerService extends FirebaseMessagingService {
     @DebugLog
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-
         Logger.i("data: " + remoteMessage.getData());
-
         if (remoteMessage.getData().size() > 0) {
             switch (remoteMessage.getData().get(PUSH_ACTION)) {
                 case PUSH_ACTION_FRIEND_ASK_QUESTION: {
@@ -31,7 +29,6 @@ public class MyFcmListenerService extends FirebaseMessagingService {
                 }
             }
         }
-
 
         /*
         RemoteMessage.Notification notification =  message.getNotification();
