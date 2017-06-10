@@ -17,8 +17,8 @@
         android:layout_height="wrap_content"
         app:jtbEaseType="ease_in_out_circ"
         app:jtbJelly="active_tremble_tail_slim_jim"
-        app:jtbLeftBackgroundColor="@color/blue"
+        app:jtbLeftBackgroundColor="@color/divider"
         app:jtbLeftThumbColor="@color/primary"
-        app:jtbRightBackgroundColor="@color/primary"
+        app:jtbRightBackgroundColor="@color/divider"
         app:jtbRightThumbColor="@color/blue" />
 </LinearLayout>

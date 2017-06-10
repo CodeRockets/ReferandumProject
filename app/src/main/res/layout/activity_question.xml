@@ -73,10 +73,10 @@
                         android:layout_marginEnd="10dp"
                         app:jtbEaseType="ease_in_out_circ"
                         app:jtbJelly="active_tremble_tail_slim_jim"
-                        app:jtbLeftBackgroundColor="@color/blue"
-                        app:jtbLeftThumbColor="@color/white"
-                        app:jtbRightBackgroundColor="@color/blue"
-                        app:jtbRightThumbColor="@color/white" />
+                        app:jtbLeftBackgroundColor="@color/dividerColor"
+                        app:jtbLeftThumbColor="@color/blue"
+                        app:jtbRightBackgroundColor="@color/white"
+                        app:jtbRightThumbColor="@color/blue" />
                 </LinearLayout>
 
                 <!--<android.support.design.widget.FloatingActionButton-->

@@ -344,6 +344,11 @@ public class QuestionActivity extends BaseActivity {
             Transition transition = new Slide(Gravity.END);
             transition.setDuration(500);
             TransitionManager.beginDelayedTransition(mHeaderContainer, transition);
+            if (state == State.LEFT) {
+                UiHelper.UiSnackBar.showSimpleSnackBar(mToolbar, "Sorunuzu herkes cevaplayabilir.", Snackbar.LENGTH_SHORT);
+            } else {
+                UiHelper.UiSnackBar.showSimpleSnackBar(mToolbar, "Sorunuzu sadece istediğiniz kişiler cevaplayabilir.", Snackbar.LENGTH_SHORT);
+            }
             mFriendNotifContainer.setVisibility(state == State.LEFT ? View.VISIBLE : View.GONE);
         });
         return super.onCreateOptionsMenu(menu);
