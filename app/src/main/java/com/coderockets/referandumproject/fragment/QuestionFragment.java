@@ -221,6 +221,7 @@ public class QuestionFragment extends Fragment {
     }
 
     private void setSoru(ModelQuestionInformation mqi) {
+
         Uri soruImageUri = Uri.parse(mqi.getQuestionImage());
         if (!mqi.getQuestionImage().contains("loremflickr")
                 && !mqi.getQuestionImage().equals("")
