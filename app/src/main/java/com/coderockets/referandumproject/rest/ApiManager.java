@@ -209,7 +209,6 @@ public class ApiManager {
 
     @DebugLog
     public Observable<SoruGetirBaseResponse> TekSoruGetir(String questionId) {
-
         return RestClient.getInstance().getApiService()
                 .TekSoruGetir(
                         Const.CLIENT_ID,
@@ -218,9 +217,7 @@ public class ApiManager {
                         questionId,
                         String.valueOf(Const.REFERANDUM_APP),
                         SuperHelper.checkUser() ? DbManager.getModelUser().getUserId() : ""
-                )
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                );
     }
 
     @DebugLog

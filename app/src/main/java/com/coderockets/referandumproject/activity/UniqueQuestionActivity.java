@@ -38,6 +38,8 @@ import java.util.List;
 
 import hugo.weaving.DebugLog;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by aykutasil on 15.02.2017.
@@ -107,22 +109,18 @@ public class UniqueQuestionActivity extends BaseActivity {
 
     @DebugLog
     private void initQuestionFragment(String questionId) {
-
         MaterialDialog dialog = UiHelper.UiDialog.newInstance(this).getProgressDialog("Lütfen Bekleyiniz", null);
         dialog.show();
 
         ApiManager.getInstance(this).TekSoruGetir(questionId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(resp -> {
-
                     mQuestionFragment = QuestionFragment_.builder().build();
-
                     Bundle args = new Bundle();
                     args.putParcelable(ModelQuestionInformation.class.getSimpleName(), resp.getData().getRows().get(0));
-
                     mQuestionFragment.setArguments(args);
-
                     SuperHelper.ReplaceFragmentBeginTransaction(this, mQuestionFragment, R.id.Container, false);
-
                     dialog.dismiss();
                 }, error -> {
                     dialog.dismiss();
