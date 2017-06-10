@@ -221,7 +221,7 @@ public class QuestionActivity extends BaseActivity {
         try {
             // Eğer soru resmi yüklenmemiş ise
             if (mQuestionImageFilePath == null) {
-                String randomImageUrl = "";
+                String randomImageUrl = "https://github.com/aykuttasil/www.aykutasil.com/blob/master/images/referandum.jpg?raw=true";
                 request.setQuestionText(mEditText_SoruText.getText().toString());
                 request.setQuestionImage(randomImageUrl);
 
