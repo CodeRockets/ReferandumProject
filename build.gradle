@@ -31,5 +31,5 @@ ext {
     libraryVersion = "1.1.0"
     libraryVersionCode = 4
     supportVersion = "25.3.1"
-    playVersion = "10.2.4"
+    playVersion = "11.0.0"
 }
