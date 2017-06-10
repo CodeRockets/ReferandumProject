@@ -11,17 +11,6 @@ import com.google.gson.annotations.SerializedName;
  */
 public class SoruSorRequest extends BaseRequest {
 
-    /*
-    {
-            "user_id": "string",
-            "app": 0,
-            "question_text": "string",
-            "question_image": "string",
-            "option_a": "string",
-            "option_b": "string"
-    }
-    */
-
     @Expose
     @SerializedName("user_id")
     private String UserId;
@@ -47,8 +36,16 @@ public class SoruSorRequest extends BaseRequest {
     private String Option_B;
 
     @Expose
-    @SerializedName("question_private")
-    private boolean QuestionPrivate;
+    @SerializedName("is_private")
+    private boolean IsPrivate;
+
+    @Expose
+    @SerializedName("private_url")
+    private String PrivateUrl;
+
+    @Expose
+    @SerializedName("notify_friend")
+    private boolean NotifyFriend;
 
     private SoruSorRequest() {
     }
@@ -58,7 +55,8 @@ public class SoruSorRequest extends BaseRequest {
         SoruSorRequest request = new SoruSorRequest();
         request.setUserId(modelUser.getUserId());
         request.setApp(Const.REFERANDUM_APP);
-        request.setQuestionPrivate(false);
+        request.setPrivate(false);
+        request.setNotifyFriend(false);
         return request;
     }
 
@@ -110,11 +108,27 @@ public class SoruSorRequest extends BaseRequest {
         App = app;
     }
 
-    public boolean isQuestionPrivate() {
-        return QuestionPrivate;
+    public boolean isPrivate() {
+        return IsPrivate;
     }
 
-    public void setQuestionPrivate(boolean questionPrivate) {
-        QuestionPrivate = questionPrivate;
+    public void setPrivate(boolean aPrivate) {
+        IsPrivate = aPrivate;
+    }
+
+    public String getPrivateUrl() {
+        return PrivateUrl;
+    }
+
+    public void setPrivateUrl(String privateUrl) {
+        PrivateUrl = privateUrl;
+    }
+
+    public boolean isNotifyFriend() {
+        return NotifyFriend;
+    }
+
+    public void setNotifyFriend(boolean notifyFriend) {
+        NotifyFriend = notifyFriend;
     }
 }

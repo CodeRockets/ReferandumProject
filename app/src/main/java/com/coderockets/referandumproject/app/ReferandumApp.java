@@ -66,7 +66,6 @@ public class ReferandumApp extends MultiDexApplication {
         RxPaparazzo.register(this);
 
         FirebaseAnalytics.getInstance(getApplicationContext());
-
     }
 
     @DebugLog

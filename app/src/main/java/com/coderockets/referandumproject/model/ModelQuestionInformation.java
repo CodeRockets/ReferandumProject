@@ -133,6 +133,16 @@ public class ModelQuestionInformation extends Model implements Parcelable {
 
     @Expose
     @Column
+    @SerializedName("is_private")
+    private boolean IsPrivate;
+
+    @Expose
+    @Column
+    @SerializedName("private_url")
+    private String PrivateUrl;
+
+    @Expose
+    @Column
     @SerializedName("friends")
     private List<ModelFriend> modelFriends;
 
@@ -159,6 +169,8 @@ public class ModelQuestionInformation extends Model implements Parcelable {
         FavoriteCount = in.readInt();
         AskerProfileImg = in.readString();
         AskerName = in.readString();
+        IsPrivate = in.readByte() != 0;
+        PrivateUrl = in.readString();
     }
 
     public static final Creator<ModelQuestionInformation> CREATOR = new Creator<ModelQuestionInformation>() {
@@ -350,5 +362,21 @@ public class ModelQuestionInformation extends Model implements Parcelable {
         dest.writeInt(FavoriteCount);
         dest.writeString(AskerProfileImg);
         dest.writeString(AskerName);
+    }
+
+    public boolean isPrivate() {
+        return IsPrivate;
+    }
+
+    public void setPrivate(boolean aPrivate) {
+        IsPrivate = aPrivate;
+    }
+
+    public String getPrivateUrl() {
+        return PrivateUrl;
+    }
+
+    public void setPrivateUrl(String privateUrl) {
+        PrivateUrl = privateUrl;
     }
 }

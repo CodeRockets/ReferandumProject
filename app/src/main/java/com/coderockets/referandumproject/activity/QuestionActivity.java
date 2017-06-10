@@ -10,8 +10,10 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,21 +25,22 @@ import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.app.Const;
 import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.rest.ApiManager;
-import com.coderockets.referandumproject.rest.RestModel.DynamicLinkRequest;
-import com.coderockets.referandumproject.rest.RestModel.DynamicLinkResponse;
 import com.coderockets.referandumproject.rest.RestModel.SoruSorRequest;
-import com.coderockets.referandumproject.rest.RestModel.SoruSorResponse;
 import com.coderockets.referandumproject.util.AutoFitTextView;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.miguelbcr.ui.rx_paparazzo.RxPaparazzo;
 import com.miguelbcr.ui.rx_paparazzo.entities.Options;
 import com.miguelbcr.ui.rx_paparazzo.entities.size.ScreenSize;
 import com.nightonke.jellytogglebutton.JellyToggleButton;
+import com.nightonke.jellytogglebutton.State;
 import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.tbruyelle.rxpermissions.RxPermissions;
+import com.transitionseverywhere.Slide;
+import com.transitionseverywhere.Transition;
+import com.transitionseverywhere.TransitionManager;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -54,9 +57,7 @@ import hugo.weaving.DebugLog;
 import io.github.yavski.fabspeeddial.FabSpeedDial;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -75,9 +76,6 @@ public class QuestionActivity extends BaseActivity {
     @ViewById(R.id.AskQuestionMainLayout)
     ViewGroup mAskQuestionMainLayout;
 
-    //@ViewById(R.id.FabRefreshImage)
-    //FloatingActionButton mFabRefreshImage;
-
     @ViewById(R.id.FabUploadImage)
     FabSpeedDial mFabUploadImage;
 
@@ -90,11 +88,16 @@ public class QuestionActivity extends BaseActivity {
     @ViewById(R.id.JellyToggleButtonFriendNotif)
     JellyToggleButton mJellyToggleButtonFriendNotif;
 
+    @ViewById(R.id.HeaderContainer)
+    ViewGroup mHeaderContainer;
+
+    @ViewById(R.id.FriendNotifContainer)
+    ViewGroup mFriendNotifContainer;
+
     RxPermissions mRxPermissions;
     JellyToggleButton mJellyToggleButtonPrivateQuestion;
-    private String mFilePath = null;
-
-    //PhotoViewAttacher photoViewAttacher;
+    MaterialDialog materialDialog;
+    private String mQuestionImageFilePath = null;
 
 
     @DebugLog
@@ -109,13 +112,12 @@ public class QuestionActivity extends BaseActivity {
     @DebugLog
     @Override
     public void initAfterViews() {
+        if (materialDialog == null) {
+            materialDialog = UiHelper.UiDialog.newInstance(this).getProgressDialog("Lütfen Bekleyiniz..", null);
+        }
         setToolbar();
         setFab();
         setReactiveEditText();
-        //setRandomImage();
-        //photoViewAttacher = new PhotoViewAttacher(mImageView_SoruImage);
-        //photoViewAttacher.setAllowParentInterceptOnEdge(true);
-        //photoViewAttacher.setScaleType(ImageView.ScaleType.CENTER_CROP);
     }
 
     @DebugLog
@@ -149,11 +151,6 @@ public class QuestionActivity extends BaseActivity {
     }
 
     private void setFab() {
-
-
-        /*mFabRefreshImage.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_refresh)
-                .sizeDp(150).color(R.color.color4).getCurrent());*/
-
         mFabUploadImage.setMenuListener(new FabSpeedDial.MenuListener() {
             @Override
             public boolean onPrepareMenu(NavigationMenu navigationMenu) {
@@ -188,51 +185,22 @@ public class QuestionActivity extends BaseActivity {
 
     }
 
-    /*
-    @DebugLog
-    @Click(R.id.FabRefreshImage)
-    public void FabRefreshImageClick() {
-        setRandomImage();
-    }
-
-    @DebugLog
-    public void setRandomImage() {
-        mImageView_SoruImage.setScaleType(ImageView.ScaleType.CENTER);
-        String randomUrl = "http://loremflickr.com/g/600/200/abstract/";//Randoms.imageUrl("png");
-        Picasso.with(this)
-                .load(randomUrl)
-                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
-                //.placeholder(android.R.drawable.progress_indeterminate_horizontal)
-                .placeholder(R.drawable.loading)
-                .into(mImageView_SoruImage, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                        //photoViewAttacher.update();
-                        mImageView_SoruImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                    }
-
-                    @Override
-                    public void onError() {
-
-                    }
-                });
-    }
-    */
     @DebugLog
     @Click(R.id.Button_SoruGonder)
     public void Button_SoruGonderClick() {
-
         mRxPermissions.request(Const.PERMISSIONS_ASK_QUESTION)
                 .subscribe(granted -> {
                             if (granted) {
-                                sendQuestionRequest();
+                                SoruSorRequest request = SoruSorRequest.SoruSorRequestInstance();
+                                request.setPrivate(mJellyToggleButtonPrivateQuestion.isChecked());
+                                request.setNotifyFriend(mJellyToggleButtonFriendNotif.isChecked());
+                                sendQuestionRequest(request);
                             } else {
                                 UiHelper.UiSnackBar.showSimpleSnackBar(getCurrentFocus(),
                                         "Soru gönderebilmeniz için gerekli izinleri vermelisiniz !",
                                         Snackbar.LENGTH_INDEFINITE);
                             }
                         }, error -> {
-                            //UiHelper.UiDialog.newInstance(QuestionActivity.this).getOKDialog("HATA", error.getMessage(), null).show();
                             UiHelper.UiDialog.showSimpleDialog(QuestionActivity.this, "HATA", error.getMessage());
                             SuperHelper.CrashlyticsLog(error);
                         }
@@ -240,170 +208,38 @@ public class QuestionActivity extends BaseActivity {
     }
 
     @DebugLog
-    public void sendQuestionRequest() {
-
+    public void sendQuestionRequest(SoruSorRequest request) {
         if (SuperHelper.validateIsEmpty(mEditText_SoruText)) return;
 
-        MaterialDialog materialDialog = UiHelper.UiDialog.newInstance(this).getProgressDialog("Lütfen Bekleyiniz..", null);
         materialDialog.show();
-
         try {
-
-            if (mFilePath == null) {
-
+            // Eğer soru resmi yüklenmemiş ise
+            if (mQuestionImageFilePath == null) {
                 String randomImageUrl = "";
-                SoruSorRequest soruSorRequest = SoruSorRequest.SoruSorRequestInstance();
-                soruSorRequest.setQuestionText(mEditText_SoruText.getText().toString());
-                soruSorRequest.setQuestionImage(randomImageUrl);
+                request.setQuestionText(mEditText_SoruText.getText().toString());
+                request.setQuestionImage(randomImageUrl);
 
                 if (mJellyToggleButtonPrivateQuestion.isChecked()) {
-
-                    soruSorRequest.setQuestionPrivate(true);
-
-                    ApiManager.getInstance(this).SoruSor(soruSorRequest)
-                            .flatMap(new Func1<SoruSorResponse, Observable<DynamicLinkResponse>>() {
-                                @Override
-                                public Observable<DynamicLinkResponse> call(SoruSorResponse response) {
-                                    String referandumImageLink = "https://scontent-otp1-1.xx.fbcdn.net/v/t31.0-8/15137646_969137279896357_8350515276412161_o.jpg?oh=51f40534d2ca39ce0db6d097b88cd638&oe=59811AA3";
-                                    return ApiManager.getInstance(QuestionActivity.this).DynamicLink(
-                                            DynamicLinkRequest.getDynamicLinkRequest(
-                                                    "http://referandum?questionId=" + response.getData().getSoruId(),
-                                                    response.getData().getQuestionText(),
-                                                    "",
-                                                    referandumImageLink));
-                                }
-                            })
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(resp -> {
-                                materialDialog.dismiss();
-                                Logger.d(resp);
-                                Logger.i("DynamicLink: " + resp.getShortLink());
-                                Logger.i("DynamicLink Preview: " + resp.getPreviewLink());
-
-
-                                NavUtils.navigateUpFromSameTask(QuestionActivity.this);
-                            }, error ->
-                            {
-                                materialDialog.dismiss();
-                                Logger.e(error, "HATA");
-                            });
+                    request.setNotifyFriend(false);
+                    sendPrivateQuestionWithDefaultImage(request);
                 } else {
-
-                    ApiManager.getInstance(this).SoruSor(soruSorRequest)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(response -> {
-                                materialDialog.dismiss();
-                                mFilePath = null;
-                                mEditText_SoruText.setText("");
-                                EventBus.getDefault().postSticky(response.getData());
-                                NavUtils.navigateUpFromSameTask(QuestionActivity.this);
-                            }, error ->
-                            {
-                                materialDialog.dismiss();
-                                Logger.e(error, "HATA");
-                            });
+                    sendPublicQuestionWithDefaultImage(request);
                 }
-
-                /*
-                Drawable drawable = mImageView_SoruImage.getDrawable();
-                File externalDir = new File(Environment.getExternalStorageDirectory().getPath() + "/ReferandumProject");
-                if (!externalDir.exists()) externalDir.mkdir();
-
-                Bitmap bitmap = SuperHelper.drawableToBitmap(drawable);
-                SuperHelper.saveBitmapToFile(externalDir, "ReferandumSoru.jpg", bitmap, Bitmap.CompressFormat.JPEG, 100);
-
-                String soruImageFilePath = externalDir.getPath() + "/ReferandumSoru.jpg";
-                Logger.i(soruImageFilePath);
-                mFilePath = soruImageFilePath;
-                */
-
             } else {
-
-                File file = new File(mFilePath);
-
-                Logger.i("FilePath: " + mFilePath);
+                File file = new File(mQuestionImageFilePath);
+                Logger.i("FilePath: " + mQuestionImageFilePath);
 
                 Map<String, RequestBody> map = new HashMap<>();
                 RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpg"), file);
                 map.put("file\"; filename=\"" + "file", requestBody);
 
-
                 if (mJellyToggleButtonPrivateQuestion.isChecked()) {
-
-                    ApiManager.getInstance(this).ImageUpload(map)
-                            .flatMap(response -> {
-
-                                Logger.i("Image Url: " + response.getData());
-
-                                SoruSorRequest soruSorRequest = SoruSorRequest.SoruSorRequestInstance();
-                                soruSorRequest.setQuestionText(mEditText_SoruText.getText().toString());
-                                soruSorRequest.setQuestionImage(response.getData());
-                                soruSorRequest.setQuestionPrivate(true);
-
-                                return ApiManager.getInstance(this).SoruSor(soruSorRequest);
-                            })
-                            .flatMap(new Func1<SoruSorResponse, Observable<DynamicLinkResponse>>() {
-                                @Override
-                                public Observable<DynamicLinkResponse> call(SoruSorResponse response) {
-                                    return ApiManager.getInstance(QuestionActivity.this).DynamicLink(
-                                            DynamicLinkRequest.getDynamicLinkRequest(
-                                                    "http://referandum?questionId=" + response.getData().getSoruId(),
-                                                    response.getData().getQuestionText(),
-                                                    "",
-                                                    response.getData().getQuestionImage()
-                                            ));
-                                }
-                            })
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(resp -> {
-                                materialDialog.dismiss();
-                                Logger.d(resp);
-                                Logger.i("DynamicLink: " + resp.getShortLink());
-                                Logger.i("DynamicLink Preview: " + resp.getPreviewLink());
-                                NavUtils.navigateUpFromSameTask(QuestionActivity.this);
-                            }, error ->
-                            {
-                                materialDialog.dismiss();
-                                UiHelper.UiDialog.showSimpleDialog(QuestionActivity.this, "HATA", error.getMessage());
-                                SuperHelper.CrashlyticsLog(error);
-                                Logger.e(error, "HATA");
-                            });
+                    request.setNotifyFriend(false);
+                    sendPrivateQuestionWithImage(request, map);
                 } else {
-
-                    ApiManager.getInstance(this).ImageUpload(map)
-                            .flatMap(response -> {
-
-                                Logger.i("Image Url: " + response.getData());
-
-                                SoruSorRequest soruSorRequest = SoruSorRequest.SoruSorRequestInstance();
-                                soruSorRequest.setQuestionText(mEditText_SoruText.getText().toString());
-                                soruSorRequest.setQuestionImage(response.getData());
-
-                                return ApiManager.getInstance(this).SoruSor(soruSorRequest);
-                            })
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(response -> {
-                                {
-                                    mFilePath = null;
-                                    mEditText_SoruText.setText("");
-                                    //UiHelper.UiSnackBar.showSimpleSnackBar(getCurrentFocus(), "Sorunuz gönderildi.", Snackbar.LENGTH_LONG);
-                                    EventBus.getDefault().postSticky(response.getData());
-                                    NavUtils.navigateUpFromSameTask(QuestionActivity.this);
-                                }
-                            }, error -> {
-                                materialDialog.dismiss();
-                                SuperHelper.CrashlyticsLog(error);
-                                error.printStackTrace();
-                                UiHelper.UiDialog.showSimpleDialog(QuestionActivity.this, "HATA", error.getMessage());
-                            }, materialDialog::dismiss);
+                    sendPublicQuestionWithImage(request, map);
                 }
             }
-
-
         } catch (Exception error) {
             materialDialog.dismiss();
             SuperHelper.CrashlyticsLog(error);
@@ -411,10 +247,100 @@ public class QuestionActivity extends BaseActivity {
         }
     }
 
+    private void sendPublicQuestionWithImage(SoruSorRequest request, Map<String, RequestBody> map) {
+        ApiManager.getInstance(this).ImageUpload(map)
+                .flatMap(response -> {
+                    Logger.i("Image Url: " + response.getData());
+                    request.setQuestionText(mEditText_SoruText.getText().toString());
+                    request.setQuestionImage(response.getData());
+
+                    return ApiManager.getInstance(this).SoruSor(request);
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    {
+                        mQuestionImageFilePath = null;
+                        mEditText_SoruText.setText("");
+                        //UiHelper.UiSnackBar.showSimpleSnackBar(getCurrentFocus(), "Sorunuz gönderildi.", Snackbar.LENGTH_LONG);
+                        EventBus.getDefault().postSticky(response.getData());
+                        NavUtils.navigateUpFromSameTask(QuestionActivity.this);
+                    }
+                }, error -> {
+                    materialDialog.dismiss();
+                    SuperHelper.CrashlyticsLog(error);
+                    error.printStackTrace();
+                    UiHelper.UiDialog.showSimpleDialog(QuestionActivity.this, "HATA", error.getMessage());
+                }, materialDialog::dismiss);
+    }
+
+    private void sendPrivateQuestionWithImage(SoruSorRequest request, Map<String, RequestBody> map) {
+        ApiManager.getInstance(this).ImageUpload(map)
+                .flatMap(response -> {
+                    Logger.i("Image Url: " + response.getData());
+                    request.setQuestionText(mEditText_SoruText.getText().toString());
+                    request.setQuestionImage(response.getData());
+                    request.setPrivate(true);
+                    request.setPrivateUrl("");
+                    return ApiManager.getInstance(this).SoruSor(request);
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(resp -> {
+                    materialDialog.dismiss();
+                    Logger.d(resp);
+                    //NavUtils.navigateUpFromSameTask(QuestionActivity.this);
+                }, error ->
+                {
+                    materialDialog.dismiss();
+                    UiHelper.UiDialog.showSimpleDialog(QuestionActivity.this, "HATA", error.getMessage());
+                    SuperHelper.CrashlyticsLog(error);
+                    Logger.e(error, "HATA");
+                });
+    }
+
+    private void sendPublicQuestionWithDefaultImage(SoruSorRequest soruSorRequest) {
+        ApiManager.getInstance(this).SoruSor(soruSorRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    materialDialog.dismiss();
+                    mQuestionImageFilePath = null;
+                    mEditText_SoruText.setText("");
+                    EventBus.getDefault().postSticky(response.getData());
+                    NavUtils.navigateUpFromSameTask(QuestionActivity.this);
+                }, error ->
+                {
+                    materialDialog.dismiss();
+                    Logger.e(error, "HATA");
+                });
+    }
+
+    private void sendPrivateQuestionWithDefaultImage(SoruSorRequest soruSorRequest) {
+        ApiManager.getInstance(this).SoruSor(soruSorRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(resp -> {
+                    Logger.d(resp);
+                    materialDialog.dismiss();
+                    SuperHelper.sharePrivateUrl(QuestionActivity.this, "Referandum'da yeni bir soru sordum", resp.getData().getPrivateUrl(), true);
+                }, error ->
+                {
+                    materialDialog.dismiss();
+                    Logger.e(error, "HATA");
+                });
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_question, menu);
         mJellyToggleButtonPrivateQuestion = (JellyToggleButton) MenuItemCompat.getActionView(menu.findItem(R.id.MenuPrivateQuestion)).findViewById(R.id.JellyToggleButtonPrivateQuestion);
+        mJellyToggleButtonPrivateQuestion.setOnStateChangeListener((process, state, jtb) -> {
+            Transition transition = new Slide(Gravity.END);
+            transition.setDuration(500);
+            TransitionManager.beginDelayedTransition(mHeaderContainer, transition);
+            mFriendNotifContainer.setVisibility(state == State.LEFT ? View.VISIBLE : View.GONE);
+        });
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -431,7 +357,7 @@ public class QuestionActivity extends BaseActivity {
                     }
 
                     Logger.i(response.data());
-                    mFilePath = response.data();
+                    mQuestionImageFilePath = response.data();
                     response.targetUI().loadImage(response.data());
                 });
     }
@@ -461,7 +387,7 @@ public class QuestionActivity extends BaseActivity {
                     }
 
                     Logger.i(response.data());
-                    mFilePath = response.data();
+                    mQuestionImageFilePath = response.data();
                     response.targetUI().loadImage(response.data());
                 }, error -> {
                     error.printStackTrace();
@@ -491,7 +417,7 @@ public class QuestionActivity extends BaseActivity {
                         return;
                     }
                     Logger.i(response.data());
-                    mFilePath = response.data();
+                    mQuestionImageFilePath = response.data();
                     response.targetUI().loadImage(response.data());
                 }, error -> {
                     error.printStackTrace();

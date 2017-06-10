@@ -7,10 +7,17 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NavUtils;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.activity.IntroActivity;
 import com.coderockets.referandumproject.db.DbManager;
@@ -49,7 +56,6 @@ public class SuperHelper extends com.aykuttasil.androidbasichelperlib.SuperHelpe
     @DebugLog
     public static boolean checkUser() {
         Logger.i("AccessToken.getCurrentAccessToken(): " + AccessToken.getCurrentAccessToken());
-        Logger.i("DbManager.getModelUser(): " + DbManager.getModelUser());
         Logger.i("FirebaseInstanceId.getInstance().getToken(): " + FirebaseInstanceId.getInstance().getToken());
 
         return AccessToken.getCurrentAccessToken() != null && DbManager.getModelUser() != null && DbManager.getModelUser().getRegId() != null;
@@ -272,6 +278,47 @@ public class SuperHelper extends com.aykuttasil.androidbasichelperlib.SuperHelpe
             }
         }, 1000);
 
+    }
+
+    public static void sharePrivateUrl(Activity activity, String title, String url, boolean goParentActivity) {
+        MaterialDialog dialog = new MaterialDialog.Builder(activity)
+                .title("Paylaş")
+                .customView(R.layout.custom_share_private_question_url, true)
+                .build();
+
+        EditText editTextPrivateUrl = (EditText) dialog.findViewById(R.id.EditTextPrivateUrl);
+        Button buttonPaylas = (Button) dialog.findViewById(R.id.ButtonPaylas);
+        Button buttonKopyala = (Button) dialog.findViewById(R.id.ButtonKopyala);
+
+        editTextPrivateUrl.setText(url);
+
+        buttonKopyala.setOnClickListener(v -> {
+            setClipboard(activity, url);
+            UiHelper.UiToast.showSimpleToast(activity, "Kopyalandı", Toast.LENGTH_LONG);
+        });
+
+        buttonPaylas.setOnClickListener(v -> {
+            dialog.dismiss();
+            if (goParentActivity) {
+                NavUtils.navigateUpFromSameTask(activity);
+            }
+            Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+            sharingIntent.setType("text/html");
+            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, Html.fromHtml("<p>" + title + "</p>" + "<p>" + url + "</p>"));
+            activity.startActivity(Intent.createChooser(sharingIntent, "Paylaş"));
+        });
+        dialog.show();
+    }
+
+    public static void setClipboard(Context context, String text) {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
+            android.text.ClipboardManager clipboard = (android.text.ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            clipboard.setText(text);
+        } else {
+            android.content.ClipboardManager clipboard = (android.content.ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            android.content.ClipData clip = android.content.ClipData.newPlainText("Kopyalandı", text);
+            clipboard.setPrimaryClip(clip);
+        }
     }
 
 }

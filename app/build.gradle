@@ -243,7 +243,6 @@ dependencies {
     //compile 'com.nightonke:faceofftogglebutton:1.0.0'
     compile 'com.nightonke:jellytogglebutton:1.0.2'
 
-
     //compile 'com.mikhaellopez:circularimageview:3.0.2'
     //compile 'com.github.florent37:glidepalette:1.0.6'
     // Google Glide ve Palette kütüphanelerinin birlikte kullanılmasını sağlar

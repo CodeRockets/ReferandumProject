@@ -17,4 +17,7 @@
     <string name="slide3">Sormuş olduğunuz ve favoriye aldığınız soruların cevaplarını takip edebilirsiniz.</string>
     <string name="slide4">Arkadaşlarınızın sorulara ne cevap verdiğini görebilirsiniz.</string>
     <string name="slide5">Beğendiğiniz soruları Facebook hesabınızda paylaşabilirsiniz.</string>
+    <string name="arkadaslarima_bildir">Arkadaşlarıma Bildir</string>
+    <string name="sorunuz">Sorunuz..</string>
+    <string name="gonder">GÖNDER</string>
 </resources>
