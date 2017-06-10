@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.aykuttasil.imageupload.ImageUpload;
+import com.aykuttasil.imageupload.rest.models.ImgurUploadResponse;
 import com.aykuttasil.imageupload.seed.Imgur;
 import com.coderockets.referandumproject.R;
 import com.coderockets.referandumproject.app.Const;
@@ -29,6 +30,8 @@ import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.model.Event.UpdateLoginEvent;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
 import com.coderockets.referandumproject.rest.ApiManager;
+import com.coderockets.referandumproject.rest.RestModel.DynamicLinkRequest;
+import com.coderockets.referandumproject.rest.RestModel.DynamicLinkResponse;
 import com.coderockets.referandumproject.rest.RestModel.FavoriteRequest;
 import com.coderockets.referandumproject.rest.RestModel.ReportAbuseRequest;
 import com.coderockets.referandumproject.util.AutoFitTextView;
@@ -58,8 +61,10 @@ import org.greenrobot.eventbus.ThreadMode;
 import co.mobiwise.materialintro.shape.Focus;
 import de.hdodenhof.circleimageview.CircleImageView;
 import hugo.weaving.DebugLog;
+import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -476,26 +481,27 @@ public class QuestionFragment extends Fragment {
         Bitmap bitmap = drawingView.getDrawingCache(true).copy(Bitmap.Config.ARGB_8888, false);
         drawingView.destroyDrawingCache();
 
-
         MaterialDialog dialog = UiHelper.UiDialog.newInstance(mContext).getProgressDialog("Lütfen bekleyiniz", null);
         dialog.show();
 
         ImageUpload.create(Imgur.getInstance(mContext, Const.IMGUR_CLIENT_ID), Imgur.resp())
                 .upload(bitmap, "Referandum")
+                .flatMap(new Func1<ImgurUploadResponse, Observable<DynamicLinkResponse>>() {
+                    @Override
+                    public Observable<DynamicLinkResponse> call(ImgurUploadResponse resp) {
+                        String link = "http://referandum?questionId=" + mqi.getSoruId();
+                        DynamicLinkRequest request = DynamicLinkRequest.getDynamicLinkRequest(link, mqi.getQuestionText(), "Referandum'a katılarak sende hemen cevap verebilirsin.", resp.getData().getLink());
+                        return ApiManager.getInstance(mContext).DynamicLink(request);
+                    }
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(success -> {
-
                     dialog.dismiss();
-
-                    Logger.i(success.getData().getLink());
+                    Logger.i(success.getShortLink());
 
                     ShareLinkContent shareLinkContent = new ShareLinkContent.Builder()
-                            .setContentTitle(mqi.getQuestionText())
-                            .setContentDescription("Sende uygulamayı yükleyerek Referandum'a katılabilirsin.")
-                            .setContentUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.coderockets.referandumproject"))
-                            .setImageUrl(Uri.parse(success.getData().getLink()))
-                            .setQuote(mqi.getQuestionText())
+                            .setContentUrl(Uri.parse(success.getShortLink()))
                             .build();
 
                     if (ShareDialog.canShow(ShareLinkContent.class)) {

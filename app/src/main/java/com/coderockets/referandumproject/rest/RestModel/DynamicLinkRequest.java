@@ -59,7 +59,7 @@ public class DynamicLinkRequest {
 
         SocialMetaTagInfo socialMetaTagInfo = new SocialMetaTagInfo();
         socialMetaTagInfo.setSocialTitle(socialTitle);
-        socialMetaTagInfo.setSocialDescription("Hemen Referandum topluluğuna katılarak cevap verebilirsin.");
+        socialMetaTagInfo.setSocialDescription(socialDesc == null ? "Hemen Referandum topluluğuna katılarak cevap verebilirsin." : socialDesc);
         socialMetaTagInfo.setSocialImageLink(socialImgUrl);
         dynamicLinkInfo.setSocialMetaTagInfo(socialMetaTagInfo);
 

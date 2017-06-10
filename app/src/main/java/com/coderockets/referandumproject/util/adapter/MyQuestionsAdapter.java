@@ -12,7 +12,6 @@ import com.aykuttasil.androidbasichelperlib.UiHelper;
 import com.aykuttasil.percentbar.PercentBarView;
 import com.aykuttasil.percentbar.models.BarImageModel;
 import com.coderockets.referandumproject.R;
-import com.coderockets.referandumproject.activity.QuestionDetailActivity_;
 import com.coderockets.referandumproject.helper.SuperHelper;
 import com.coderockets.referandumproject.model.ModelFriend;
 import com.coderockets.referandumproject.model.ModelQuestionInformation;
@@ -100,7 +99,7 @@ public class MyQuestionsAdapter extends RecyclerView.Adapter<MyQuestionsAdapter.
         ViewHolder(View itemView) {
             super(itemView);
 
-            itemView.setOnClickListener(view -> QuestionDetailActivity_.intent(view.getContext()).start());
+            //itemView.setOnClickListener(view -> QuestionDetailActivity_.intent(view.getContext()).start());
 
             mTextViewSoru = (AutoFitTextView) itemView.findViewById(R.id.TextViewSoru);
             mImageViewSoruImage = (ImageView) itemView.findViewById(R.id.ImageViewSoruImage);

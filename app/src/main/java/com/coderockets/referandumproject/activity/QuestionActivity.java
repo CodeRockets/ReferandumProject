@@ -287,7 +287,6 @@ public class QuestionActivity extends BaseActivity {
                     request.setQuestionText(mEditText_SoruText.getText().toString());
                     request.setQuestionImage(response.getData());
                     request.setPrivate(true);
-                    request.setPrivateUrl("");
                     return ApiManager.getInstance(this).SoruSor(request);
                 })
                 .subscribeOn(Schedulers.io())
@@ -295,7 +294,7 @@ public class QuestionActivity extends BaseActivity {
                 .subscribe(resp -> {
                     materialDialog.dismiss();
                     Logger.d(resp);
-                    //NavUtils.navigateUpFromSameTask(QuestionActivity.this);
+                    SuperHelper.sharePrivateUrl(QuestionActivity.this, "Referandum'da yeni bir soru sordum. " + resp.getData().getQuestionText(), resp.getData().getPrivateUrl(), true);
                 }, error ->
                 {
                     materialDialog.dismiss();
@@ -329,7 +328,7 @@ public class QuestionActivity extends BaseActivity {
                 .subscribe(resp -> {
                     Logger.d(resp);
                     materialDialog.dismiss();
-                    SuperHelper.sharePrivateUrl(QuestionActivity.this, "Referandum'da yeni bir soru sordum", resp.getData().getPrivateUrl(), true);
+                    SuperHelper.sharePrivateUrl(QuestionActivity.this, "Referandum'da yeni bir soru sordum. " + resp.getData().getQuestionText(), resp.getData().getPrivateUrl(), true);
                 }, error ->
                 {
                     materialDialog.dismiss();

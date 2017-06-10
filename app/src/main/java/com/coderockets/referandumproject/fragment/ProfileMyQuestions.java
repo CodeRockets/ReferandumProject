@@ -73,13 +73,10 @@ public class ProfileMyQuestions extends BaseProfile implements MaterialIntroList
     @DebugLog
     @AfterViews
     public void ProfileMyQuestionsInit() {
-
         if (mList.size() == 0) {
             getUserQuestions();
         }
-
         setAdapter();
-
     }
 
     private void setAdapter() {
@@ -97,7 +94,6 @@ public class ProfileMyQuestions extends BaseProfile implements MaterialIntroList
     }
 
     private void getUserQuestions() {
-
         MaterialDialog progressDialog = UiHelper.UiDialog.newInstance(mContext).getProgressDialog("Lütfen bekleyiniz..", null);
         progressDialog.show();
 
@@ -122,46 +118,34 @@ public class ProfileMyQuestions extends BaseProfile implements MaterialIntroList
 
     @DebugLog
     private void convertResponseToUiView(List<ModelQuestionInformation> rows) {
-
         for (ModelQuestionInformation mqi : rows) {
             mMyQuestionsAdapter.addUserQuestion(mqi);
         }
 
         new Handler().postDelayed(() -> {
-
             try {
                 if (mMyQuestionsAdapter.getItemCount() > 0) {
-
                     View vi = mRecyclerViewMyQuestions.getChildAt(0);
-
                     mLastIntroView = vi;
-
                     SuperHelper.showIntro(getActivity(),
                             vi,
                             this,
                             INTRO_KEY_SWIPE_DELETE,
                             "Sorularınızı sağa veya sola sürükleyerek silebilirsiniz.",
                             Focus.MINIMUM);
-
                 }
             } catch (Exception e) {
                 Logger.e(e, "HATA");
             }
         }, 1000);
-
-
     }
 
     @DebugLog
     @Override
     public void onUserClicked(String materialIntroViewId) {
-
         if (materialIntroViewId.equals(INTRO_KEY_SWIPE_DELETE)) {
-
             if (mLastIntroView.findViewById(R.id.MyPercentBar) != null) {
-
                 mLastIntroView = mLastIntroView.findViewById(R.id.MyPercentBar);
-
                 SuperHelper.showIntro(getActivity(),
                         mLastIntroView,
                         this,
@@ -170,9 +154,7 @@ public class ProfileMyQuestions extends BaseProfile implements MaterialIntroList
                         "Cevap oranlarını ve soruya cevap veren arkadaş listenizi buradan görebilirsiniz.",
                         Focus.MINIMUM);
             }
-
         } else if (materialIntroViewId.equals(INTRO_KEY_PERCENT_BAR)) {
-
         }
     }
 

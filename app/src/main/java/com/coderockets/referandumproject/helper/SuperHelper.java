@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
-import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -303,8 +302,8 @@ public class SuperHelper extends com.aykuttasil.androidbasichelperlib.SuperHelpe
                 NavUtils.navigateUpFromSameTask(activity);
             }
             Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-            sharingIntent.setType("text/html");
-            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, Html.fromHtml("<p>" + title + "</p>" + "<p>" + url + "</p>"));
+            sharingIntent.setType("text/plain");
+            sharingIntent.putExtra(Intent.EXTRA_TEXT, title + " - " + url);
             activity.startActivity(Intent.createChooser(sharingIntent, "Paylaş"));
         });
         dialog.show();
